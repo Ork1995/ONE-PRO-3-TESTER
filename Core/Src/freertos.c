@@ -25,6 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "../../Application/appProxy.h"
 
 /* USER CODE END Includes */
 
@@ -114,11 +115,9 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
+
   /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
+	runAppTask();
   /* USER CODE END StartDefaultTask */
 }
 

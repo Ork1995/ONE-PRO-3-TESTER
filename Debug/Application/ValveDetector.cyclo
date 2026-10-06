@@ -1,0 +1,4 @@
+../Application/ValveDetector.cpp:10:6:void ValveDetector::Init()	1
+../Application/ValveDetector.cpp:17:6:bool ValveDetector::Read()	2
+../Application/ValveDetector.cpp:23:6:bool ValveDetector::IsChanged()	5
+../Application/ValveDetector.cpp:46:6:void ValveDetector::PrintStatus(TextPrinter&)	2

@@ -1,0 +1,4 @@
+../Application/App.hpp:33:14:static App& App::Instance()	3
+../Application/App.hpp:38:9:Board& App::GetBoard()	1
+../Application/appProxy.cpp:6:6:void runAppTask()	1
+../Application/appProxy.cpp:13:8:Board& getBoard()	1

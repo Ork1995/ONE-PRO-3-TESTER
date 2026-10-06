@@ -1,0 +1,2 @@
+../Application/CLIManager.cpp:11:1:CLIManager::CLIManager(Uart&)	16	static
+../Application/CLIManager.cpp:16:6:void CLIManager::Task()	16	static

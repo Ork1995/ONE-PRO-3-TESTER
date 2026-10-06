@@ -1,0 +1,3 @@
+../Application/MutexLock.cpp:10:1:MutexLock::MutexLock(osMutexId_t)	16	static
+../Application/MutexLock.cpp:15:1:MutexLock::~MutexLock()	16	static
+../Application/MutexLock.cpp:15:1:virtual MutexLock::~MutexLock()	16	static

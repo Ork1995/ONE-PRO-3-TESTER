@@ -1,0 +1,1 @@
+../Application/Clock.cpp:15:10:uint32_t Clock::GetTimeMsec()	8	static

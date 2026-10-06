@@ -1,0 +1,18 @@
+../Application/TextScanner.hpp:42:7:bool TextScanner::IsError() const	1
+../Application/App.cpp:14:1:App::App()	1
+../Application/App.cpp:35:6:void App::Init()	3
+../Application/App.cpp:52:6:void App::Task()	2
+../Application/App.cpp:72:6:void App::AppendStatus(TextPrinter&)	4
+../Application/App.cpp:88:6:void App::ControlWaterMeters()	5
+../Application/App.cpp:114:6:void App::HandleCommand(const BufferView<char>&)	48
+C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/array:132:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::begin() [with _Tp = DigitalOutput; unsigned int _Nm = 0]	1
+C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/array:142:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::end() [with _Tp = DigitalOutput; unsigned int _Nm = 0]	1
+../Application/Buffer.hpp:20:2:Buffer<Capacity, TItem>::Buffer() [with int Capacity = 100; TItem = char]	1
+../Application/Buffer.hpp:20:2:Buffer<Capacity, TItem>::Buffer() [with int Capacity = 256; TItem = char]	1
+../Application/Buffer.hpp:20:2:Buffer<Capacity, TItem>::Buffer() [with int Capacity = 200; TItem = char]	1
+../Application/Buffer.hpp:20:2:Buffer<Capacity, TItem>::Buffer() [with int Capacity = 30; TItem = char]	1
+../Application/BufferView.hpp:86:7:bool BufferView<TItem>::operator==(const TItem*) [with TItem = char]	5
+C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/array:206:7:std::array<_Tp, _Nm>::value_type& std::array<_Tp, _Nm>::operator[](size_type) [with _Tp = DigitalOutput; unsigned int _Nm = 0]	0
+../Application/BufferView.hpp:21:7:void BufferView<TItem>::Reset() [with TItem = char]	1
+../Application/BufferView.hpp:18:6:int BufferView<TItem>::Len() const [with TItem = char]	1
+../Application/BufferView.hpp:16:2:BufferView<TItem>::BufferView(int, TItem*, int) [with TItem = char]	1

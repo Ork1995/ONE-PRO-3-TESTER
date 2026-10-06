@@ -1,0 +1,3 @@
+../Application/RealTimer.cpp:11:1:RealTimer::RealTimer()	16	static
+../Application/RealTimer.cpp:16:6:void RealTimer::Set(int, int, int)	24	static
+../Application/RealTimer.cpp:25:6:bool RealTimer::Get(int&, int&, int&)	32	static
