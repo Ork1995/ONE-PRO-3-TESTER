@@ -1326,11 +1326,40 @@ class LogAnalyzerEngine:
         return current_pass
 
 
+# -----------------------------------------------------------------------------
+# Sensor supply (VAI1..VAI4 behind ONE shared VSEN PWM) - GUI constants
+# -----------------------------------------------------------------------------
+SS_COUNT = 4
+SS_DEFAULT_MV = {1: 5000, 2: 7500, 3: 10000, 4: 15000}   # initial presets, one per sensor
+SS_PINS = {1: "PC7", 2: "PB9", 3: "PB8", 4: "PG2"}       # VAIx_VEN pins (display only)
+SS_MV_MIN, SS_MV_MAX = 2100, 15000                      # mirrors SensorSupply::MIN_MV / MAX_MV in the firmware
+SS_ACK_TIMEOUT_MS = 1500                                # max wait for the firmware reply to each command
+SS_STEP_GAP_MS = 20                                     # pause between an acknowledged command and the next one
+SS_COLOR_ON = ("#2e8b57", "white")                      # (background, text) of an active sensor
+SS_COLOR_PENDING = ("#e6a700", "black")                 # rail requested but booster still off
+SS_COLOR_OFF = ("#d9d9d9", "black")
+SS_ROW_ON = "#d8f0e0"                                  # tint of the active sensor's row
+SS_ROW_PENDING = "#fff0c4"
+SS_MARKER_ON = "#2e8b57"
+SS_MARKER_OFF = "#b8b8b8"
+
+# Firmware replies (App::HandleSetSensorSupply / AppendSensorSupplyStatus). They are matched
+# case-sensitively on the upper-case ON/OFF so the firmware's echo of the typed command
+# ("set vai 1 on") is never mistaken for a reply.
+SS_RE_SET_VSEN = re.compile(r'vsen set to (\d+) mV')
+SS_RE_VSEN_EN = re.compile(r'vsen_en (ON|OFF)(?:, (\d+) mV)?')
+SS_RE_VAI = re.compile(r'\bvai (\d) (ON|OFF)')
+SS_RE_STATUS = re.compile(r'vsen en=(\d) mv=(\d+) ccr4=(\d+) duty=([\d.]+)% pwm=(\S+)((?: vai\d=\w+)+)')
+SS_RE_ERROR = re.compile(r'\bERROR\b')
+SS_RE_OWN_ERROR = re.compile(r'\bERROR vsen\b')   # the supply's own error: "ERROR vsen pwm not running"
+
+
 class FlexTesterGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("FLEX Tester Controller")
-        self.root.geometry("1000x700")
+        # Taller than before: the Sensor Supply section adds ~200 px to the main tab
+        self.root.geometry("1000x%d" % min(900, max(700, self.root.winfo_screenheight() - 100)))
 
         timestamp_str = time.strftime("%Y-%m-%d_%H-%M-%S")
         self._logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "FLEX_LOGS")
@@ -1460,6 +1489,8 @@ class FlexTesterGUI:
         self.sensor_widgets = {}
         self._build_sensor_panel(sensor_frame, 1, "Sensor 1 — DAC1 / PA4")
         self._build_sensor_panel(sensor_frame, 2, "Sensor 2 — DAC2 / PA5")
+
+        self._build_sensor_supply_section(left_frame)
 
         term_frame = ttk.LabelFrame(left_frame, text="Terminal Output")
         term_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
@@ -1988,6 +2019,7 @@ class FlexTesterGUI:
                                     if 1 <= wm_id <= 5:
                                         self.root.after(0, self.stop_wm_pulse, wm_id)
                                 self.root.after(0, self.log, self.text_area, line, True)
+                                self.root.after(0, self._ss_handle_line, line)
                     except:
                         pass
                 time.sleep(0.01)
@@ -2005,6 +2037,8 @@ class FlexTesterGUI:
         try:
             self.serial_port.write(full_cmd.encode('utf-8'))
             self.log(self.text_area, f"> {cmd}\n")
+            if cmd.strip().lower() == "system init":
+                self._ss_on_system_init()   # firmware powers the sensor supply down on 'system init'
         except Exception as e:
             self.log(self.text_area, f"Error sending: {e}\n")
 
@@ -2212,6 +2246,270 @@ class FlexTesterGUI:
             return
         mv = round(voltage * 1000)
         self.send_command(f"set dac{sensor_id} {mv}")
+
+    # -------------------------------------------------------------------------
+    # Sensor supply: VAI1..VAI4 are four selectable outputs behind ONE shared
+    # VSEN PWM (TIM8 CH4 / PC9). The four mV fields are presets for that single PWM,
+    # and only one sensor can be active at a time.
+    #
+    # Firmware commands used (App::HandleSetSensorSupply in Application/App.cpp):
+    #   set vsen <mV>          common PWM setpoint
+    #   set vsen_en on|off     booster (VSEN_ONF) master enable
+    #   set vai <1-4> on|off   one sensor rail (VAIx_VEN)
+    #   get vsen               full status
+    #
+    # Each command is sent only after the firmware has answered the previous one, and
+    # the sequence is abandoned on an ERROR reply or a timeout - so the rails are never
+    # enabled on top of a setpoint the board did not accept. The displayed state always
+    # comes from the firmware's replies, not from what the GUI merely sent.
+    # -------------------------------------------------------------------------
+
+    def _build_sensor_supply_section(self, parent):
+        ttk.Style().configure("Supply.TButton", padding=(4, 1))   # slimmer than the global TButton; keeps the section compact
+        group = ttk.LabelFrame(parent)
+        group.pack(fill=tk.X, padx=5, pady=5)
+        self.ss_group = group
+
+        # State mirrored from the firmware's replies
+        self.ss_on = set()        # sensors whose rail is requested (shown ON, or PENDING while the booster is off)
+        self.ss_vsen_en = False   # booster (VSEN_ONF) master enable
+        self.ss_mv = None         # common PWM setpoint last reported by the firmware (mV)
+
+        # One entry per sensor: its voltage preset and its widgets. There is no per-sensor PWM.
+        self.ss_mv_vars = {}
+        self.ss_widgets = {}
+        self._ss_row_default = self.root.cget("bg")   # row colour when a sensor is not active
+
+        # Running activation sequence
+        self._ss_steps = []       # [(command, regex of the expected reply)]
+        self._ss_ack = None       # compiled regex of the reply we are waiting for
+        self._ss_cmd = ""
+        self._ss_timeout_id = None
+        self._ss_busy = False
+
+        # Group header: title + the ONE common PWM / booster / active-sensor summary
+        header = ttk.Frame(group)
+        ttk.Label(header, text="Sensor Supply", font=("", 9, "bold"), padding=(2, 0)).pack(side=tk.LEFT)
+        self.ss_summary = ttk.Label(header, text="", padding=(6, 0))
+        self.ss_summary.pack(side=tk.LEFT)
+        ttk.Button(header, text="Get Status", width=10, style="Supply.TButton",
+                   command=lambda: self.send_command("get vsen")).pack(side=tk.LEFT, padx=6)
+        group.configure(labelwidget=header)
+
+        for n in range(1, SS_COUNT + 1):
+            self._build_supply_sensor_panel(group, n)
+
+        self._ss_refresh_ui()
+
+    def _build_supply_sensor_panel(self, parent, n):
+        """One sensor row: [marker] title | Voltage [mV field] mV | [ON/OFF] | status."""
+        panel = tk.Frame(parent, bd=2, relief="groove")
+        panel.pack(fill=tk.X, padx=4, pady=2)
+
+        var = tk.StringVar(value=str(SS_DEFAULT_MV[n]))
+        self.ss_mv_vars[n] = var
+
+        marker = tk.Label(panel, text="●", width=2, fg=SS_MARKER_OFF)
+        marker.grid(row=0, column=0, padx=(4, 0), pady=3)
+        title = tk.Label(panel, text=f"Sensor {n}  (VAI{n} / {SS_PINS[n]})", font=("", 9, "bold"),
+                         anchor="w", width=20)
+        title.grid(row=0, column=1, sticky="w", padx=(0, 6))
+        volt_label = tk.Label(panel, text="Voltage:")
+        volt_label.grid(row=0, column=2)
+        entry = ttk.Entry(panel, textvariable=var, width=7, justify="right")
+        entry.grid(row=0, column=3, padx=2)
+        mv_label = tk.Label(panel, text="mV")
+        mv_label.grid(row=0, column=4, padx=(0, 6))
+        button = ttk.Button(panel, text="ON", width=6, style="Supply.TButton",
+                            command=lambda sid=n: self._ss_toggle(sid))
+        button.grid(row=0, column=5, padx=2)
+        status = tk.Label(panel, text="OFF", anchor="w", relief="groove", bd=1, padx=6, width=20)
+        status.grid(row=0, column=6, sticky="ew", padx=(6, 6))
+        panel.columnconfigure(6, weight=1)
+
+        self.ss_widgets[n] = {
+            "panel": panel, "marker": marker, "entry": entry, "button": button, "status": status,
+            "tint": [panel, marker, title, volt_label, mv_label],   # widgets that take the row tint
+        }
+
+    def _ss_parse_mv(self, n):
+        """Read sensor n's own voltage field. Returns (mV, None) or (None, error message)."""
+        text = self.ss_mv_vars[n].get().strip()
+        try:
+            mv = int(text)
+        except ValueError:
+            return None, "The voltage must be a whole number of mV."
+        if not SS_MV_MIN <= mv <= SS_MV_MAX:
+            return None, f"The voltage must be between {SS_MV_MIN} and {SS_MV_MAX} mV."
+        return mv, None
+
+    def _ss_toggle(self, n):
+        """ON/OFF button of sensor n."""
+        if self._ss_busy:
+            return
+        if not self.is_connected:
+            messagebox.showwarning("Not Connected", "Please connect to a COM port first.")
+            return
+
+        if n in self.ss_on:
+            # Switch the sensor off, then the booster (PWM returns to its safe/off state in the firmware).
+            steps = [(f"set vai {a} off", rf"vai {a} OFF") for a in sorted(self.ss_on)]
+            steps.append(("set vsen_en off", r"vsen_en OFF"))
+        else:
+            mv, error = self._ss_parse_mv(n)
+            if error:
+                messagebox.showwarning("Invalid Sensor Voltage", f"Sensor {n}: {error}")
+                return
+            # 1. turn off whichever sensor is active   2. load this sensor's voltage into the common PWM
+            # 3. booster on   4. this sensor's rail on
+            steps = [(f"set vai {a} off", rf"vai {a} OFF") for a in sorted(self.ss_on - {n})]
+            steps += [
+                (f"set vsen {mv}", r"vsen set to \d+ mV"),
+                ("set vsen_en on", r"vsen_en ON"),
+                (f"set vai {n} on", rf"vai {n} ON"),
+            ]
+
+        self._ss_steps = steps
+        self._ss_set_busy(True)
+        self._ss_send_next()
+
+    def _ss_send_next(self):
+        self._ss_timeout_id = None
+        if not self._ss_steps:
+            self._ss_ack = None
+            self._ss_set_busy(False)
+            return
+        if not self.is_connected:
+            self._ss_abort("The COM port was disconnected.")
+            return
+
+        cmd, ack = self._ss_steps.pop(0)
+        self._ss_cmd = cmd
+        self._ss_ack = re.compile(ack)          # armed before sending: the reply can arrive at once
+        self.send_command(cmd)
+        self._ss_timeout_id = self.root.after(SS_ACK_TIMEOUT_MS, self._ss_on_timeout)
+
+    def _ss_on_timeout(self):
+        self._ss_timeout_id = None
+        self._ss_abort(f'No reply from the board to "{self._ss_cmd}".')
+
+    def _ss_abort(self, reason):
+        if self._ss_timeout_id is not None:
+            self.root.after_cancel(self._ss_timeout_id)
+            self._ss_timeout_id = None
+        self._ss_steps = []
+        self._ss_ack = None
+        self._ss_set_busy(False)
+        self._ss_refresh_ui()
+        messagebox.showwarning(
+            "Sensor Supply",
+            f"{reason}\n\nThe remaining steps were not sent. The supply may be only partly "
+            f"configured - use \"Get Status\" in the Sensor Supply header to check it.")
+
+    def _ss_set_busy(self, busy):
+        self._ss_busy = busy
+        for w in self.ss_widgets.values():
+            w["button"].state(["disabled"] if busy else ["!disabled"])
+
+    def _ss_on_system_init(self):
+        """'system init' resets the firmware's sensor supply to PWM 0 %, booster and all rails off."""
+        if self._ss_timeout_id is not None:
+            self.root.after_cancel(self._ss_timeout_id)
+            self._ss_timeout_id = None
+        self._ss_steps = []
+        self._ss_ack = None
+        self._ss_set_busy(False)
+        self.ss_on = set()
+        self.ss_vsen_en = False
+        self.ss_mv = None
+        self._ss_refresh_ui()
+
+    def _ss_handle_line(self, line):
+        """Called (Tk thread) for every line received from the board.
+
+        Updates the sensor-supply state from the firmware's replies, and, while a sequence
+        is running, advances it on the expected reply or aborts it on an ERROR.
+        """
+        changed = True
+        status = SS_RE_STATUS.search(line)
+        vai = SS_RE_VAI.search(line)
+        vsen_en = SS_RE_VSEN_EN.search(line)
+        set_vsen = SS_RE_SET_VSEN.search(line)
+
+        if status:      # reply to 'get vsen': full resync
+            self.ss_vsen_en = status.group(1) == "1"
+            self.ss_mv = int(status.group(2))
+            states = dict(re.findall(r"vai(\d)=(\w+)", status.group(6)))
+            self.ss_on = {int(k) for k, v in states.items() if v in ("on", "pend")}
+        elif vai:       # 'vai N ON' / 'vai N OFF'
+            if vai.group(2) == "ON":
+                self.ss_on.add(int(vai.group(1)))
+            else:
+                self.ss_on.discard(int(vai.group(1)))
+        elif vsen_en:   # 'vsen_en ON, <mV> mV' / 'vsen_en OFF'
+            self.ss_vsen_en = vsen_en.group(1) == "ON"
+            if vsen_en.group(2):
+                self.ss_mv = int(vsen_en.group(2))
+        elif set_vsen:  # 'vsen set to <mV> mV'
+            self.ss_mv = int(set_vsen.group(1))
+        else:
+            changed = False
+
+        if changed:
+            self._ss_refresh_ui()
+
+        if self._ss_ack is not None:
+            if self._ss_ack.search(line):
+                if self._ss_timeout_id is not None:
+                    self.root.after_cancel(self._ss_timeout_id)
+                    self._ss_timeout_id = None
+                self._ss_ack = None
+                self.root.after(SS_STEP_GAP_MS, self._ss_send_next)
+            elif SS_RE_ERROR.search(line) and self._ss_error_is_ours(line):
+                self._ss_abort(f'The board rejected "{self._ss_cmd}":\n{line.strip()}')
+
+    def _ss_error_is_ours(self, line):
+        """True if an ERROR line answers the command we just sent.
+
+        The firmware's generic error echoes the rejected command ("ERROR set vsen 7500 ...").
+        An ERROR for some other command (e.g. a late reply to a WM or DAC button) must not abort
+        the supply sequence; if our own command really got no answer, the timeout still catches it.
+        """
+        return self._ss_cmd in line or bool(SS_RE_OWN_ERROR.search(line))
+
+    def _ss_refresh_ui(self):
+        """Redraw all four rows and the summary from the state mirrored from the firmware."""
+        active = sorted(n for n in self.ss_on if self.ss_vsen_en)
+
+        for n, w in self.ss_widgets.items():
+            requested = n in self.ss_on
+            is_active = requested and self.ss_vsen_en
+            if is_active:
+                text = f"ON  —  {self.ss_mv} mV" if self.ss_mv is not None else "ON"
+                chip_bg, chip_fg = SS_COLOR_ON
+                row_bg, marker_fg = SS_ROW_ON, SS_MARKER_ON
+            elif requested:
+                text = "PENDING (booster off)"
+                chip_bg, chip_fg = SS_COLOR_PENDING
+                row_bg, marker_fg = SS_ROW_PENDING, SS_COLOR_PENDING[0]
+            else:
+                text = "OFF"
+                chip_bg, chip_fg = SS_COLOR_OFF
+                row_bg, marker_fg = self._ss_row_default, SS_MARKER_OFF
+            w["status"].config(text=text, bg=chip_bg, fg=chip_fg)
+            w["button"].config(text="OFF" if requested else "ON")
+            for widget in w["tint"]:
+                widget.config(bg=row_bg)
+            w["marker"].config(fg=marker_fg)
+
+        if self.ss_vsen_en and self.ss_mv is not None:
+            pwm = f"{self.ss_mv} mV"
+        else:
+            pwm = "OFF"
+        who = ", ".join(f"Sensor {n}" for n in active) if active else "none"
+        self.ss_summary.config(
+            text=f"—  one common PWM: {pwm}   |   Booster: {'ON' if self.ss_vsen_en else 'OFF'}"
+                 f"   |   Active: {who}")
 
     def cmd_set_mode(self):
         # index 0 → mode 1, index 1 → mode 2

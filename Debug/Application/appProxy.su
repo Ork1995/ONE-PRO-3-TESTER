@@ -1,4 +1,4 @@
-../Application/App.hpp:33:14:static App& App::Instance()	8	static,ignoring_inline_asm
-../Application/App.hpp:38:9:Board& App::GetBoard()	16	static
+../Application/App.hpp:35:14:static App& App::Instance()	8	static,ignoring_inline_asm
+../Application/App.hpp:40:9:Board& App::GetBoard()	16	static
 ../Application/appProxy.cpp:6:6:void runAppTask()	8	static
 ../Application/appProxy.cpp:13:8:Board& getBoard()	8	static

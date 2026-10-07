@@ -1,0 +1,194 @@
+--- Log Started: Wed Oct  7 15:41:05 2026 ---
+[15:43:54] Connected to COM16
+[15:43:55] > set vsen 5000
+
+[15:43:55] set vsen 5000
+[15:43:55] vsen set to 5000 mV (booster off)
+[15:43:55] > set vsen_en on
+
+[15:43:55] set vsen_en on
+[15:43:55] vsen_en ON, 5000 mV
+[15:43:55] > set vai 1 on
+
+[15:43:55] set vai 1 on
+[15:43:55] vai 1 ON
+[15:44:00] > set vai 1 off
+
+[15:44:00] set vai 1 off
+[15:44:00] vai 1 OFF
+[15:44:00] > set vsen_en off
+
+[15:44:00] set vsen_en off
+[15:44:00] vsen_en OFF
+[15:44:02] > set vsen 7500
+
+[15:44:02] set vsen 7500
+[15:44:02] vsen set to 7500 mV (booster off)
+[15:44:02] > set vsen_en on
+
+[15:44:02] set vsen_en on
+[15:44:02] vsen_en ON, 7500 mV
+[15:44:02] > set vai 2 on
+
+[15:44:02] set vai 2 on
+[15:44:02] vai 2 ON
+[15:44:04] > set vai 2 off
+
+[15:44:04] set vai 2 off
+[15:44:04] vai 2 OFF
+[15:44:04] > set vsen_en off
+
+[15:44:04] set vsen_en off
+[15:44:04] vsen_en OFF
+[15:44:21] > set vsen 7500
+
+[15:44:21] set vsen 7500
+[15:44:21] vsen set to 7500 mV (booster off)
+[15:44:21] > set vsen_en on
+
+[15:44:21] set vsen_en on
+[15:44:21] vsen_en ON, 7500 mV
+[15:44:21] > set vai 2 on
+
+[15:44:21] set vai 2 on
+[15:44:21] vai 2 ON
+[15:44:26] > set vai 2 off
+
+[15:44:26] set vai 2 off
+[15:44:26] vai 2 OFF
+[15:44:26] > set vsen_en off
+
+[15:44:26] set vsen_en off
+[15:44:26] vsen_en OFF
+[15:45:49] > set vsen 7500
+
+[15:45:49] set vsen 7500
+[15:45:49] vsen set to 7500 mV (booster off)
+[15:45:49] > set vsen_en on
+
+[15:45:49] set vsen_en on
+[15:45:49] vsen_en ON, 7500 mV
+[15:45:49] > set vai 2 on
+
+[15:45:49] set vai 2 on
+[15:45:49] vai 2 ON
+[15:45:55] > set vai 2 off
+
+[15:45:55] set vai 2 off
+[15:45:55] vai 2 OFF
+[15:45:55] > set vsen_en off
+
+[15:45:55] set vsen_en off
+[15:45:55] vsen_en OFF
+[15:46:12] > set vsen 10000
+
+[15:46:12] set vsen 10000
+[15:46:12] vsen set to 10000 mV (booster off)
+[15:46:12] > set vsen_en on
+
+[15:46:12] set vsen_en on
+[15:46:12] vsen_en ON, 10000 mV
+[15:46:12] > set vai 3 on
+
+[15:46:12] set vai 3 on
+[15:46:12] vai 3 ON
+[15:46:21] > set vai 3 off
+
+[15:46:21] set vai 3 off
+[15:46:21] vai 3 OFF
+[15:46:21] > set vsen_en off
+
+[15:46:21] set vsen_en off
+[15:46:21] vsen_en OFF
+[15:47:30] > set vsen 15000
+
+[15:47:30] set vsen 15000
+[15:47:30] vsen set to 15000 mV (booster off)
+[15:47:30] > set vsen_en on
+
+[15:47:30] set vsen_en on
+[15:47:30] vsen_en ON, 15000 mV
+[15:47:30] > set vai 3 on
+
+[15:47:30] set vai 3 on
+[15:47:30] vai 3 ON
+[15:47:37] > set vai 3 off
+
+[15:47:37] set vai 3 off
+[15:47:37] vai 3 OFF
+[15:47:37] > set vsen_en off
+
+[15:47:37] set vsen_en off
+[15:47:37] vsen_en OFF
+[15:47:40] > set vsen 10000
+
+[15:47:40] set vsen 10000
+[15:47:40] vsen set to 10000 mV (booster off)
+[15:47:40] > set vsen_en on
+
+[15:47:40] set vsen_en on
+[15:47:40] vsen_en ON, 10000 mV
+[15:47:40] > set vai 3 on
+
+[15:47:40] set vai 3 on
+[15:47:40] vai 3 ON
+[15:47:44] > set vai 3 off
+
+[15:47:44] set vai 3 off
+[15:47:44] vai 3 OFF
+[15:47:44] > set vsen_en off
+
+[15:47:44] set vsen_en off
+[15:47:44] vsen_en OFF
+[15:47:55] > set vsen 5000
+
+[15:47:55] set vsen 5000
+[15:47:55] vsen set to 5000 mV (booster off)
+[15:47:55] > set vsen_en on
+
+[15:47:55] set vsen_en on
+[15:47:55] vsen_en ON, 5000 mV
+[15:47:55] > set vai 1 on
+
+[15:47:55] set vai 1 on
+[15:47:55] vai 1 ON
+[15:48:00] > set vai 1 off
+
+[15:48:00] set vai 1 off
+[15:48:00] vai 1 OFF
+[15:48:00] > set vsen_en off
+
+[15:48:00] set vsen_en off
+[15:48:00] vsen_en OFF
+[15:48:07] > set vsen 7500
+
+[15:48:07] set vsen 7500
+[15:48:07] vsen set to 7500 mV (booster off)
+[15:48:07] > set vsen_en on
+
+[15:48:07] set vsen_en on
+[15:48:07] vsen_en ON, 7500 mV
+[15:48:07] > set vai 2 on
+
+[15:48:07] set vai 2 on
+[15:48:07] vai 2 ON
+[15:49:31] > set vai 2 off
+
+[15:49:31] set vai 2 off
+[15:49:31] vai 2 OFF
+[15:49:31] > set vsen_en off
+
+[15:49:31] set vsen_en off
+[15:49:31] vsen_en OFF
+[15:59:54] > set vsen 5000
+
+[15:59:54] set vsen 5000
+[15:59:54] vsen set to 5000 mV (booster off)
+[15:59:54] > set vsen_en on
+
+[15:59:54] set vsen_en on
+[15:59:54] vsen_en ON, 5000 mV
+[15:59:54] > set vai 1 on
+
+[15:59:54] set vai 1 on
+[15:59:54] vai 1 ON

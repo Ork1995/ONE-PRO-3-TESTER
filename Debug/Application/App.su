@@ -1,18 +1,23 @@
+../Application/SensorSupply.hpp:89:11:uint32_t SensorSupply::GetRequestedVoltage_mV() const	16	static
+../Application/SensorSupply.hpp:90:7:bool SensorSupply::IsPwmRunning() const	16	static
+../Application/SensorSupply.hpp:91:7:bool SensorSupply::IsVsenEnabled() const	16	static
 ../Application/TextScanner.hpp:42:7:bool TextScanner::IsError() const	16	static
-../Application/App.cpp:14:1:App::App()	16	static
-../Application/App.cpp:35:6:void App::Init()	48	static
-../Application/App.cpp:52:6:void App::Task()	400	static
-../Application/App.cpp:72:6:void App::AppendStatus(TextPrinter&)	32	static
-../Application/App.cpp:88:6:void App::ControlWaterMeters()	248	static
-../Application/App.cpp:114:6:void App::ToggleWaterMeter(int, TextPrinter&)	32	static
-../Application/App.cpp:132:6:void App::HandleCommand(const BufferView<char>&)	528	static
+../Application/App.cpp:14:1:App::App()	112	static
+../Application/App.cpp:48:6:void App::Init()	48	static
+../Application/App.cpp:67:6:void App::Task()	400	static
+../Application/App.cpp:87:6:void App::AppendStatus(TextPrinter&)	32	static
+../Application/App.cpp:103:6:void App::ControlWaterMeters()	248	static
+../Application/App.cpp:129:6:void App::ToggleWaterMeter(int, TextPrinter&)	32	static
+../Application/App.cpp:152:6:void App::HandleSetSensorSupply(BufferView<char>&, TextScanner&, TextPrinter&)	96	static
+../Application/App.cpp:203:6:void App::AppendSensorSupplyStatus(TextPrinter&)	40	static
+../Application/App.cpp:220:6:void App::HandleCommand(const BufferView<char>&)	528	static
 C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/array:132:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::begin() [with _Tp = DigitalOutput; unsigned int _Nm = 0]	24	static
 C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/array:142:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::end() [with _Tp = DigitalOutput; unsigned int _Nm = 0]	24	static
 ../Application/Buffer.hpp:20:2:Buffer<Capacity, TItem>::Buffer() [with int Capacity = 100; TItem = char]	16	static
 ../Application/Buffer.hpp:20:2:Buffer<Capacity, TItem>::Buffer() [with int Capacity = 256; TItem = char]	16	static
 ../Application/Buffer.hpp:20:2:Buffer<Capacity, TItem>::Buffer() [with int Capacity = 200; TItem = char]	16	static
-../Application/Buffer.hpp:20:2:Buffer<Capacity, TItem>::Buffer() [with int Capacity = 30; TItem = char]	16	static
 ../Application/BufferView.hpp:86:7:bool BufferView<TItem>::operator==(const TItem*) [with TItem = char]	24	static
+../Application/Buffer.hpp:20:2:Buffer<Capacity, TItem>::Buffer() [with int Capacity = 30; TItem = char]	16	static
 C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/array:206:7:std::array<_Tp, _Nm>::value_type& std::array<_Tp, _Nm>::operator[](size_type) [with _Tp = DigitalOutput; unsigned int _Nm = 0]	24	static
 ../Application/BufferView.hpp:21:7:void BufferView<TItem>::Reset() [with TItem = char]	16	static
 ../Application/BufferView.hpp:18:6:int BufferView<TItem>::Len() const [with TItem = char]	16	static

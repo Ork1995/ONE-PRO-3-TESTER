@@ -7,6 +7,7 @@
 "./Application/DigitalOutput.o"
 "./Application/MutexLock.o"
 "./Application/RealTimer.o"
+"./Application/SensorSupply.o"
 "./Application/TextPrinter.o"
 "./Application/TextScanner.o"
 "./Application/Uart.o"

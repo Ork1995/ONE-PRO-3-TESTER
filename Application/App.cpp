@@ -18,6 +18,19 @@ App::App():
 		{ ._port = WM_SIM_2_GPIO_Port, ._pin = WM_SIM_2_Pin, ._id = 2 },
 		{ ._port = WM_SIM_3_GPIO_Port, ._pin = WM_SIM_3_Pin, ._id = 3 },
 		{ ._port = WM_SIM_4_GPIO_Port, ._pin = WM_SIM_4_Pin, ._id = 4 },
+	},
+	_sensorSupply {
+		SensorSupply::Config {
+			.timer = &htim8,
+			.channel = TIM_CHANNEL_4,	// TIM8_CH4 -> PC9 (VSEN_PWM)
+			.vsenOnf = { ._port = VSEN_ONF_GPIO_Port, ._pin = VSEN_ONF_Pin, ._id = 0 },
+			.vaiVen = {
+				{ ._port = VAI1_VEN_GPIO_Port, ._pin = VAI1_VEN_Pin, ._id = 1 },
+				{ ._port = VAI2_VEN_GPIO_Port, ._pin = VAI2_VEN_Pin, ._id = 2 },
+				{ ._port = VAI3_VEN_GPIO_Port, ._pin = VAI3_VEN_Pin, ._id = 3 },
+				{ ._port = VAI4_VEN_GPIO_Port, ._pin = VAI4_VEN_Pin, ._id = 4 },
+			},
+		}
 	}
 
 #if PS_COUNT > 0
@@ -34,6 +47,8 @@ App::App():
 
 void App::Init()
 {
+	_sensorSupply.Init();	// PWM at 0 %, VSEN_ONF and VAI1..4 off
+
 	for (auto &wm: _wmSim) {
 		wm.SetStatus(WaterMeterSimulator::Status::Stopped, 0);
 	}
@@ -129,6 +144,79 @@ void App::ToggleWaterMeter(int wmIdx, TextPrinter &response)
 	}
 }
 
+/**
+ * 'set vsen <mV>', 'set vsen_en on|off', 'set vai <1-4> on|off'.
+ * Translates the text command into SensorSupply calls. Leaves 'response' empty if the
+ * command is not a sensor-supply one or its arguments are invalid (caller reports the error).
+ */
+void App::HandleSetSensorSupply(BufferView<> &token2, TextScanner &scanner, TextPrinter &response)
+{
+	if (token2 == "vsen") {
+		long mv;
+		scanner >> mv;
+		if (!scanner.IsError() && mv >= 0) {
+			uint32_t applied = _sensorSupply.SetVoltage_mV((uint32_t)mv);
+			response << "vsen set to " << (long)applied << " mV";
+			if (applied != (uint32_t)mv) {
+				response << " (clamped from " << mv << " mV)";
+			}
+			if (!_sensorSupply.IsVsenEnabled()) {
+				response << " (booster off)";
+			}
+		}
+	}
+	else if (token2 == "vsen_en") {
+		Buffer<Comm::MAX_TOKEN_LEN> onOff;
+		scanner >> onOff;
+		if (!scanner.IsError()) {
+			if (onOff == "on") {
+				if (_sensorSupply.SetVsenEnable(true)) {
+					response << "vsen_en ON, " << (long)_sensorSupply.GetRequestedVoltage_mV() << " mV";
+				}
+				else {
+					response << "ERROR vsen pwm not running";
+				}
+			}
+			else if (onOff == "off") {
+				_sensorSupply.SetVsenEnable(false);
+				response << "vsen_en OFF";
+			}
+		}
+	}
+	else if (token2 == "vai") {
+		long ch;
+		Buffer<Comm::MAX_TOKEN_LEN> onOff;
+		scanner >> ch >> onOff;
+		if (!scanner.IsError() && ch >= 1 && ch <= SensorSupply::VAI_COUNT) {
+			bool isOn = (onOff == "on");
+			if (isOn || onOff == "off") {
+				_sensorSupply.SetVaiEnable((uint8_t)ch, isOn);
+				response << "vai " << ch << (isOn ? " ON" : " OFF");
+				if (isOn && !_sensorSupply.IsVsenEnabled()) {
+					response << " (pending: vsen_en is off)";
+				}
+			}
+		}
+	}
+}
+
+void App::AppendSensorSupplyStatus(TextPrinter &p)
+{
+	const uint32_t dutyX100 = _sensorSupply.GetDutyPercentX100();
+	const uint32_t dutyFrac = dutyX100 % 100;
+
+	p << "vsen en=" << (long)_sensorSupply.IsVsenEnabled()
+	  << " mv=" << (long)_sensorSupply.GetRequestedVoltage_mV()
+	  << " ccr4=" << (long)_sensorSupply.GetCompareValue()
+	  << " duty=" << (long)(dutyX100 / 100) << "." << (dutyFrac < 10 ? "0" : "") << (long)dutyFrac << "%"
+	  << " pwm=" << (_sensorSupply.IsPwmRunning() ? "run" : "stopped");
+
+	for (uint8_t ch = 1; ch <= SensorSupply::VAI_COUNT; ++ch) {
+		p << " vai" << (long)ch << "="
+		  << (_sensorSupply.IsVaiActive(ch) ? "on" : (_sensorSupply.IsVaiRequested(ch) ? "pend" : "off"));
+	}
+}
+
 void App::HandleCommand(const BufferView<> &cmd)
 {
 	TextScanner scanner(cmd);
@@ -179,6 +267,9 @@ void App::HandleCommand(const BufferView<> &cmd)
 					response << "DAC2 set to " << mv << "mV";
 				}
 			}
+			else if (token2 == "vsen" || token2 == "vsen_en" || token2 == "vai") {
+				HandleSetSensorSupply(token2, scanner, response);
+			}
 			else if (token2 == "ps") {
 				long id;
 				Buffer<Comm::MAX_TOKEN_LEN> onOff;
@@ -202,6 +293,9 @@ void App::HandleCommand(const BufferView<> &cmd)
 				if (_realTimer.Get(hour, minute, second)) {
 					response << "sys time " << hour << ":" << minute << ":" << second;
 				}
+			}
+			else if (token2 == "vsen") {
+				AppendSensorSupplyStatus(response);
 			}
 			else if (token2 == "status") {
 				response << "wm status";
@@ -275,6 +369,18 @@ void App::HandleCommand(const BufferView<> &cmd)
 			_comm.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " set ps <id> on|off\r\n";
+			_comm.SendResponse(helpBuf); helpBuf.Reset();
+
+			helpPrinter << " set vsen <mV>\r\n";
+			_comm.SendResponse(helpBuf); helpBuf.Reset();
+
+			helpPrinter << " set vsen_en on|off\r\n";
+			_comm.SendResponse(helpBuf); helpBuf.Reset();
+
+			helpPrinter << " set vai <1-4> on|off\r\n";
+			_comm.SendResponse(helpBuf); helpBuf.Reset();
+
+			helpPrinter << " get vsen\r\n";
 			_comm.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " start wm <id> <cycle_ms>\r\n";

@@ -14,6 +14,7 @@ CPP_SRCS += \
 ../Application/DigitalOutput.cpp \
 ../Application/MutexLock.cpp \
 ../Application/RealTimer.cpp \
+../Application/SensorSupply.cpp \
 ../Application/TextPrinter.cpp \
 ../Application/TextScanner.cpp \
 ../Application/Uart.cpp \
@@ -31,6 +32,7 @@ OBJS += \
 ./Application/DigitalOutput.o \
 ./Application/MutexLock.o \
 ./Application/RealTimer.o \
+./Application/SensorSupply.o \
 ./Application/TextPrinter.o \
 ./Application/TextScanner.o \
 ./Application/Uart.o \
@@ -48,6 +50,7 @@ CPP_DEPS += \
 ./Application/DigitalOutput.d \
 ./Application/MutexLock.d \
 ./Application/RealTimer.d \
+./Application/SensorSupply.d \
 ./Application/TextPrinter.d \
 ./Application/TextScanner.d \
 ./Application/Uart.d \
@@ -63,7 +66,7 @@ Application/%.o Application/%.su Application/%.cyclo: ../Application/%.cpp Appli
 clean: clean-Application
 
 clean-Application:
-	-$(RM) ./Application/App.cyclo ./Application/App.d ./Application/App.o ./Application/App.su ./Application/Board.cyclo ./Application/Board.d ./Application/Board.o ./Application/Board.su ./Application/CLIManager.cyclo ./Application/CLIManager.d ./Application/CLIManager.o ./Application/CLIManager.su ./Application/Clock.cyclo ./Application/Clock.d ./Application/Clock.o ./Application/Clock.su ./Application/Comm.cyclo ./Application/Comm.d ./Application/Comm.o ./Application/Comm.su ./Application/DacControl.cyclo ./Application/DacControl.d ./Application/DacControl.o ./Application/DacControl.su ./Application/DigitalOutput.cyclo ./Application/DigitalOutput.d ./Application/DigitalOutput.o ./Application/DigitalOutput.su ./Application/MutexLock.cyclo ./Application/MutexLock.d ./Application/MutexLock.o ./Application/MutexLock.su ./Application/RealTimer.cyclo ./Application/RealTimer.d ./Application/RealTimer.o ./Application/RealTimer.su ./Application/TextPrinter.cyclo ./Application/TextPrinter.d ./Application/TextPrinter.o ./Application/TextPrinter.su ./Application/TextScanner.cyclo ./Application/TextScanner.d ./Application/TextScanner.o ./Application/TextScanner.su ./Application/Uart.cyclo ./Application/Uart.d ./Application/Uart.o ./Application/Uart.su ./Application/ValveDetector.cyclo ./Application/ValveDetector.d ./Application/ValveDetector.o ./Application/ValveDetector.su ./Application/WaterMeterSimulator.cyclo ./Application/WaterMeterSimulator.d ./Application/WaterMeterSimulator.o ./Application/WaterMeterSimulator.su ./Application/appProxy.cyclo ./Application/appProxy.d ./Application/appProxy.o ./Application/appProxy.su
+	-$(RM) ./Application/App.cyclo ./Application/App.d ./Application/App.o ./Application/App.su ./Application/Board.cyclo ./Application/Board.d ./Application/Board.o ./Application/Board.su ./Application/CLIManager.cyclo ./Application/CLIManager.d ./Application/CLIManager.o ./Application/CLIManager.su ./Application/Clock.cyclo ./Application/Clock.d ./Application/Clock.o ./Application/Clock.su ./Application/Comm.cyclo ./Application/Comm.d ./Application/Comm.o ./Application/Comm.su ./Application/DacControl.cyclo ./Application/DacControl.d ./Application/DacControl.o ./Application/DacControl.su ./Application/DigitalOutput.cyclo ./Application/DigitalOutput.d ./Application/DigitalOutput.o ./Application/DigitalOutput.su ./Application/MutexLock.cyclo ./Application/MutexLock.d ./Application/MutexLock.o ./Application/MutexLock.su ./Application/RealTimer.cyclo ./Application/RealTimer.d ./Application/RealTimer.o ./Application/RealTimer.su ./Application/SensorSupply.cyclo ./Application/SensorSupply.d ./Application/SensorSupply.o ./Application/SensorSupply.su ./Application/TextPrinter.cyclo ./Application/TextPrinter.d ./Application/TextPrinter.o ./Application/TextPrinter.su ./Application/TextScanner.cyclo ./Application/TextScanner.d ./Application/TextScanner.o ./Application/TextScanner.su ./Application/Uart.cyclo ./Application/Uart.d ./Application/Uart.o ./Application/Uart.su ./Application/ValveDetector.cyclo ./Application/ValveDetector.d ./Application/ValveDetector.o ./Application/ValveDetector.su ./Application/WaterMeterSimulator.cyclo ./Application/WaterMeterSimulator.d ./Application/WaterMeterSimulator.o ./Application/WaterMeterSimulator.su ./Application/appProxy.cyclo ./Application/appProxy.d ./Application/appProxy.o ./Application/appProxy.su
 
 .PHONY: clean-Application
 

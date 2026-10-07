@@ -1,0 +1,15 @@
+../Application/DigitalOutput.hpp:11:8:DigitalOutput::DigitalOutput()	16	static
+../Application/SensorSupply.cpp:9:1:SensorSupply::SensorSupply(const Config&)	32	static
+../Application/SensorSupply.cpp:19:6:bool SensorSupply::Init()	16	static
+../Application/SensorSupply.cpp:40:10:uint32_t SensorSupply::SetVoltage_mV(uint32_t)	16	static
+../Application/SensorSupply.cpp:59:6:bool SensorSupply::SetVsenEnable(bool)	24	static
+../Application/SensorSupply.cpp:94:6:bool SensorSupply::SetVaiEnable(uint8_t, bool)	24	static
+../Application/SensorSupply.cpp:107:6:void SensorSupply::AllOff()	24	static
+../Application/SensorSupply.cpp:116:6:bool SensorSupply::IsVaiRequested(uint8_t) const	16	static
+../Application/SensorSupply.cpp:121:6:bool SensorSupply::IsVaiActive(uint8_t) const	16	static
+../Application/SensorSupply.cpp:126:10:uint32_t SensorSupply::GetCompareValue() const	16	static
+../Application/SensorSupply.cpp:131:10:uint32_t SensorSupply::GetDutyPercentX100() const	24	static
+../Application/SensorSupply.cpp:138:6:void SensorSupply::WriteCompare(uint32_t)	16	static
+../Application/SensorSupply.cpp:147:10:uint32_t SensorSupply::CompareForVoltage(uint32_t) const	16	static
+../Application/SensorSupply.cpp:161:7:static float SensorSupply::VoltageToDutyPercent(uint32_t)	24	static
+../Application/SensorSupply.cpp:174:10:static uint32_t SensorSupply::DutyPercentToCompare(float, uint32_t)	24	static

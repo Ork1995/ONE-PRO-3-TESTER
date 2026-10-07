@@ -16,6 +16,8 @@
 #include "CLIManager.h"
 #include "RealTimer.hpp"
 #include "DacControl.hpp"
+#include "SensorSupply.hpp"
+#include "TextScanner.hpp"
 
 class App
 {
@@ -45,6 +47,7 @@ private:
 	//CLIManager _cli;
 	Comm _comm;
 	WaterMeterSimulator _wmSim[WM_SIM_COUNT];
+	SensorSupply _sensorSupply;
 	std::array<DigitalOutput, PS_COUNT> _psOut;
 	RealTimer _realTimer;
 	DacControl _dac;
@@ -53,5 +56,7 @@ private:
 	void ControlWaterMeters();
 	void ToggleWaterMeter(int wmIdx, TextPrinter &response);
 	void HandleCommand(const BufferView<> &cmd);
+	void HandleSetSensorSupply(BufferView<> &token2, TextScanner &scanner, TextPrinter &response);
 	void AppendStatus(TextPrinter &p);
+	void AppendSensorSupplyStatus(TextPrinter &p);
 };
