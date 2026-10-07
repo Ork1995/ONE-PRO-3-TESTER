@@ -21,6 +21,12 @@ void WaterMeterSimulator::Set(bool isHigh)
     HAL_GPIO_WritePin(_port, _pin, (GPIO_PinState) isHigh);
 }
 
+void WaterMeterSimulator::SetManualHigh()
+{
+    _status = Status::ManualHigh;
+    Set(true);
+}
+
 /**
  * Updates the simulator status and recalculates the pulse timings.
  *
@@ -114,6 +120,9 @@ void WaterMeterSimulator::PrintStatus(TextPrinter &printer)
         break;
     case Status::RunningTriggered:
         printer << "running (triggered)";
+        break;
+    case Status::ManualHigh:
+        printer << "manual on";
         break;
     default:
         printer << "unknown";

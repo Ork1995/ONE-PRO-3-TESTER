@@ -1,0 +1,34 @@
+--- Log Started: Wed Oct  7 14:24:14 2026 ---
+[14:24:19] Connected to COM16
+[14:24:23] > toggle wm 1
+
+[14:24:23] toggle wm 1
+[14:24:23] wm 1 manual on
+[14:24:30] > toggle wm 2
+
+[14:24:30] toggle wm 2
+[14:24:30] wm 2 manual on
+[14:24:33] > start wm 1 1000
+
+[14:24:33] start wm 1 1000
+[14:24:33] wm 1 started
+[14:24:36] > toggle wm 1
+
+[14:24:36] toggle wm 1
+[14:24:36] ERROR wm 1 busy
+[14:24:40] > toggle wm 1
+
+[14:24:40] toggle wm 1
+[14:24:40] ERROR wm 1 busy
+[14:24:41] > stop wm 1
+
+[14:24:41] stop wm 1
+[14:24:41] wm 1 stopped
+[14:24:42] > toggle wm 1
+
+[14:24:42] toggle wm 1
+[14:24:42] wm 1 manual on
+[14:24:43] > toggle wm 1
+
+[14:24:43] toggle wm 1
+[14:24:43] wm 1 manual off

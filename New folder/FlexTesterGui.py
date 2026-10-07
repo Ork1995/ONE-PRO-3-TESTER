@@ -1461,23 +1461,6 @@ class FlexTesterGUI:
         self._build_sensor_panel(sensor_frame, 1, "Sensor 1 — DAC1 / PA4")
         self._build_sensor_panel(sensor_frame, 2, "Sensor 2 — DAC2 / PA5")
 
-        gpio_frame = ttk.LabelFrame(left_frame, text="Digital Outputs (Static GPIO)")
-        gpio_frame.pack(fill=tk.X, padx=5, pady=5)
-        self.ps_gpio_state = {}
-        self.ps_gpio_labels = {}
-        ps_pins = {1: "PA15", 2: "PC10", 3: "PC11", 4: "PC12", 5: "PD2"}
-        for i in range(1, 6):
-            row = ttk.Frame(gpio_frame)
-            row.pack(fill=tk.X, pady=2)
-            self.ps_gpio_state[i] = False
-            ttk.Label(row, text=f"PS{i} ({ps_pins[i]}):", width=14).pack(side=tk.LEFT, padx=5)
-            ttk.Button(row, text="ON/OFF", width=8,
-                       command=lambda pid=i: self._toggle_ps_gpio(pid)).pack(side=tk.LEFT, padx=5)
-            ttk.Label(row, text="State:").pack(side=tk.LEFT, padx=(10, 2))
-            state_label = ttk.Label(row, text="OFF", foreground="gray", width=4)
-            state_label.pack(side=tk.LEFT)
-            self.ps_gpio_labels[i] = state_label
-
         term_frame = ttk.LabelFrame(left_frame, text="Terminal Output")
         term_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
         self.text_area = scrolledtext.ScrolledText(term_frame, state='disabled', height=15, bg="white", fg="black", font=("Consolas", 10))
@@ -1548,6 +1531,7 @@ class FlexTesterGUI:
         ttk.Label(cb_frame, text="Start",   font=('', 8, 'bold')).grid(row=0, column=2, sticky='w', padx=1)
         ttk.Label(cb_frame, text="Stop",    font=('', 8, 'bold')).grid(row=0, column=3, sticky='w', padx=1)
         ttk.Label(cb_frame, text="Trigger", font=('', 8, 'bold')).grid(row=0, column=4, sticky='w', padx=1)
+        ttk.Label(cb_frame, text="On/Off",  font=('', 8, 'bold')).grid(row=0, column=5, sticky='w', padx=1)
 
         self.wm_show_vars = {}
         self.wm_rate_vars = {}
@@ -1569,9 +1553,14 @@ class FlexTesterGUI:
             ttk.Button(cb_frame, text="T", width=2,
                        command=lambda wid=i: self._cmd_wm_trigger(wid)
                        ).grid(row=i, column=4, padx=1)
+            # The new board has only WM1-WM4
+            if i <= 4:
+                ttk.Button(cb_frame, text="ON/OFF", width=7,
+                           command=lambda wid=i: self._cmd_wm_toggle(wid)
+                           ).grid(row=i, column=5, padx=1)
 
         ttk.Button(cb_frame, text="Reset Graph", command=self.reset_wm_graph).grid(
-            row=6, column=0, columnspan=5, pady=8, sticky='ew')
+            row=6, column=0, columnspan=6, pady=8, sticky='ew')
 
         fig_frame = ttk.Frame(graph_outer)
         fig_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -1730,19 +1719,8 @@ class FlexTesterGUI:
             return
         self.send_command(f"trigger wm {wm_id} {int(rate)}")
 
-    def _toggle_ps_gpio(self, ps_id):
-        """Flip PS<id>'s static GPIO output (set ps <id> on/off)."""
-        if not self.is_connected:
-            messagebox.showwarning("Not Connected", "Please connect to a COM port first.")
-            return
-        new_state = not self.ps_gpio_state[ps_id]
-        self.ps_gpio_state[ps_id] = new_state
-        self.send_command(f"set ps {ps_id} {'on' if new_state else 'off'}")
-        label = self.ps_gpio_labels[ps_id]
-        if new_state:
-            label.config(text="ON", foreground="green")
-        else:
-            label.config(text="OFF", foreground="gray")
+    def _cmd_wm_toggle(self, wm_id):
+        self.send_command(f"toggle wm {wm_id}")
 
     def start_wm_pulse(self, wm_id):
         if not (1 <= wm_id <= 5) or self.wm_active[wm_id]:

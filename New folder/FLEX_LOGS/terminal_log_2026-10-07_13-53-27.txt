@@ -446,3 +446,203 @@
 [14:00:15] [DBG] WM1 hb t=469229ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
 [14:00:20] [DBG] WM1 hb t=474237ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
 [14:00:25] [DBG] WM1 hb t=479245ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:00:30] [DBG] WM1 hb t=484253ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:00:35] [DBG] WM1 hb t=489261ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:00:40] [DBG] WM1 hb t=494269ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:00:45] [DBG] WM1 hb t=499277ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:00:50] [DBG] WM1 hb t=504285ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:00:55] [DBG] WM1 hb t=509293ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:01:00] [DBG] WM1 hb t=514301ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:01:05] [DBG] WM1 hb t=519309ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:01:10] [DBG] WM1 hb t=524317ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:01:15] [DBG] WM1 hb t=529325ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:01:20] [DBG] WM1 hb t=534333ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:01:25] [DBG] WM1 hb t=539341ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:01:30] [DBG] WM1 hb t=544349ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:01:35] [DBG] WM1 hb t=549357ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:01:40] [DBG] WM1 hb t=554365ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:01:45] [DBG] WM1 hb t=559373ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:01:50] [DBG] WM1 hb t=564381ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:01:55] [DBG] WM1 hb t=569389ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:02:00] [DBG] WM1 hb t=574397ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:02:05] [DBG] WM1 hb t=579405ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:02:10] [DBG] WM1 hb t=584413ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:02:15] [DBG] WM1 hb t=589421ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:02:20] [DBG] WM1 hb t=594429ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:02:25] [DBG] WM1 hb t=599437ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:02:30] [DBG] WM1 hb t=604445ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:02:35] [DBG] WM1 hb t=609453ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:02:40] [DBG] WM1 hb t=614461ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:02:45] [DBG] WM1 hb t=619469ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:02:50] [DBG] WM1 hb t=624477ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:02:55] [DBG] WM1 hb t=629485ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:03:00] [DBG] WM1 hb t=634493ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:03:05] [DBG] WM1 hb t=639501ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:03:10] [DBG] WM1 hb t=644509ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:03:15] [DBG] WM1 hb t=649517ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:03:20] [DBG] WM1 hb t=654525ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:03:25] [DBG] WM1 hb t=659533ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:03:31] [DBG] WM1 hb t=664541ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:03:36] [DBG] WM1 hb t=669549ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:03:41] [DBG] WM1 hb t=674557ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:03:46] [DBG] WM1 hb t=679565ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:03:51] [DBG] WM1 hb t=684573ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:03:56] [DBG] WM1 hb t=689581ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:04:01] [DBG] WM1 hb t=694589ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:04:06] [DBG] WM1 hb t=699597ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:04:11] [DBG] WM1 hb t=704605ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:04:16] [DBG] WM1 hb t=709613ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:04:21] [DBG] WM1 hb t=714621ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:04:26] [DBG] WM1 hb t=719629ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:04:31] [DBG] WM1 hb t=724637ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:04:36] [DBG] WM1 hb t=729645ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:04:41] [DBG] WM1 hb t=734653ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:04:46] [DBG] WM1 hb t=739661ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:04:51] [DBG] WM1 hb t=744669ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:04:56] [DBG] WM1 hb t=749677ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:05:01] [DBG] WM1 hb t=754685ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:05:06] [DBG] WM1 hb t=759693ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:05:11] [DBG] WM1 hb t=764701ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:05:16] [DBG] WM1 hb t=769709ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:05:21] [DBG] WM1 hb t=774717ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:05:26] [DBG] WM1 hb t=779725ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:05:31] [DBG] WM1 hb t=784733ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:05:36] [DBG] WM1 hb t=789741ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:05:41] [DBG] WM1 hb t=794749ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:05:46] [DBG] WM1 hb t=799757ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:05:51] [DBG] WM1 hb t=804765ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:05:56] [DBG] WM1 hb t=809773ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:06:01] [DBG] WM1 hb t=814781ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:06:06] [DBG] WM1 hb t=819789ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:06:11] [DBG] WM1 hb t=824797ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:06:16] [DBG] WM1 hb t=829805ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:06:21] [DBG] WM1 hb t=834813ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:06:26] [DBG] WM1 hb t=839821ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:06:31] [DBG] WM1 hb t=844829ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:06:36] [DBG] WM1 hb t=849837ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:06:41] [DBG] WM1 hb t=854845ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:06:46] [DBG] WM1 hb t=859853ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:06:51] [DBG] WM1 hb t=864861ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:06:56] [DBG] WM1 hb t=869869ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:07:01] [DBG] WM1 hb t=874877ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:07:06] [DBG] WM1 hb t=879885ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:07:11] [DBG] WM1 hb t=884893ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:07:16] [DBG] WM1 hb t=889901ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:07:21] [DBG] WM1 hb t=894909ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:07:26] [DBG] WM1 hb t=899917ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:07:31] [DBG] WM1 hb t=904925ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:07:36] [DBG] WM1 hb t=909933ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:07:41] [DBG] WM1 hb t=914941ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:07:46] [DBG] WM1 hb t=919949ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:07:51] [DBG] WM1 hb t=924957ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:07:56] [DBG] WM1 hb t=929965ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:08:01] [DBG] WM1 hb t=934973ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:08:06] [DBG] WM1 hb t=939981ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:08:11] [DBG] WM1 hb t=944989ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:08:16] [DBG] WM1 hb t=949997ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:08:21] [DBG] WM1 hb t=955005ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:08:26] [DBG] WM1 hb t=960013ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:08:31] [DBG] WM1 hb t=965021ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:08:36] [DBG] WM1 hb t=970029ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:08:41] [DBG] WM1 hb t=975037ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:08:46] [DBG] WM1 hb t=980045ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:08:51] [DBG] WM1 hb t=985053ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:08:56] [DBG] WM1 hb t=990061ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:09:01] [DBG] WM1 hb t=995069ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:09:06] [DBG] WM1 hb t=1000077ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:09:11] [DBG] WM1 hb t=1005085ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:09:16] [DBG] WM1 hb t=1010093ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:09:21] [DBG] WM1 hb t=1015101ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:09:26] [DBG] WM1 hb t=1020109ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:09:31] [DBG] WM1 hb t=1025117ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:09:36] [DBG] WM1 hb t=1030125ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:09:41] [DBG] WM1 hb t=1035133ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:09:46] [DBG] WM1 hb t=1040141ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:09:51] [DBG] WM1 hb t=1045149ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:09:56] [DBG] WM1 hb t=1050157ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:10:01] [DBG] WM1 hb t=1055165ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:10:06] [DBG] WM1 hb t=1060173ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:10:11] [DBG] WM1 hb t=1065181ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:10:16] [DBG] WM1 hb t=1070189ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:10:21] [DBG] WM1 hb t=1075197ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:10:26] [DBG] WM1 hb t=1080205ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:10:31] [DBG] WM1 hb t=1085213ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:10:36] [DBG] WM1 hb t=1090221ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:10:41] [DBG] WM1 hb t=1095229ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:10:46] [DBG] WM1 hb t=1100237ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:10:51] [DBG] WM1 hb t=1105245ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:10:56] [DBG] WM1 hb t=1110253ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:11:01] [DBG] WM1 hb t=1115261ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:11:06] [DBG] WM1 hb t=1120269ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:11:11] [DBG] WM1 hb t=1125277ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:11:16] [DBG] WM1 hb t=1130285ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:11:21] [DBG] WM1 hb t=1135293ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:11:26] [DBG] WM1 hb t=1140301ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:11:31] [DBG] WM1 hb t=1145309ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:11:36] [DBG] WM1 hb t=1150317ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:11:41] [DBG] WM1 hb t=1155325ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:11:46] [DBG] WM1 hb t=1160333ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:11:51] [DBG] WM1 hb t=1165341ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:11:56] [DBG] WM1 hb t=1170349ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:12:01] [DBG] WM1 hb t=1175357ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:12:06] [DBG] WM1 hb t=1180365ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:12:11] [DBG] WM1 hb t=1185373ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:12:16] [DBG] WM1 hb t=1190381ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:12:21] [DBG] WM1 hb t=1195389ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:12:26] [DBG] WM1 hb t=1200397ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:12:31] [DBG] WM1 hb t=1205405ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:12:36] [DBG] WM1 hb t=1210413ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:12:41] [DBG] WM1 hb t=1215421ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:12:46] [DBG] WM1 hb t=1220429ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:12:51] [DBG] WM1 hb t=1225437ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:12:56] [DBG] WM1 hb t=1230445ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:13:01] [DBG] WM1 hb t=1235453ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:13:06] [DBG] WM1 hb t=1240461ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:13:11] [DBG] WM1 hb t=1245469ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:13:16] [DBG] WM1 hb t=1250477ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:13:21] [DBG] WM1 hb t=1255485ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:13:26] [DBG] WM1 hb t=1260493ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:13:31] [DBG] WM1 hb t=1265501ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:13:36] [DBG] WM1 hb t=1270509ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:13:41] [DBG] WM1 hb t=1275517ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:13:46] [DBG] WM1 hb t=1280525ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:13:52] [DBG] WM1 hb t=1285533ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:13:56] App Started
+[14:13:56] [DBG] WM1 config at startup: port=GPIOF pin=8 moder=1(1=out) odr=0 idr=0 status=Stopped cycle=0ms high=0ms low=0ms resume=0/0ms
+[14:13:59] App Started
+[14:15:01] > set ps 1 on
+
+[14:15:01] set ps 1 on
+[14:15:01] ERROR set ps 1 on
+[14:15:03] > set ps 1 off
+
+[14:15:03] set ps 1 off
+[14:15:03] ERROR set ps 1 off
+[14:15:05] > set ps 1 on
+
+[14:15:05] set ps 1 on
+[14:15:05] ERROR set ps 1 on
+[14:15:09] > start wm 1 1000
+
+[14:15:09] start wm 1 1000
+[14:15:09] wm 1 started
+[14:15:21] > start wm 1 2000
+
+[14:15:21] start wm 1 2000
+[14:15:21] wm 1 started
+[14:15:30] > start wm 1 10000
+
+[14:15:30] start wm 1 10000
+[14:15:30] wm 1 started
+[14:15:34] > stop wm 1
+
+[14:15:34] stop wm 1
+[14:15:34] wm 1 stopped
+[14:15:36] > set ps 1 off
+
+[14:15:36] set ps 1 off
+[14:15:36] ERROR set ps 1 off
+[14:15:37] > set ps 1 on
+
+[14:15:37] set ps 1 on
+[14:15:37] ERROR set ps 1 on

@@ -1,0 +1,42 @@
+--- Log Started: Wed Oct  7 14:15:46 2026 ---
+[14:15:56] Connected to COM16
+[14:16:01] > set ps 1 on
+
+[14:16:01] set ps 1 on
+[14:16:01] ERROR set ps 1 on
+[14:16:04] > set ps 2 on
+
+[14:16:04] set ps 2 on
+[14:16:04] ERROR set ps 2 on
+[14:16:04] > set ps 3 on
+
+[14:16:04] set ps 3 on
+[14:16:04] ERROR set ps 3 on
+[14:16:05] > set ps 4 on
+
+[14:16:05] set ps 4 on
+[14:16:05] ERROR set ps 4 on
+[14:16:05] > set ps 5 on
+
+[14:16:05] set ps 5 on
+[14:16:05] ERROR set ps 5 on
+[14:16:07] > set ps 5 off
+
+[14:16:07] set ps 5 off
+[14:16:07] ERROR set ps 5 off
+[14:16:08] > set ps 4 off
+
+[14:16:08] set ps 4 off
+[14:16:08] ERROR set ps 4 off
+[14:16:08] > set ps 3 off
+
+[14:16:08] set ps 3 off
+[14:16:08] ERROR set ps 3 off
+[14:16:08] > set ps 2 off
+
+[14:16:08] set ps 2 off
+[14:16:08] ERROR set ps 2 off
+[14:16:09] > set ps 1 off
+
+[14:16:09] set ps 1 off
+[14:16:09] ERROR set ps 1 off

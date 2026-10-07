@@ -51,6 +51,7 @@ private:
 
 	void Init();
 	void ControlWaterMeters();
+	void ToggleWaterMeter(int wmIdx, TextPrinter &response);
 	void HandleCommand(const BufferView<> &cmd);
 	void AppendStatus(TextPrinter &p);
 };

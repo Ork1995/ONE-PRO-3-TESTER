@@ -111,6 +111,24 @@ void App::ControlWaterMeters()
 	}
 }
 
+void App::ToggleWaterMeter(int wmIdx, TextPrinter &response)
+{
+	auto &wm = _wmSim[wmIdx];
+
+	if (wm._status == WaterMeterSimulator::Status::Stopped) {
+		wm.SetManualHigh();
+		response << "wm " << (long)wm._id << " manual on";
+	}
+	else if (wm._status == WaterMeterSimulator::Status::ManualHigh) {
+		wm.SetStatus(WaterMeterSimulator::Status::Stopped, 0);
+		response << "wm " << (long)wm._id << " manual off";
+	}
+	else {
+		// Running or armed by a start/trigger command; that operation keeps ownership
+		response << "ERROR wm " << (long)wm._id << " busy";
+	}
+}
+
 void App::HandleCommand(const BufferView<> &cmd)
 {
 	TextScanner scanner(cmd);
@@ -222,6 +240,15 @@ void App::HandleCommand(const BufferView<> &cmd)
 				}
 			}
 		}
+		else if (token1 == "toggle") {
+			if (token2 == "wm") {
+				long id;
+				scanner >> id;
+				if (!scanner.IsError() && id >= 1 && id <= WM_SIM_COUNT) {
+					ToggleWaterMeter(id - 1, response);
+				}
+			}
+		}
 		else if (token1 == "help") {
 			Buffer<100> helpBuf;
 			TextPrinter helpPrinter(helpBuf);
@@ -257,6 +284,9 @@ void App::HandleCommand(const BufferView<> &cmd)
 			_comm.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " trigger wm <id> <cycle_ms>\r\n";
+			_comm.SendResponse(helpBuf); helpBuf.Reset();
+
+			helpPrinter << " toggle wm <id>\r\n";
 			_comm.SendResponse(helpBuf); helpBuf.Reset();
 
 			response << "OK";

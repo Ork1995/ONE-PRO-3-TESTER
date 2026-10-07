@@ -16,7 +16,8 @@ struct WaterMeterSimulator
 		Stopped,
 		Started,
 		Triggered,
-		RunningTriggered
+		RunningTriggered,
+		ManualHigh // static HIGH from 'toggle wm'; Task() leaves the pin untouched
 	};
 
 	enum class StateChange {
@@ -41,6 +42,7 @@ struct WaterMeterSimulator
 	bool _hasResumeState = false;     // true after the first stop
 
 	void Set(bool isHigh);
+	void SetManualHigh();
 	void SetStatus(Status status, uint32_t cycleTimeMs);
 	void PrintStatus(TextPrinter &printer);
 	StateChange Task(bool isValvesOpened);

@@ -1,0 +1,74 @@
+--- Log Started: Wed Oct  7 14:37:40 2026 ---
+[14:38:21] Connected to COM16
+[14:38:25] > toggle wm 1
+
+[14:38:25] toggle wm 1
+[14:38:25] wm 1 manual on
+[14:38:33] > toggle wm 1
+
+[14:38:33] toggle wm 1
+[14:38:33] wm 1 manual off
+[14:38:36] > start wm 1 1000
+
+[14:38:36] start wm 1 1000
+[14:38:36] wm 1 started
+[14:38:40] > stop wm 1
+
+[14:38:40] stop wm 1
+[14:38:40] wm 1 stopped
+[14:38:41] > trigger wm 1 1000
+
+[14:38:41] trigger wm 1 1000
+[14:38:41] wm 1 triggered
+[14:38:46] > start wm 1 1000
+
+[14:38:46] start wm 1 1000
+[14:38:46] wm 1 started
+[14:38:47] > start wm 1 1000
+
+[14:38:47] start wm 1 1000
+[14:38:47] wm 1 started
+[14:38:48] > stop wm 1
+
+[14:38:48] stop wm 1
+[14:38:48] wm 1 stopped
+[14:38:49] > toggle wm 1
+
+[14:38:49] toggle wm 1
+[14:38:49] wm 1 manual on
+[14:38:50] > toggle wm 1
+
+[14:38:50] toggle wm 1
+[14:38:50] wm 1 manual off
+[14:38:51] > toggle wm 1
+
+[14:38:51] toggle wm 1
+[14:38:51] wm 1 manual on
+[14:38:51] > toggle wm 1
+
+[14:38:51] toggle wm 1
+[14:38:51] wm 1 manual off
+[14:39:02] > start wm 1 1000
+
+[14:39:02] start wm 1 1000
+[14:39:02] wm 1 started
+[14:39:04] > start wm 2 1000
+
+[14:39:04] start wm 2 1000
+[14:39:04] wm 2 started
+[14:39:08] > toggle wm 2
+
+[14:39:08] toggle wm 2
+[14:39:08] ERROR wm 2 busy
+[14:39:12] > stop wm 2
+
+[14:39:12] stop wm 2
+[14:39:12] wm 2 stopped
+[14:39:12] > toggle wm 2
+
+[14:39:12] toggle wm 2
+[14:39:12] wm 2 manual on
+[14:39:14] > toggle wm 2
+
+[14:39:14] toggle wm 2
+[14:39:14] wm 2 manual off

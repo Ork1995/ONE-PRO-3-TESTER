@@ -1,4 +1,5 @@
 ../Application/WaterMeterSimulator.cpp:18:6:void WaterMeterSimulator::Set(bool)	16	static
-../Application/WaterMeterSimulator.cpp:38:6:void WaterMeterSimulator::SetStatus(Status, uint32_t)	64	static
-../Application/WaterMeterSimulator.cpp:101:6:void WaterMeterSimulator::PrintStatus(TextPrinter&)	16	static
-../Application/WaterMeterSimulator.cpp:144:34:WaterMeterSimulator::StateChange WaterMeterSimulator::Task(bool)	56	static
+../Application/WaterMeterSimulator.cpp:24:6:void WaterMeterSimulator::SetManualHigh()	16	static
+../Application/WaterMeterSimulator.cpp:44:6:void WaterMeterSimulator::SetStatus(Status, uint32_t)	64	static
+../Application/WaterMeterSimulator.cpp:107:6:void WaterMeterSimulator::PrintStatus(TextPrinter&)	16	static
+../Application/WaterMeterSimulator.cpp:153:34:WaterMeterSimulator::StateChange WaterMeterSimulator::Task(bool)	56	static
