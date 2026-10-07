@@ -1,0 +1,448 @@
+--- Log Started: Wed Oct  7 13:53:27 2026 ---
+[13:53:41] Connected to COM16
+[13:53:46] [DBG] WM1 hb t=80125ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:53:49] > start wm 1 1000
+
+[13:53:49] start wm 1 1000
+[13:53:49] [DBG] UART RX line complete len=15: start wm 1 1000
+[13:53:49] [DBG] App command len=15 tok1='start' tok2='wm' scanErr=0
+[13:53:49] [DBG] START WM parsed: scanErr=0 id=1 cycle=1000ms -> WM1 START detected, prevStatus=Stopped
+[13:53:49] [DBG] WM1 after SetStatus(Started): port=GPIOF pin=8 moder=1(1=out) odr=0 idr=0 status=Started cycle=1000ms high=50ms low=950ms resume=0/0ms
+[13:53:49] wm 1 started
+[13:53:49] [DBG] WM1 state Stopped -> Started
+[13:53:49] [DBG] WM1 GPIO LOW GPIOF pin=8 t=83054ms dt=83054ms odr=0 idr=0 pulses=0 cfgHigh=50ms cfgLow=950ms
+[13:53:50] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=84012ms dt=958ms odr=1 idr=1 pulses=1 cfgHigh=50ms cfgLow=950ms
+[13:53:50] [DBG] WM1 GPIO LOW GPIOF pin=8 t=84061ms dt=49ms odr=0 idr=0 pulses=1 cfgHigh=50ms cfgLow=950ms
+[13:53:51] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=85010ms dt=949ms odr=1 idr=1 pulses=2 cfgHigh=50ms cfgLow=950ms
+[13:53:51] [DBG] WM1 GPIO LOW GPIOF pin=8 t=85059ms dt=49ms odr=0 idr=0 pulses=2 cfgHigh=50ms cfgLow=950ms
+[13:53:52] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=86008ms dt=949ms odr=1 idr=1 pulses=3 cfgHigh=50ms cfgLow=950ms
+[13:53:52] [DBG] WM1 GPIO LOW GPIOF pin=8 t=86057ms dt=49ms odr=0 idr=0 pulses=3 cfgHigh=50ms cfgLow=950ms
+[13:53:53] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=87006ms dt=949ms odr=1 idr=1 pulses=4 cfgHigh=50ms cfgLow=950ms
+[13:53:53] [DBG] WM1 GPIO LOW GPIOF pin=8 t=87055ms dt=49ms odr=0 idr=0 pulses=4 cfgHigh=50ms cfgLow=950ms
+[13:53:54] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=88004ms dt=949ms odr=1 idr=1 pulses=5 cfgHigh=50ms cfgLow=950ms
+[13:53:54] [DBG] WM1 GPIO LOW GPIOF pin=8 t=88063ms dt=59ms odr=0 idr=0 pulses=5 cfgHigh=50ms cfgLow=950ms
+[13:53:55] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=89012ms dt=949ms odr=1 idr=1 pulses=6 cfgHigh=50ms cfgLow=950ms
+[13:53:55] [DBG] WM1 GPIO LOW GPIOF pin=8 t=89061ms dt=49ms odr=0 idr=0 pulses=6 cfgHigh=50ms cfgLow=950ms
+[13:53:56] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=90010ms dt=949ms odr=1 idr=1 pulses=7 cfgHigh=50ms cfgLow=950ms
+[13:53:56] [DBG] WM1 GPIO LOW GPIOF pin=8 t=90059ms dt=49ms odr=0 idr=0 pulses=7 cfgHigh=50ms cfgLow=950ms
+[13:53:57] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=91008ms dt=949ms odr=1 idr=1 pulses=8 cfgHigh=50ms cfgLow=950ms
+[13:53:57] [DBG] WM1 GPIO LOW GPIOF pin=8 t=91057ms dt=49ms odr=0 idr=0 pulses=8 cfgHigh=50ms cfgLow=950ms
+[13:53:58] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=92006ms dt=949ms odr=1 idr=1 pulses=9 cfgHigh=50ms cfgLow=950ms
+[13:53:58] [DBG] WM1 GPIO LOW GPIOF pin=8 t=92055ms dt=49ms odr=0 idr=0 pulses=9 cfgHigh=50ms cfgLow=950ms
+[13:53:59] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=93004ms dt=949ms odr=1 idr=1 pulses=10 cfgHigh=50ms cfgLow=950ms
+[13:53:59] [DBG] WM1 GPIO LOW GPIOF pin=8 t=93063ms dt=59ms odr=0 idr=0 pulses=10 cfgHigh=50ms cfgLow=950ms
+[13:54:00] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=94012ms dt=949ms odr=1 idr=1 pulses=11 cfgHigh=50ms cfgLow=950ms
+[13:54:00] [DBG] WM1 GPIO LOW GPIOF pin=8 t=94061ms dt=49ms odr=0 idr=0 pulses=11 cfgHigh=50ms cfgLow=950ms
+[13:54:01] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=95010ms dt=949ms odr=1 idr=1 pulses=12 cfgHigh=50ms cfgLow=950ms
+[13:54:01] [DBG] WM1 GPIO LOW GPIOF pin=8 t=95059ms dt=49ms odr=0 idr=0 pulses=12 cfgHigh=50ms cfgLow=950ms
+[13:54:02] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=96008ms dt=949ms odr=1 idr=1 pulses=13 cfgHigh=50ms cfgLow=950ms
+[13:54:02] [DBG] WM1 GPIO LOW GPIOF pin=8 t=96057ms dt=49ms odr=0 idr=0 pulses=13 cfgHigh=50ms cfgLow=950ms
+[13:54:03] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=97006ms dt=949ms odr=1 idr=1 pulses=14 cfgHigh=50ms cfgLow=950ms
+[13:54:03] [DBG] WM1 GPIO LOW GPIOF pin=8 t=97055ms dt=49ms odr=0 idr=0 pulses=14 cfgHigh=50ms cfgLow=950ms
+[13:54:04] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=98004ms dt=949ms odr=1 idr=1 pulses=15 cfgHigh=50ms cfgLow=950ms
+[13:54:04] [DBG] WM1 GPIO LOW GPIOF pin=8 t=98063ms dt=59ms odr=0 idr=0 pulses=15 cfgHigh=50ms cfgLow=950ms
+[13:54:05] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=99012ms dt=949ms odr=1 idr=1 pulses=16 cfgHigh=50ms cfgLow=950ms
+[13:54:05] [DBG] WM1 GPIO LOW GPIOF pin=8 t=99061ms dt=49ms odr=0 idr=0 pulses=16 cfgHigh=50ms cfgLow=950ms
+[13:54:06] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=100010ms dt=949ms odr=1 idr=1 pulses=17 cfgHigh=50ms cfgLow=950ms
+[13:54:06] [DBG] WM1 GPIO LOW GPIOF pin=8 t=100059ms dt=49ms odr=0 idr=0 pulses=17 cfgHigh=50ms cfgLow=950ms
+[13:54:07] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=101008ms dt=949ms odr=1 idr=1 pulses=18 cfgHigh=50ms cfgLow=950ms
+[13:54:07] [DBG] WM1 GPIO LOW GPIOF pin=8 t=101057ms dt=49ms odr=0 idr=0 pulses=18 cfgHigh=50ms cfgLow=950ms
+[13:54:08] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=102006ms dt=949ms odr=1 idr=1 pulses=19 cfgHigh=50ms cfgLow=950ms
+[13:54:08] [DBG] WM1 GPIO LOW GPIOF pin=8 t=102055ms dt=49ms odr=0 idr=0 pulses=19 cfgHigh=50ms cfgLow=950ms
+[13:54:09] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=103004ms dt=949ms odr=1 idr=1 pulses=20 cfgHigh=50ms cfgLow=950ms
+[13:54:09] [DBG] WM1 GPIO LOW GPIOF pin=8 t=103063ms dt=59ms odr=0 idr=0 pulses=20 cfgHigh=50ms cfgLow=950ms
+[13:54:10] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=104012ms dt=949ms odr=1 idr=1 pulses=21 cfgHigh=50ms cfgLow=950ms
+[13:54:10] [DBG] WM1 GPIO LOW GPIOF pin=8 t=104061ms dt=49ms odr=0 idr=0 pulses=21 cfgHigh=50ms cfgLow=950ms
+[13:54:11] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=105010ms dt=949ms odr=1 idr=1 pulses=22 cfgHigh=50ms cfgLow=950ms
+[13:54:11] [DBG] WM1 GPIO LOW GPIOF pin=8 t=105059ms dt=49ms odr=0 idr=0 pulses=22 cfgHigh=50ms cfgLow=950ms
+[13:54:12] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=106008ms dt=949ms odr=1 idr=1 pulses=23 cfgHigh=50ms cfgLow=950ms
+[13:54:12] [DBG] WM1 GPIO LOW GPIOF pin=8 t=106057ms dt=49ms odr=0 idr=0 pulses=23 cfgHigh=50ms cfgLow=950ms
+[13:54:13] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=107006ms dt=949ms odr=1 idr=1 pulses=24 cfgHigh=50ms cfgLow=950ms
+[13:54:13] [DBG] WM1 GPIO LOW GPIOF pin=8 t=107055ms dt=49ms odr=0 idr=0 pulses=24 cfgHigh=50ms cfgLow=950ms
+[13:54:14] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=108004ms dt=949ms odr=1 idr=1 pulses=25 cfgHigh=50ms cfgLow=950ms
+[13:54:14] [DBG] WM1 GPIO LOW GPIOF pin=8 t=108063ms dt=59ms odr=0 idr=0 pulses=25 cfgHigh=50ms cfgLow=950ms
+[13:54:15] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=109012ms dt=949ms odr=1 idr=1 pulses=26 cfgHigh=50ms cfgLow=950ms
+[13:54:15] [DBG] WM1 GPIO LOW GPIOF pin=8 t=109061ms dt=49ms odr=0 idr=0 pulses=26 cfgHigh=50ms cfgLow=950ms
+[13:54:16] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=110010ms dt=949ms odr=1 idr=1 pulses=27 cfgHigh=50ms cfgLow=950ms
+[13:54:16] [DBG] WM1 GPIO LOW GPIOF pin=8 t=110059ms dt=49ms odr=0 idr=0 pulses=27 cfgHigh=50ms cfgLow=950ms
+[13:54:17] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=111008ms dt=949ms odr=1 idr=1 pulses=28 cfgHigh=50ms cfgLow=950ms
+[13:54:17] [DBG] WM1 GPIO LOW GPIOF pin=8 t=111057ms dt=49ms odr=0 idr=0 pulses=28 cfgHigh=50ms cfgLow=950ms
+[13:54:18] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=112006ms dt=949ms odr=1 idr=1 pulses=29 cfgHigh=50ms cfgLow=950ms
+[13:54:18] [DBG] WM1 GPIO LOW GPIOF pin=8 t=112055ms dt=49ms odr=0 idr=0 pulses=29 cfgHigh=50ms cfgLow=950ms
+[13:54:19] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=113004ms dt=949ms odr=1 idr=1 pulses=30 cfgHigh=50ms cfgLow=950ms
+[13:54:19] [DBG] WM1 GPIO LOW GPIOF pin=8 t=113063ms dt=59ms odr=0 idr=0 pulses=30 cfgHigh=50ms cfgLow=950ms
+[13:54:20] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=114012ms dt=949ms odr=1 idr=1 pulses=31 cfgHigh=50ms cfgLow=950ms
+[13:54:20] [DBG] WM1 GPIO LOW GPIOF pin=8 t=114061ms dt=49ms odr=0 idr=0 pulses=31 cfgHigh=50ms cfgLow=950ms
+[13:54:21] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=115010ms dt=949ms odr=1 idr=1 pulses=32 cfgHigh=50ms cfgLow=950ms
+[13:54:21] [DBG] WM1 GPIO LOW GPIOF pin=8 t=115059ms dt=49ms odr=0 idr=0 pulses=32 cfgHigh=50ms cfgLow=950ms
+[13:54:22] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=116008ms dt=949ms odr=1 idr=1 pulses=33 cfgHigh=50ms cfgLow=950ms
+[13:54:22] [DBG] WM1 GPIO LOW GPIOF pin=8 t=116057ms dt=49ms odr=0 idr=0 pulses=33 cfgHigh=50ms cfgLow=950ms
+[13:54:23] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=117006ms dt=949ms odr=1 idr=1 pulses=34 cfgHigh=50ms cfgLow=950ms
+[13:54:23] [DBG] WM1 GPIO LOW GPIOF pin=8 t=117055ms dt=49ms odr=0 idr=0 pulses=34 cfgHigh=50ms cfgLow=950ms
+[13:54:24] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=118004ms dt=949ms odr=1 idr=1 pulses=35 cfgHigh=50ms cfgLow=950ms
+[13:54:24] [DBG] WM1 GPIO LOW GPIOF pin=8 t=118063ms dt=59ms odr=0 idr=0 pulses=35 cfgHigh=50ms cfgLow=950ms
+[13:54:25] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=119012ms dt=949ms odr=1 idr=1 pulses=36 cfgHigh=50ms cfgLow=950ms
+[13:54:25] [DBG] WM1 GPIO LOW GPIOF pin=8 t=119061ms dt=49ms odr=0 idr=0 pulses=36 cfgHigh=50ms cfgLow=950ms
+[13:54:26] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=120010ms dt=949ms odr=1 idr=1 pulses=37 cfgHigh=50ms cfgLow=950ms
+[13:54:26] [DBG] WM1 GPIO LOW GPIOF pin=8 t=120059ms dt=49ms odr=0 idr=0 pulses=37 cfgHigh=50ms cfgLow=950ms
+[13:54:27] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=121008ms dt=949ms odr=1 idr=1 pulses=38 cfgHigh=50ms cfgLow=950ms
+[13:54:27] [DBG] WM1 GPIO LOW GPIOF pin=8 t=121057ms dt=49ms odr=0 idr=0 pulses=38 cfgHigh=50ms cfgLow=950ms
+[13:54:28] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=122006ms dt=949ms odr=1 idr=1 pulses=39 cfgHigh=50ms cfgLow=950ms
+[13:54:28] [DBG] WM1 GPIO LOW GPIOF pin=8 t=122055ms dt=49ms odr=0 idr=0 pulses=39 cfgHigh=50ms cfgLow=950ms
+[13:54:29] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=123004ms dt=949ms odr=1 idr=1 pulses=40 cfgHigh=50ms cfgLow=950ms
+[13:54:29] [DBG] WM1 GPIO LOW GPIOF pin=8 t=123063ms dt=59ms odr=0 idr=0 pulses=40 cfgHigh=50ms cfgLow=950ms
+[13:54:30] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=124012ms dt=949ms odr=1 idr=1 pulses=41 cfgHigh=50ms cfgLow=950ms
+[13:54:30] [DBG] WM1 GPIO LOW GPIOF pin=8 t=124061ms dt=49ms odr=0 idr=0 pulses=41 cfgHigh=50ms cfgLow=950ms
+[13:54:31] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=125010ms dt=949ms odr=1 idr=1 pulses=42 cfgHigh=50ms cfgLow=950ms
+[13:54:31] [DBG] WM1 GPIO LOW GPIOF pin=8 t=125059ms dt=49ms odr=0 idr=0 pulses=42 cfgHigh=50ms cfgLow=950ms
+[13:54:32] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=126008ms dt=949ms odr=1 idr=1 pulses=43 cfgHigh=50ms cfgLow=950ms
+[13:54:32] [DBG] WM1 GPIO LOW GPIOF pin=8 t=126057ms dt=49ms odr=0 idr=0 pulses=43 cfgHigh=50ms cfgLow=950ms
+[13:54:33] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=127006ms dt=949ms odr=1 idr=1 pulses=44 cfgHigh=50ms cfgLow=950ms
+[13:54:33] [DBG] WM1 GPIO LOW GPIOF pin=8 t=127055ms dt=49ms odr=0 idr=0 pulses=44 cfgHigh=50ms cfgLow=950ms
+[13:54:34] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=128004ms dt=949ms odr=1 idr=1 pulses=45 cfgHigh=50ms cfgLow=950ms
+[13:54:34] [DBG] WM1 GPIO LOW GPIOF pin=8 t=128063ms dt=59ms odr=0 idr=0 pulses=45 cfgHigh=50ms cfgLow=950ms
+[13:54:35] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=129012ms dt=949ms odr=1 idr=1 pulses=46 cfgHigh=50ms cfgLow=950ms
+[13:54:35] [DBG] WM1 GPIO LOW GPIOF pin=8 t=129061ms dt=49ms odr=0 idr=0 pulses=46 cfgHigh=50ms cfgLow=950ms
+[13:54:36] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=130010ms dt=949ms odr=1 idr=1 pulses=47 cfgHigh=50ms cfgLow=950ms
+[13:54:36] [DBG] WM1 GPIO LOW GPIOF pin=8 t=130059ms dt=49ms odr=0 idr=0 pulses=47 cfgHigh=50ms cfgLow=950ms
+[13:54:37] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=131008ms dt=949ms odr=1 idr=1 pulses=48 cfgHigh=50ms cfgLow=950ms
+[13:54:37] [DBG] WM1 GPIO LOW GPIOF pin=8 t=131057ms dt=49ms odr=0 idr=0 pulses=48 cfgHigh=50ms cfgLow=950ms
+[13:54:38] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=132006ms dt=949ms odr=1 idr=1 pulses=49 cfgHigh=50ms cfgLow=950ms
+[13:54:38] [DBG] WM1 GPIO LOW GPIOF pin=8 t=132055ms dt=49ms odr=0 idr=0 pulses=49 cfgHigh=50ms cfgLow=950ms
+[13:54:39] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=133004ms dt=949ms odr=1 idr=1 pulses=50 cfgHigh=50ms cfgLow=950ms
+[13:54:39] [DBG] WM1 GPIO LOW GPIOF pin=8 t=133063ms dt=59ms odr=0 idr=0 pulses=50 cfgHigh=50ms cfgLow=950ms
+[13:54:40] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=134012ms dt=949ms odr=1 idr=1 pulses=51 cfgHigh=50ms cfgLow=950ms
+[13:54:40] [DBG] WM1 GPIO LOW GPIOF pin=8 t=134061ms dt=49ms odr=0 idr=0 pulses=51 cfgHigh=50ms cfgLow=950ms
+[13:54:41] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=135010ms dt=949ms odr=1 idr=1 pulses=52 cfgHigh=50ms cfgLow=950ms
+[13:54:41] [DBG] WM1 GPIO LOW GPIOF pin=8 t=135059ms dt=49ms odr=0 idr=0 pulses=52 cfgHigh=50ms cfgLow=950ms
+[13:54:42] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=136008ms dt=949ms odr=1 idr=1 pulses=53 cfgHigh=50ms cfgLow=950ms
+[13:54:42] [DBG] WM1 GPIO LOW GPIOF pin=8 t=136057ms dt=49ms odr=0 idr=0 pulses=53 cfgHigh=50ms cfgLow=950ms
+[13:54:43] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=137006ms dt=949ms odr=1 idr=1 pulses=54 cfgHigh=50ms cfgLow=950ms
+[13:54:43] [DBG] WM1 GPIO LOW GPIOF pin=8 t=137055ms dt=49ms odr=0 idr=0 pulses=54 cfgHigh=50ms cfgLow=950ms
+[13:54:44] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=138004ms dt=949ms odr=1 idr=1 pulses=55 cfgHigh=50ms cfgLow=950ms
+[13:54:44] [DBG] WM1 GPIO LOW GPIOF pin=8 t=138063ms dt=59ms odr=0 idr=0 pulses=55 cfgHigh=50ms cfgLow=950ms
+[13:54:45] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=139012ms dt=949ms odr=1 idr=1 pulses=56 cfgHigh=50ms cfgLow=950ms
+[13:54:45] [DBG] WM1 GPIO LOW GPIOF pin=8 t=139061ms dt=49ms odr=0 idr=0 pulses=56 cfgHigh=50ms cfgLow=950ms
+[13:54:46] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=140010ms dt=949ms odr=1 idr=1 pulses=57 cfgHigh=50ms cfgLow=950ms
+[13:54:46] [DBG] WM1 GPIO LOW GPIOF pin=8 t=140059ms dt=49ms odr=0 idr=0 pulses=57 cfgHigh=50ms cfgLow=950ms
+[13:54:47] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=141008ms dt=949ms odr=1 idr=1 pulses=58 cfgHigh=50ms cfgLow=950ms
+[13:54:47] [DBG] WM1 GPIO LOW GPIOF pin=8 t=141057ms dt=49ms odr=0 idr=0 pulses=58 cfgHigh=50ms cfgLow=950ms
+[13:54:48] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=142006ms dt=949ms odr=1 idr=1 pulses=59 cfgHigh=50ms cfgLow=950ms
+[13:54:48] [DBG] WM1 GPIO LOW GPIOF pin=8 t=142055ms dt=49ms odr=0 idr=0 pulses=59 cfgHigh=50ms cfgLow=950ms
+[13:54:49] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=143004ms dt=949ms odr=1 idr=1 pulses=60 cfgHigh=50ms cfgLow=950ms
+[13:54:49] [DBG] WM1 GPIO LOW GPIOF pin=8 t=143063ms dt=59ms odr=0 idr=0 pulses=60 cfgHigh=50ms cfgLow=950ms
+[13:54:50] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=144012ms dt=949ms odr=1 idr=1 pulses=61 cfgHigh=50ms cfgLow=950ms
+[13:54:50] [DBG] WM1 GPIO LOW GPIOF pin=8 t=144061ms dt=49ms odr=0 idr=0 pulses=61 cfgHigh=50ms cfgLow=950ms
+[13:54:51] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=145010ms dt=949ms odr=1 idr=1 pulses=62 cfgHigh=50ms cfgLow=950ms
+[13:54:51] [DBG] WM1 GPIO LOW GPIOF pin=8 t=145059ms dt=49ms odr=0 idr=0 pulses=62 cfgHigh=50ms cfgLow=950ms
+[13:54:52] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=146008ms dt=949ms odr=1 idr=1 pulses=63 cfgHigh=50ms cfgLow=950ms
+[13:54:52] [DBG] WM1 GPIO LOW GPIOF pin=8 t=146057ms dt=49ms odr=0 idr=0 pulses=63 cfgHigh=50ms cfgLow=950ms
+[13:54:53] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=147006ms dt=949ms odr=1 idr=1 pulses=64 cfgHigh=50ms cfgLow=950ms
+[13:54:53] [DBG] WM1 GPIO LOW GPIOF pin=8 t=147055ms dt=49ms odr=0 idr=0 pulses=64 cfgHigh=50ms cfgLow=950ms
+[13:54:54] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=148004ms dt=949ms odr=1 idr=1 pulses=65 cfgHigh=50ms cfgLow=950ms
+[13:54:54] [DBG] WM1 GPIO LOW GPIOF pin=8 t=148063ms dt=59ms odr=0 idr=0 pulses=65 cfgHigh=50ms cfgLow=950ms
+[13:54:55] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=149012ms dt=949ms odr=1 idr=1 pulses=66 cfgHigh=50ms cfgLow=950ms
+[13:54:55] [DBG] WM1 GPIO LOW GPIOF pin=8 t=149061ms dt=49ms odr=0 idr=0 pulses=66 cfgHigh=50ms cfgLow=950ms
+[13:54:56] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=150010ms dt=949ms odr=1 idr=1 pulses=67 cfgHigh=50ms cfgLow=950ms
+[13:54:56] [DBG] WM1 GPIO LOW GPIOF pin=8 t=150059ms dt=49ms odr=0 idr=0 pulses=67 cfgHigh=50ms cfgLow=950ms
+[13:54:57] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=151008ms dt=949ms odr=1 idr=1 pulses=68 cfgHigh=50ms cfgLow=950ms
+[13:54:57] [DBG] WM1 GPIO LOW GPIOF pin=8 t=151057ms dt=49ms odr=0 idr=0 pulses=68 cfgHigh=50ms cfgLow=950ms
+[13:54:58] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=152006ms dt=949ms odr=1 idr=1 pulses=69 cfgHigh=50ms cfgLow=950ms
+[13:54:58] [DBG] WM1 GPIO LOW GPIOF pin=8 t=152055ms dt=49ms odr=0 idr=0 pulses=69 cfgHigh=50ms cfgLow=950ms
+[13:54:59] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=153004ms dt=949ms odr=1 idr=1 pulses=70 cfgHigh=50ms cfgLow=950ms
+[13:54:59] [DBG] WM1 GPIO LOW GPIOF pin=8 t=153063ms dt=59ms odr=0 idr=0 pulses=70 cfgHigh=50ms cfgLow=950ms
+[13:55:00] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=154012ms dt=949ms odr=1 idr=1 pulses=71 cfgHigh=50ms cfgLow=950ms
+[13:55:00] [DBG] WM1 GPIO LOW GPIOF pin=8 t=154061ms dt=49ms odr=0 idr=0 pulses=71 cfgHigh=50ms cfgLow=950ms
+[13:55:01] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=155010ms dt=949ms odr=1 idr=1 pulses=72 cfgHigh=50ms cfgLow=950ms
+[13:55:01] [DBG] WM1 GPIO LOW GPIOF pin=8 t=155059ms dt=49ms odr=0 idr=0 pulses=72 cfgHigh=50ms cfgLow=950ms
+[13:55:02] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=156008ms dt=949ms odr=1 idr=1 pulses=73 cfgHigh=50ms cfgLow=950ms
+[13:55:02] [DBG] WM1 GPIO LOW GPIOF pin=8 t=156057ms dt=49ms odr=0 idr=0 pulses=73 cfgHigh=50ms cfgLow=950ms
+[13:55:03] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=157006ms dt=949ms odr=1 idr=1 pulses=74 cfgHigh=50ms cfgLow=950ms
+[13:55:03] [DBG] WM1 GPIO LOW GPIOF pin=8 t=157055ms dt=49ms odr=0 idr=0 pulses=74 cfgHigh=50ms cfgLow=950ms
+[13:55:04] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=158004ms dt=949ms odr=1 idr=1 pulses=75 cfgHigh=50ms cfgLow=950ms
+[13:55:04] [DBG] WM1 GPIO LOW GPIOF pin=8 t=158063ms dt=59ms odr=0 idr=0 pulses=75 cfgHigh=50ms cfgLow=950ms
+[13:55:05] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=159012ms dt=949ms odr=1 idr=1 pulses=76 cfgHigh=50ms cfgLow=950ms
+[13:55:05] [DBG] WM1 GPIO LOW GPIOF pin=8 t=159061ms dt=49ms odr=0 idr=0 pulses=76 cfgHigh=50ms cfgLow=950ms
+[13:55:06] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=160010ms dt=949ms odr=1 idr=1 pulses=77 cfgHigh=50ms cfgLow=950ms
+[13:55:06] [DBG] WM1 GPIO LOW GPIOF pin=8 t=160059ms dt=49ms odr=0 idr=0 pulses=77 cfgHigh=50ms cfgLow=950ms
+[13:55:07] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=161008ms dt=949ms odr=1 idr=1 pulses=78 cfgHigh=50ms cfgLow=950ms
+[13:55:07] [DBG] WM1 GPIO LOW GPIOF pin=8 t=161057ms dt=49ms odr=0 idr=0 pulses=78 cfgHigh=50ms cfgLow=950ms
+[13:55:08] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=162006ms dt=949ms odr=1 idr=1 pulses=79 cfgHigh=50ms cfgLow=950ms
+[13:55:08] [DBG] WM1 GPIO LOW GPIOF pin=8 t=162055ms dt=49ms odr=0 idr=0 pulses=79 cfgHigh=50ms cfgLow=950ms
+[13:55:09] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=163004ms dt=949ms odr=1 idr=1 pulses=80 cfgHigh=50ms cfgLow=950ms
+[13:55:09] [DBG] WM1 GPIO LOW GPIOF pin=8 t=163063ms dt=59ms odr=0 idr=0 pulses=80 cfgHigh=50ms cfgLow=950ms
+[13:55:10] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=164012ms dt=949ms odr=1 idr=1 pulses=81 cfgHigh=50ms cfgLow=950ms
+[13:55:10] [DBG] WM1 GPIO LOW GPIOF pin=8 t=164061ms dt=49ms odr=0 idr=0 pulses=81 cfgHigh=50ms cfgLow=950ms
+[13:55:11] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=165010ms dt=949ms odr=1 idr=1 pulses=82 cfgHigh=50ms cfgLow=950ms
+[13:55:11] [DBG] WM1 GPIO LOW GPIOF pin=8 t=165059ms dt=49ms odr=0 idr=0 pulses=82 cfgHigh=50ms cfgLow=950ms
+[13:55:12] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=166008ms dt=949ms odr=1 idr=1 pulses=83 cfgHigh=50ms cfgLow=950ms
+[13:55:12] [DBG] WM1 GPIO LOW GPIOF pin=8 t=166057ms dt=49ms odr=0 idr=0 pulses=83 cfgHigh=50ms cfgLow=950ms
+[13:55:13] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=167006ms dt=949ms odr=1 idr=1 pulses=84 cfgHigh=50ms cfgLow=950ms
+[13:55:13] [DBG] WM1 GPIO LOW GPIOF pin=8 t=167055ms dt=49ms odr=0 idr=0 pulses=84 cfgHigh=50ms cfgLow=950ms
+[13:55:14] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=168004ms dt=949ms odr=1 idr=1 pulses=85 cfgHigh=50ms cfgLow=950ms
+[13:55:14] [DBG] WM1 GPIO LOW GPIOF pin=8 t=168063ms dt=59ms odr=0 idr=0 pulses=85 cfgHigh=50ms cfgLow=950ms
+[13:55:15] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=169012ms dt=949ms odr=1 idr=1 pulses=86 cfgHigh=50ms cfgLow=950ms
+[13:55:15] [DBG] WM1 GPIO LOW GPIOF pin=8 t=169061ms dt=49ms odr=0 idr=0 pulses=86 cfgHigh=50ms cfgLow=950ms
+[13:55:16] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=170010ms dt=949ms odr=1 idr=1 pulses=87 cfgHigh=50ms cfgLow=950ms
+[13:55:16] [DBG] WM1 GPIO LOW GPIOF pin=8 t=170059ms dt=49ms odr=0 idr=0 pulses=87 cfgHigh=50ms cfgLow=950ms
+[13:55:17] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=171008ms dt=949ms odr=1 idr=1 pulses=88 cfgHigh=50ms cfgLow=950ms
+[13:55:17] [DBG] WM1 GPIO LOW GPIOF pin=8 t=171057ms dt=49ms odr=0 idr=0 pulses=88 cfgHigh=50ms cfgLow=950ms
+[13:55:18] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=172006ms dt=949ms odr=1 idr=1 pulses=89 cfgHigh=50ms cfgLow=950ms
+[13:55:18] [DBG] WM1 GPIO LOW GPIOF pin=8 t=172055ms dt=49ms odr=0 idr=0 pulses=89 cfgHigh=50ms cfgLow=950ms
+[13:55:19] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=173004ms dt=949ms odr=1 idr=1 pulses=90 cfgHigh=50ms cfgLow=950ms
+[13:55:19] [DBG] WM1 GPIO LOW GPIOF pin=8 t=173063ms dt=59ms odr=0 idr=0 pulses=90 cfgHigh=50ms cfgLow=950ms
+[13:55:20] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=174012ms dt=949ms odr=1 idr=1 pulses=91 cfgHigh=50ms cfgLow=950ms
+[13:55:20] [DBG] WM1 GPIO LOW GPIOF pin=8 t=174061ms dt=49ms odr=0 idr=0 pulses=91 cfgHigh=50ms cfgLow=950ms
+[13:55:21] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=175010ms dt=949ms odr=1 idr=1 pulses=92 cfgHigh=50ms cfgLow=950ms
+[13:55:21] [DBG] WM1 GPIO LOW GPIOF pin=8 t=175059ms dt=49ms odr=0 idr=0 pulses=92 cfgHigh=50ms cfgLow=950ms
+[13:55:22] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=176008ms dt=949ms odr=1 idr=1 pulses=93 cfgHigh=50ms cfgLow=950ms
+[13:55:22] [DBG] WM1 GPIO LOW GPIOF pin=8 t=176057ms dt=49ms odr=0 idr=0 pulses=93 cfgHigh=50ms cfgLow=950ms
+[13:55:23] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=177006ms dt=949ms odr=1 idr=1 pulses=94 cfgHigh=50ms cfgLow=950ms
+[13:55:23] [DBG] WM1 GPIO LOW GPIOF pin=8 t=177055ms dt=49ms odr=0 idr=0 pulses=94 cfgHigh=50ms cfgLow=950ms
+[13:55:24] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=178004ms dt=949ms odr=1 idr=1 pulses=95 cfgHigh=50ms cfgLow=950ms
+[13:55:24] [DBG] WM1 GPIO LOW GPIOF pin=8 t=178063ms dt=59ms odr=0 idr=0 pulses=95 cfgHigh=50ms cfgLow=950ms
+[13:55:25] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=179012ms dt=949ms odr=1 idr=1 pulses=96 cfgHigh=50ms cfgLow=950ms
+[13:55:25] [DBG] WM1 GPIO LOW GPIOF pin=8 t=179061ms dt=49ms odr=0 idr=0 pulses=96 cfgHigh=50ms cfgLow=950ms
+[13:55:26] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=180010ms dt=949ms odr=1 idr=1 pulses=97 cfgHigh=50ms cfgLow=950ms
+[13:55:26] [DBG] WM1 GPIO LOW GPIOF pin=8 t=180059ms dt=49ms odr=0 idr=0 pulses=97 cfgHigh=50ms cfgLow=950ms
+[13:55:27] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=181008ms dt=949ms odr=1 idr=1 pulses=98 cfgHigh=50ms cfgLow=950ms
+[13:55:27] [DBG] WM1 GPIO LOW GPIOF pin=8 t=181057ms dt=49ms odr=0 idr=0 pulses=98 cfgHigh=50ms cfgLow=950ms
+[13:55:28] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=182006ms dt=949ms odr=1 idr=1 pulses=99 cfgHigh=50ms cfgLow=950ms
+[13:55:28] [DBG] WM1 GPIO LOW GPIOF pin=8 t=182055ms dt=49ms odr=0 idr=0 pulses=99 cfgHigh=50ms cfgLow=950ms
+[13:55:29] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=183004ms dt=949ms odr=1 idr=1 pulses=100 cfgHigh=50ms cfgLow=950ms
+[13:55:29] [DBG] WM1 GPIO LOW GPIOF pin=8 t=183063ms dt=59ms odr=0 idr=0 pulses=100 cfgHigh=50ms cfgLow=950ms
+[13:55:30] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=184012ms dt=949ms odr=1 idr=1 pulses=101 cfgHigh=50ms cfgLow=950ms
+[13:55:30] [DBG] WM1 GPIO LOW GPIOF pin=8 t=184061ms dt=49ms odr=0 idr=0 pulses=101 cfgHigh=50ms cfgLow=950ms
+[13:55:31] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=185010ms dt=949ms odr=1 idr=1 pulses=102 cfgHigh=50ms cfgLow=950ms
+[13:55:31] [DBG] WM1 GPIO LOW GPIOF pin=8 t=185059ms dt=49ms odr=0 idr=0 pulses=102 cfgHigh=50ms cfgLow=950ms
+[13:55:32] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=186008ms dt=949ms odr=1 idr=1 pulses=103 cfgHigh=50ms cfgLow=950ms
+[13:55:32] [DBG] WM1 GPIO LOW GPIOF pin=8 t=186057ms dt=49ms odr=0 idr=0 pulses=103 cfgHigh=50ms cfgLow=950ms
+[13:55:33] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=187006ms dt=949ms odr=1 idr=1 pulses=104 cfgHigh=50ms cfgLow=950ms
+[13:55:33] [DBG] WM1 GPIO LOW GPIOF pin=8 t=187055ms dt=49ms odr=0 idr=0 pulses=104 cfgHigh=50ms cfgLow=950ms
+[13:55:34] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=188004ms dt=949ms odr=1 idr=1 pulses=105 cfgHigh=50ms cfgLow=950ms
+[13:55:34] [DBG] WM1 GPIO LOW GPIOF pin=8 t=188063ms dt=59ms odr=0 idr=0 pulses=105 cfgHigh=50ms cfgLow=950ms
+[13:55:35] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=189012ms dt=949ms odr=1 idr=1 pulses=106 cfgHigh=50ms cfgLow=950ms
+[13:55:35] [DBG] WM1 GPIO LOW GPIOF pin=8 t=189061ms dt=49ms odr=0 idr=0 pulses=106 cfgHigh=50ms cfgLow=950ms
+[13:55:36] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=190010ms dt=949ms odr=1 idr=1 pulses=107 cfgHigh=50ms cfgLow=950ms
+[13:55:36] [DBG] WM1 GPIO LOW GPIOF pin=8 t=190059ms dt=49ms odr=0 idr=0 pulses=107 cfgHigh=50ms cfgLow=950ms
+[13:55:37] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=191008ms dt=949ms odr=1 idr=1 pulses=108 cfgHigh=50ms cfgLow=950ms
+[13:55:37] [DBG] WM1 GPIO LOW GPIOF pin=8 t=191057ms dt=49ms odr=0 idr=0 pulses=108 cfgHigh=50ms cfgLow=950ms
+[13:55:38] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=192006ms dt=949ms odr=1 idr=1 pulses=109 cfgHigh=50ms cfgLow=950ms
+[13:55:38] [DBG] WM1 GPIO LOW GPIOF pin=8 t=192055ms dt=49ms odr=0 idr=0 pulses=109 cfgHigh=50ms cfgLow=950ms
+[13:55:39] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=193004ms dt=949ms odr=1 idr=1 pulses=110 cfgHigh=50ms cfgLow=950ms
+[13:55:39] [DBG] WM1 GPIO LOW GPIOF pin=8 t=193063ms dt=59ms odr=0 idr=0 pulses=110 cfgHigh=50ms cfgLow=950ms
+[13:55:40] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=194012ms dt=949ms odr=1 idr=1 pulses=111 cfgHigh=50ms cfgLow=950ms
+[13:55:40] [DBG] WM1 GPIO LOW GPIOF pin=8 t=194061ms dt=49ms odr=0 idr=0 pulses=111 cfgHigh=50ms cfgLow=950ms
+[13:55:41] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=195010ms dt=949ms odr=1 idr=1 pulses=112 cfgHigh=50ms cfgLow=950ms
+[13:55:41] [DBG] WM1 GPIO LOW GPIOF pin=8 t=195059ms dt=49ms odr=0 idr=0 pulses=112 cfgHigh=50ms cfgLow=950ms
+[13:55:42] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=196008ms dt=949ms odr=1 idr=1 pulses=113 cfgHigh=50ms cfgLow=950ms
+[13:55:42] [DBG] WM1 GPIO LOW GPIOF pin=8 t=196057ms dt=49ms odr=0 idr=0 pulses=113 cfgHigh=50ms cfgLow=950ms
+[13:55:43] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=197006ms dt=949ms odr=1 idr=1 pulses=114 cfgHigh=50ms cfgLow=950ms
+[13:55:43] [DBG] WM1 GPIO LOW GPIOF pin=8 t=197055ms dt=49ms odr=0 idr=0 pulses=114 cfgHigh=50ms cfgLow=950ms
+[13:55:44] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=198004ms dt=949ms odr=1 idr=1 pulses=115 cfgHigh=50ms cfgLow=950ms
+[13:55:44] [DBG] WM1 GPIO LOW GPIOF pin=8 t=198063ms dt=59ms odr=0 idr=0 pulses=115 cfgHigh=50ms cfgLow=950ms
+[13:55:45] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=199012ms dt=949ms odr=1 idr=1 pulses=116 cfgHigh=50ms cfgLow=950ms
+[13:55:45] [DBG] WM1 GPIO LOW GPIOF pin=8 t=199061ms dt=49ms odr=0 idr=0 pulses=116 cfgHigh=50ms cfgLow=950ms
+[13:55:46] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=200010ms dt=949ms odr=1 idr=1 pulses=117 cfgHigh=50ms cfgLow=950ms
+[13:55:46] [DBG] WM1 GPIO LOW GPIOF pin=8 t=200059ms dt=49ms odr=0 idr=0 pulses=117 cfgHigh=50ms cfgLow=950ms
+[13:55:47] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=201008ms dt=949ms odr=1 idr=1 pulses=118 cfgHigh=50ms cfgLow=950ms
+[13:55:47] [DBG] WM1 GPIO LOW GPIOF pin=8 t=201057ms dt=49ms odr=0 idr=0 pulses=118 cfgHigh=50ms cfgLow=950ms
+[13:55:48] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=202006ms dt=949ms odr=1 idr=1 pulses=119 cfgHigh=50ms cfgLow=950ms
+[13:55:48] [DBG] WM1 GPIO LOW GPIOF pin=8 t=202055ms dt=49ms odr=0 idr=0 pulses=119 cfgHigh=50ms cfgLow=950ms
+[13:55:49] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=203004ms dt=949ms odr=1 idr=1 pulses=120 cfgHigh=50ms cfgLow=950ms
+[13:55:49] [DBG] WM1 GPIO LOW GPIOF pin=8 t=203063ms dt=59ms odr=0 idr=0 pulses=120 cfgHigh=50ms cfgLow=950ms
+[13:55:50] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=204012ms dt=949ms odr=1 idr=1 pulses=121 cfgHigh=50ms cfgLow=950ms
+[13:55:50] [DBG] WM1 GPIO LOW GPIOF pin=8 t=204061ms dt=49ms odr=0 idr=0 pulses=121 cfgHigh=50ms cfgLow=950ms
+[13:55:50] > stop wm 1
+
+[13:55:50] stop wm 1
+[13:55:50] [DBG] UART RX line complete len=9: stop wm 1
+[13:55:50] [DBG] App command len=9 tok1='stop' tok2='wm' scanErr=0
+[13:55:50] [DBG] WM1 after SetStatus(Stopped): port=GPIOF pin=8 moder=1(1=out) odr=0 idr=0 status=Stopped cycle=1000ms high=50ms low=950ms resume=1/703ms
+[13:55:50] wm 1 stopped
+[13:55:50] [DBG] WM1 state Started -> Stopped
+[13:55:50] [DBG] WM1 GPIO LOW GPIOF pin=8 t=204301ms dt=240ms odr=0 idr=0 pulses=121 cfgHigh=50ms cfgLow=950ms
+[13:55:50] [DBG] WM1 hb t=204328ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:55:53] > start wm 1 1000
+
+[13:55:53] start wm 1 1000
+[13:55:53] [DBG] UART RX line complete len=15: start wm 1 1000
+[13:55:53] [DBG] App command len=15 tok1='start' tok2='wm' scanErr=0
+[13:55:53] [DBG] START WM parsed: scanErr=0 id=1 cycle=1000ms -> WM1 START detected, prevStatus=Stopped
+[13:55:53] [DBG] WM1 after SetStatus(Started): port=GPIOF pin=8 moder=1(1=out) odr=0 idr=0 status=Started cycle=1000ms high=50ms low=950ms resume=1/0ms
+[13:55:53] wm 1 started
+[13:55:53] [DBG] WM1 state Stopped -> Started
+[13:55:53] [DBG] WM1 GPIO LOW GPIOF pin=8 t=206990ms dt=2689ms odr=0 idr=0 pulses=121 cfgHigh=50ms cfgLow=950ms
+[13:55:54] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=207698ms dt=708ms odr=1 idr=1 pulses=122 cfgHigh=50ms cfgLow=950ms
+[13:55:54] [DBG] WM1 GPIO LOW GPIOF pin=8 t=207747ms dt=49ms odr=0 idr=0 pulses=122 cfgHigh=50ms cfgLow=950ms
+[13:55:55] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=208696ms dt=949ms odr=1 idr=1 pulses=123 cfgHigh=50ms cfgLow=950ms
+[13:55:55] [DBG] WM1 GPIO LOW GPIOF pin=8 t=208745ms dt=49ms odr=0 idr=0 pulses=123 cfgHigh=50ms cfgLow=950ms
+[13:55:56] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=209694ms dt=949ms odr=1 idr=1 pulses=124 cfgHigh=50ms cfgLow=950ms
+[13:55:56] [DBG] WM1 GPIO LOW GPIOF pin=8 t=209743ms dt=49ms odr=0 idr=0 pulses=124 cfgHigh=50ms cfgLow=950ms
+[13:55:57] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=210702ms dt=959ms odr=1 idr=1 pulses=125 cfgHigh=50ms cfgLow=950ms
+[13:55:57] [DBG] WM1 GPIO LOW GPIOF pin=8 t=210751ms dt=49ms odr=0 idr=0 pulses=125 cfgHigh=50ms cfgLow=950ms
+[13:55:58] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=211700ms dt=949ms odr=1 idr=1 pulses=126 cfgHigh=50ms cfgLow=950ms
+[13:55:58] [DBG] WM1 GPIO LOW GPIOF pin=8 t=211749ms dt=49ms odr=0 idr=0 pulses=126 cfgHigh=50ms cfgLow=950ms
+[13:55:59] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=212698ms dt=949ms odr=1 idr=1 pulses=127 cfgHigh=50ms cfgLow=950ms
+[13:55:59] [DBG] WM1 GPIO LOW GPIOF pin=8 t=212747ms dt=49ms odr=0 idr=0 pulses=127 cfgHigh=50ms cfgLow=950ms
+[13:56:00] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=213696ms dt=949ms odr=1 idr=1 pulses=128 cfgHigh=50ms cfgLow=950ms
+[13:56:00] [DBG] WM1 GPIO LOW GPIOF pin=8 t=213745ms dt=49ms odr=0 idr=0 pulses=128 cfgHigh=50ms cfgLow=950ms
+[13:56:01] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=214694ms dt=949ms odr=1 idr=1 pulses=129 cfgHigh=50ms cfgLow=950ms
+[13:56:01] [DBG] WM1 GPIO LOW GPIOF pin=8 t=214743ms dt=49ms odr=0 idr=0 pulses=129 cfgHigh=50ms cfgLow=950ms
+[13:56:02] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=215702ms dt=959ms odr=1 idr=1 pulses=130 cfgHigh=50ms cfgLow=950ms
+[13:56:02] [DBG] WM1 GPIO LOW GPIOF pin=8 t=215751ms dt=49ms odr=0 idr=0 pulses=130 cfgHigh=50ms cfgLow=950ms
+[13:56:03] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=216700ms dt=949ms odr=1 idr=1 pulses=131 cfgHigh=50ms cfgLow=950ms
+[13:56:03] [DBG] WM1 GPIO LOW GPIOF pin=8 t=216749ms dt=49ms odr=0 idr=0 pulses=131 cfgHigh=50ms cfgLow=950ms
+[13:56:04] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=217698ms dt=949ms odr=1 idr=1 pulses=132 cfgHigh=50ms cfgLow=950ms
+[13:56:04] [DBG] WM1 GPIO LOW GPIOF pin=8 t=217747ms dt=49ms odr=0 idr=0 pulses=132 cfgHigh=50ms cfgLow=950ms
+[13:56:05] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=218696ms dt=949ms odr=1 idr=1 pulses=133 cfgHigh=50ms cfgLow=950ms
+[13:56:05] [DBG] WM1 GPIO LOW GPIOF pin=8 t=218745ms dt=49ms odr=0 idr=0 pulses=133 cfgHigh=50ms cfgLow=950ms
+[13:56:06] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=219694ms dt=949ms odr=1 idr=1 pulses=134 cfgHigh=50ms cfgLow=950ms
+[13:56:06] [DBG] WM1 GPIO LOW GPIOF pin=8 t=219743ms dt=49ms odr=0 idr=0 pulses=134 cfgHigh=50ms cfgLow=950ms
+[13:56:07] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=220702ms dt=959ms odr=1 idr=1 pulses=135 cfgHigh=50ms cfgLow=950ms
+[13:56:07] [DBG] WM1 GPIO LOW GPIOF pin=8 t=220751ms dt=49ms odr=0 idr=0 pulses=135 cfgHigh=50ms cfgLow=950ms
+[13:56:08] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=221700ms dt=949ms odr=1 idr=1 pulses=136 cfgHigh=50ms cfgLow=950ms
+[13:56:08] [DBG] WM1 GPIO LOW GPIOF pin=8 t=221749ms dt=49ms odr=0 idr=0 pulses=136 cfgHigh=50ms cfgLow=950ms
+[13:56:09] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=222698ms dt=949ms odr=1 idr=1 pulses=137 cfgHigh=50ms cfgLow=950ms
+[13:56:09] [DBG] WM1 GPIO LOW GPIOF pin=8 t=222747ms dt=49ms odr=0 idr=0 pulses=137 cfgHigh=50ms cfgLow=950ms
+[13:56:10] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=223696ms dt=949ms odr=1 idr=1 pulses=138 cfgHigh=50ms cfgLow=950ms
+[13:56:10] [DBG] WM1 GPIO LOW GPIOF pin=8 t=223745ms dt=49ms odr=0 idr=0 pulses=138 cfgHigh=50ms cfgLow=950ms
+[13:56:11] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=224694ms dt=949ms odr=1 idr=1 pulses=139 cfgHigh=50ms cfgLow=950ms
+[13:56:11] [DBG] WM1 GPIO LOW GPIOF pin=8 t=224743ms dt=49ms odr=0 idr=0 pulses=139 cfgHigh=50ms cfgLow=950ms
+[13:56:12] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=225702ms dt=959ms odr=1 idr=1 pulses=140 cfgHigh=50ms cfgLow=950ms
+[13:56:12] [DBG] WM1 GPIO LOW GPIOF pin=8 t=225751ms dt=49ms odr=0 idr=0 pulses=140 cfgHigh=50ms cfgLow=950ms
+[13:56:13] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=226700ms dt=949ms odr=1 idr=1 pulses=141 cfgHigh=50ms cfgLow=950ms
+[13:56:13] [DBG] WM1 GPIO LOW GPIOF pin=8 t=226749ms dt=49ms odr=0 idr=0 pulses=141 cfgHigh=50ms cfgLow=950ms
+[13:56:14] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=227698ms dt=949ms odr=1 idr=1 pulses=142 cfgHigh=50ms cfgLow=950ms
+[13:56:14] [DBG] WM1 GPIO LOW GPIOF pin=8 t=227747ms dt=49ms odr=0 idr=0 pulses=142 cfgHigh=50ms cfgLow=950ms
+[13:56:15] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=228696ms dt=949ms odr=1 idr=1 pulses=143 cfgHigh=50ms cfgLow=950ms
+[13:56:15] [DBG] WM1 GPIO LOW GPIOF pin=8 t=228745ms dt=49ms odr=0 idr=0 pulses=143 cfgHigh=50ms cfgLow=950ms
+[13:56:16] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=229694ms dt=949ms odr=1 idr=1 pulses=144 cfgHigh=50ms cfgLow=950ms
+[13:56:16] [DBG] WM1 GPIO LOW GPIOF pin=8 t=229743ms dt=49ms odr=0 idr=0 pulses=144 cfgHigh=50ms cfgLow=950ms
+[13:56:17] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=230702ms dt=959ms odr=1 idr=1 pulses=145 cfgHigh=50ms cfgLow=950ms
+[13:56:17] [DBG] WM1 GPIO LOW GPIOF pin=8 t=230751ms dt=49ms odr=0 idr=0 pulses=145 cfgHigh=50ms cfgLow=950ms
+[13:56:18] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=231700ms dt=949ms odr=1 idr=1 pulses=146 cfgHigh=50ms cfgLow=950ms
+[13:56:18] [DBG] WM1 GPIO LOW GPIOF pin=8 t=231749ms dt=49ms odr=0 idr=0 pulses=146 cfgHigh=50ms cfgLow=950ms
+[13:56:19] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=232698ms dt=949ms odr=1 idr=1 pulses=147 cfgHigh=50ms cfgLow=950ms
+[13:56:19] [DBG] WM1 GPIO LOW GPIOF pin=8 t=232747ms dt=49ms odr=0 idr=0 pulses=147 cfgHigh=50ms cfgLow=950ms
+[13:56:20] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=233696ms dt=949ms odr=1 idr=1 pulses=148 cfgHigh=50ms cfgLow=950ms
+[13:56:20] [DBG] WM1 GPIO LOW GPIOF pin=8 t=233745ms dt=49ms odr=0 idr=0 pulses=148 cfgHigh=50ms cfgLow=950ms
+[13:56:21] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=234694ms dt=949ms odr=1 idr=1 pulses=149 cfgHigh=50ms cfgLow=950ms
+[13:56:21] [DBG] WM1 GPIO LOW GPIOF pin=8 t=234743ms dt=49ms odr=0 idr=0 pulses=149 cfgHigh=50ms cfgLow=950ms
+[13:56:22] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=235702ms dt=959ms odr=1 idr=1 pulses=150 cfgHigh=50ms cfgLow=950ms
+[13:56:22] [DBG] WM1 GPIO LOW GPIOF pin=8 t=235751ms dt=49ms odr=0 idr=0 pulses=150 cfgHigh=50ms cfgLow=950ms
+[13:56:23] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=236700ms dt=949ms odr=1 idr=1 pulses=151 cfgHigh=50ms cfgLow=950ms
+[13:56:23] [DBG] WM1 GPIO LOW GPIOF pin=8 t=236749ms dt=49ms odr=0 idr=0 pulses=151 cfgHigh=50ms cfgLow=950ms
+[13:56:24] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=237698ms dt=949ms odr=1 idr=1 pulses=152 cfgHigh=50ms cfgLow=950ms
+[13:56:24] [DBG] WM1 GPIO LOW GPIOF pin=8 t=237747ms dt=49ms odr=0 idr=0 pulses=152 cfgHigh=50ms cfgLow=950ms
+[13:56:25] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=238696ms dt=949ms odr=1 idr=1 pulses=153 cfgHigh=50ms cfgLow=950ms
+[13:56:25] [DBG] WM1 GPIO LOW GPIOF pin=8 t=238745ms dt=49ms odr=0 idr=0 pulses=153 cfgHigh=50ms cfgLow=950ms
+[13:56:26] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=239694ms dt=949ms odr=1 idr=1 pulses=154 cfgHigh=50ms cfgLow=950ms
+[13:56:26] [DBG] WM1 GPIO LOW GPIOF pin=8 t=239743ms dt=49ms odr=0 idr=0 pulses=154 cfgHigh=50ms cfgLow=950ms
+[13:56:27] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=240702ms dt=959ms odr=1 idr=1 pulses=155 cfgHigh=50ms cfgLow=950ms
+[13:56:27] [DBG] WM1 GPIO LOW GPIOF pin=8 t=240751ms dt=49ms odr=0 idr=0 pulses=155 cfgHigh=50ms cfgLow=950ms
+[13:56:28] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=241700ms dt=949ms odr=1 idr=1 pulses=156 cfgHigh=50ms cfgLow=950ms
+[13:56:28] [DBG] WM1 GPIO LOW GPIOF pin=8 t=241749ms dt=49ms odr=0 idr=0 pulses=156 cfgHigh=50ms cfgLow=950ms
+[13:56:29] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=242698ms dt=949ms odr=1 idr=1 pulses=157 cfgHigh=50ms cfgLow=950ms
+[13:56:29] [DBG] WM1 GPIO LOW GPIOF pin=8 t=242747ms dt=49ms odr=0 idr=0 pulses=157 cfgHigh=50ms cfgLow=950ms
+[13:56:30] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=243696ms dt=949ms odr=1 idr=1 pulses=158 cfgHigh=50ms cfgLow=950ms
+[13:56:30] [DBG] WM1 GPIO LOW GPIOF pin=8 t=243745ms dt=49ms odr=0 idr=0 pulses=158 cfgHigh=50ms cfgLow=950ms
+[13:56:31] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=244694ms dt=949ms odr=1 idr=1 pulses=159 cfgHigh=50ms cfgLow=950ms
+[13:56:31] [DBG] WM1 GPIO LOW GPIOF pin=8 t=244743ms dt=49ms odr=0 idr=0 pulses=159 cfgHigh=50ms cfgLow=950ms
+[13:56:32] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=245702ms dt=959ms odr=1 idr=1 pulses=160 cfgHigh=50ms cfgLow=950ms
+[13:56:32] [DBG] WM1 GPIO LOW GPIOF pin=8 t=245751ms dt=49ms odr=0 idr=0 pulses=160 cfgHigh=50ms cfgLow=950ms
+[13:56:33] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=246700ms dt=949ms odr=1 idr=1 pulses=161 cfgHigh=50ms cfgLow=950ms
+[13:56:33] [DBG] WM1 GPIO LOW GPIOF pin=8 t=246749ms dt=49ms odr=0 idr=0 pulses=161 cfgHigh=50ms cfgLow=950ms
+[13:56:34] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=247698ms dt=949ms odr=1 idr=1 pulses=162 cfgHigh=50ms cfgLow=950ms
+[13:56:34] [DBG] WM1 GPIO LOW GPIOF pin=8 t=247747ms dt=49ms odr=0 idr=0 pulses=162 cfgHigh=50ms cfgLow=950ms
+[13:56:35] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=248696ms dt=949ms odr=1 idr=1 pulses=163 cfgHigh=50ms cfgLow=950ms
+[13:56:35] [DBG] WM1 GPIO LOW GPIOF pin=8 t=248745ms dt=49ms odr=0 idr=0 pulses=163 cfgHigh=50ms cfgLow=950ms
+[13:56:36] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=249694ms dt=949ms odr=1 idr=1 pulses=164 cfgHigh=50ms cfgLow=950ms
+[13:56:36] [DBG] WM1 GPIO LOW GPIOF pin=8 t=249743ms dt=49ms odr=0 idr=0 pulses=164 cfgHigh=50ms cfgLow=950ms
+[13:56:37] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=250702ms dt=959ms odr=1 idr=1 pulses=165 cfgHigh=50ms cfgLow=950ms
+[13:56:37] [DBG] WM1 GPIO LOW GPIOF pin=8 t=250751ms dt=49ms odr=0 idr=0 pulses=165 cfgHigh=50ms cfgLow=950ms
+[13:56:38] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=251700ms dt=949ms odr=1 idr=1 pulses=166 cfgHigh=50ms cfgLow=950ms
+[13:56:38] [DBG] WM1 GPIO LOW GPIOF pin=8 t=251749ms dt=49ms odr=0 idr=0 pulses=166 cfgHigh=50ms cfgLow=950ms
+[13:56:39] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=252698ms dt=949ms odr=1 idr=1 pulses=167 cfgHigh=50ms cfgLow=950ms
+[13:56:39] [DBG] WM1 GPIO LOW GPIOF pin=8 t=252747ms dt=49ms odr=0 idr=0 pulses=167 cfgHigh=50ms cfgLow=950ms
+[13:56:40] [DBG] WM1 GPIO HIGH GPIOF pin=8 t=253696ms dt=949ms odr=1 idr=1 pulses=168 cfgHigh=50ms cfgLow=950ms
+[13:56:40] [DBG] WM1 GPIO LOW GPIOF pin=8 t=253745ms dt=49ms odr=0 idr=0 pulses=168 cfgHigh=50ms cfgLow=950ms
+[13:56:40] > stop wm 1
+
+[13:56:40] stop wm 1
+[13:56:40] [DBG] UART RX line complete len=9: stop wm 1
+[13:56:40] [DBG] App command len=9 tok1='stop' tok2='wm' scanErr=0
+[13:56:40] [DBG] WM1 after SetStatus(Stopped): port=GPIOF pin=8 moder=1(1=out) odr=0 idr=0 status=Stopped cycle=1000ms high=50ms low=950ms resume=1/828ms
+[13:56:40] wm 1 stopped
+[13:56:40] [DBG] WM1 state Started -> Stopped
+[13:56:40] [DBG] WM1 GPIO LOW GPIOF pin=8 t=253865ms dt=120ms odr=0 idr=0 pulses=168 cfgHigh=50ms cfgLow=950ms
+[13:56:40] [DBG] WM1 hb t=253892ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:56:42] > set ps 1 on
+
+[13:56:43] set ps 1 on
+[13:56:43] [DBG] UART RX line complete len=11: set ps 1 on
+[13:56:43] [DBG] App command len=11 tok1='set' tok2='ps' scanErr=0
+[13:56:43] ERROR set ps 1 on
+[13:56:44] > set ps 1 off
+
+[13:56:44] set ps 1 off
+[13:56:44] [DBG] UART RX line complete len=12: set ps 1 off
+[13:56:44] [DBG] App command len=12 tok1='set' tok2='ps' scanErr=0
+[13:56:44] ERROR set ps 1 off
+[13:56:45] [DBG] WM1 hb t=258893ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:56:45] > set ps 1 on
+
+[13:56:45] set ps 1 on
+[13:56:45] [DBG] UART RX line complete len=11: set ps 1 on
+[13:56:45] [DBG] App command len=11 tok1='set' tok2='ps' scanErr=0
+[13:56:45] ERROR set ps 1 on
+[13:56:46] > set ps 1 off
+
+[13:56:46] set ps 1 off
+[13:56:46] [DBG] UART RX line complete len=12: set ps 1 off
+[13:56:46] [DBG] App command len=12 tok1='set' tok2='ps' scanErr=0
+[13:56:46] ERROR set ps 1 off
+[13:56:50] [DBG] WM1 hb t=263901ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:56:55] [DBG] WM1 hb t=268909ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:57:00] [DBG] WM1 hb t=273917ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:57:05] [DBG] WM1 hb t=278925ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:57:10] [DBG] WM1 hb t=283933ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:57:15] [DBG] WM1 hb t=288941ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:57:20] [DBG] WM1 hb t=293949ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:57:25] [DBG] WM1 hb t=298957ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:57:30] [DBG] WM1 hb t=303965ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:57:35] [DBG] WM1 hb t=308973ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:57:40] [DBG] WM1 hb t=313981ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:57:45] [DBG] WM1 hb t=318989ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:57:50] [DBG] WM1 hb t=323997ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:57:55] [DBG] WM1 hb t=329005ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:58:00] [DBG] WM1 hb t=334013ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:58:05] [DBG] WM1 hb t=339021ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:58:10] [DBG] WM1 hb t=344029ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:58:15] [DBG] WM1 hb t=349037ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:58:20] [DBG] WM1 hb t=354045ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:58:25] [DBG] WM1 hb t=359053ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:58:30] [DBG] WM1 hb t=364061ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:58:35] [DBG] WM1 hb t=369069ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:58:40] [DBG] WM1 hb t=374077ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:58:45] [DBG] WM1 hb t=379085ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:58:50] [DBG] WM1 hb t=384093ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:58:55] [DBG] WM1 hb t=389101ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:59:00] [DBG] WM1 hb t=394109ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:59:05] [DBG] WM1 hb t=399117ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:59:10] [DBG] WM1 hb t=404125ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:59:15] [DBG] WM1 hb t=409133ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:59:20] [DBG] WM1 hb t=414141ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:59:25] [DBG] WM1 hb t=419149ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:59:30] [DBG] WM1 hb t=424157ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:59:35] [DBG] WM1 hb t=429165ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:59:40] [DBG] WM1 hb t=434173ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:59:45] [DBG] WM1 hb t=439181ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:59:50] [DBG] WM1 hb t=444189ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[13:59:55] [DBG] WM1 hb t=449197ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:00:00] [DBG] WM1 hb t=454205ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:00:05] [DBG] WM1 hb t=459213ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:00:10] [DBG] WM1 hb t=464221ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:00:15] [DBG] WM1 hb t=469229ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:00:20] [DBG] WM1 hb t=474237ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'
+[14:00:25] [DBG] WM1 hb t=479245ms status=Stopped BLOCK: Stopped, no pulses until 'start wm 1 <ms>'

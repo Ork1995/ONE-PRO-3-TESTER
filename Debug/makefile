@@ -81,6 +81,9 @@ default.size.stdout \
 OBJDUMP_LIST += \
 ONE\ PRO\ 3\ TESTER.list \
 
+OBJCOPY_BIN += \
+ONE\ PRO\ 3\ TESTER.bin \
+
 
 # All Target
 all: main-build
@@ -104,12 +107,17 @@ ONE\ PRO\ 3\ TESTER.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_D
 	@echo 'Finished building: $@'
 	@echo ' '
 
+ONE\ PRO\ 3\ TESTER.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "ONE PRO 3 TESTER.bin"
+	@echo 'Finished building: $@'
+	@echo ' '
+
 # Other Targets
 clean:
-	-$(RM) ONE\ PRO\ 3\ TESTER.elf ONE\ PRO\ 3\ TESTER.list ONE\ PRO\ 3\ TESTER.map ONE\\ PRO\\ 3\\ TESTER.elf default.size.stdout
+	-$(RM) ONE\ PRO\ 3\ TESTER.bin ONE\ PRO\ 3\ TESTER.elf ONE\ PRO\ 3\ TESTER.list ONE\ PRO\ 3\ TESTER.map ONE\\ PRO\\ 3\\ TESTER.elf default.size.stdout
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
 
 fail-specified-linker-script-missing:
 	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'
