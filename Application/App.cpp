@@ -252,6 +252,9 @@ void App::HandleSetSensorSupply(BufferView<> &token2, TextScanner &scanner, Text
 			if (applied != (uint32_t)mv) {
 				response << " (clamped from " << mv << " mV)";
 			}
+			if (applied < SensorSupply::CALIBRATED_MIN_MV || applied > SensorSupply::CALIBRATED_MAX_MV) {
+				response << " (outside calibrated range 3137-10120 mV)";
+			}
 			if (!_sensorSupply.IsVsenEnabled()) {
 				response << " (booster off)";
 			}
@@ -307,6 +310,9 @@ void App::AppendSensorSupplyStatus(TextPrinter &p)
 		p << " vai" << (long)ch << "="
 		  << (_sensorSupply.IsVaiActive(ch) ? "on" : (_sensorSupply.IsVaiRequested(ch) ? "pend" : "off"));
 	}
+	const uint32_t requested = _sensorSupply.GetRequestedVoltage_mV();
+	p << " cal=" << (requested >= SensorSupply::CALIBRATED_MIN_MV && requested <= SensorSupply::CALIBRATED_MAX_MV
+		? "interpolated" : "extrapolated");
 }
 
 void App::HandleCommand(const BufferView<> &cmd)

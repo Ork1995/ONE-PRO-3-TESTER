@@ -1,6 +1,6 @@
-../Application/SensorSupply.hpp:92:11:uint32_t SensorSupply::GetRequestedVoltage_mV() const	1
-../Application/SensorSupply.hpp:93:7:bool SensorSupply::IsPwmRunning() const	1
-../Application/SensorSupply.hpp:94:7:bool SensorSupply::IsVsenEnabled() const	1
+../Application/SensorSupply.hpp:94:11:uint32_t SensorSupply::GetRequestedVoltage_mV() const	1
+../Application/SensorSupply.hpp:95:7:bool SensorSupply::IsPwmRunning() const	1
+../Application/SensorSupply.hpp:96:7:bool SensorSupply::IsVsenEnabled() const	1
 ../Application/TextScanner.hpp:42:7:bool TextScanner::IsError() const	1
 ../Application/App.cpp:15:1:App::App()	1
 ../Application/App.cpp:49:6:void App::Init()	3
@@ -10,9 +10,9 @@
 ../Application/App.cpp:179:6:void App::AppendStatus(TextPrinter&)	4
 ../Application/App.cpp:195:6:void App::ControlWaterMeters()	5
 ../Application/App.cpp:221:6:void App::ToggleWaterMeter(int, TextPrinter&)	3
-../Application/App.cpp:244:6:void App::HandleSetSensorSupply(BufferView<char>&, TextScanner&, TextPrinter&)	24
-../Application/App.cpp:295:6:void App::AppendSensorSupplyStatus(TextPrinter&)	6
-../Application/App.cpp:312:6:void App::HandleCommand(const BufferView<char>&)	81
+../Application/App.cpp:244:6:void App::HandleSetSensorSupply(BufferView<char>&, TextScanner&, TextPrinter&)	26
+../Application/App.cpp:298:6:void App::AppendSensorSupplyStatus(TextPrinter&)	8
+../Application/App.cpp:318:6:void App::HandleCommand(const BufferView<char>&)	81
 C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/array:132:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::begin() [with _Tp = DigitalOutput; unsigned int _Nm = 0]	1
 C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/array:142:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::end() [with _Tp = DigitalOutput; unsigned int _Nm = 0]	1
 ../Application/Buffer.hpp:20:2:Buffer<Capacity, TItem>::Buffer() [with int Capacity = 100; TItem = char]	1

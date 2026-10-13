@@ -38,8 +38,10 @@ public:
 	static constexpr uint32_t MIN_MV = 2100;
 	static constexpr uint32_t MAX_MV = 15000;
 
-	// Nominal transfer function: Vout = FULL_SCALE_MV * duty. See VoltageToDutyPercent().
+	// Nominal PWM scale; VoltageToDutyPercent() applies measured calibration first.
 	static constexpr uint32_t FULL_SCALE_MV = 15000;
+	static constexpr uint32_t CALIBRATED_MIN_MV = 3137;
+	static constexpr uint32_t CALIBRATED_MAX_MV = 10120;
 
 	/// Hardware binding, supplied by the board-specific code (see App::App()).
 	struct Config

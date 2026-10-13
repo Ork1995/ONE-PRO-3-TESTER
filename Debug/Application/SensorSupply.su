@@ -14,5 +14,5 @@
 ../Application/SensorSupply.cpp:172:10:uint32_t SensorSupply::GetDutyPercentX100() const	24	static
 ../Application/SensorSupply.cpp:179:6:void SensorSupply::WriteCompare(uint32_t)	16	static
 ../Application/SensorSupply.cpp:188:10:uint32_t SensorSupply::CompareForVoltage(uint32_t) const	16	static
-../Application/SensorSupply.cpp:202:7:static float SensorSupply::VoltageToDutyPercent(uint32_t)	24	static
-../Application/SensorSupply.cpp:215:10:static uint32_t SensorSupply::DutyPercentToCompare(float, uint32_t)	24	static
+../Application/SensorSupply.cpp:199:7:static float SensorSupply::VoltageToDutyPercent(uint32_t)	32	static
+../Application/SensorSupply.cpp:246:10:static uint32_t SensorSupply::DutyPercentToCompare(float, uint32_t)	24	static

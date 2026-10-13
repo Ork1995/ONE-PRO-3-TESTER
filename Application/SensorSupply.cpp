@@ -193,21 +193,52 @@ uint32_t SensorSupply::CompareForVoltage(uint32_t mv) const
 // ---------------------------------------------------------------------------------------
 // Voltage -> PWM conversion.
 //
-// VoltageToDutyPercent() is the only place that encodes how the booster responds to the
-// PWM. It currently uses the nominal relation taken from the Flex Lite firmware,
-//     Vout = FULL_SCALE_MV * duty
-// which has NOT been measured on this hardware. After bench characterisation (offset,
-// gain, non-linearity, lookup table) change this function only; everything else calls it.
+// Inverse interpolation of the measured command/output pairs. Outside the measured
+// range the nearest segment is extrapolated; the 2100 -> 326 mV startup point is excluded.
 // ---------------------------------------------------------------------------------------
 float SensorSupply::VoltageToDutyPercent(uint32_t mv)
 {
-	float percent = 100.0f * (float)mv / (float)FULL_SCALE_MV;
-
-	if (percent > 100.0f) {
-		percent = 100.0f;
+	if (mv == 0) {
+		return 0.0f;
 	}
-
-	return percent;
+	struct CalibrationPoint {
+		uint32_t commandMv;
+		uint32_t actualMv;
+	};
+	static constexpr CalibrationPoint calibration[] = {
+		{ 3000, 3137 },
+		{ 3500, 3656 },
+		{ 4000, 4172 },
+		{ 4500, 4680 },
+		{ 5000, 5190 },
+		{ 6000, 6200 },
+		{ 6500, 6700 },
+		{ 7000, 7200 },
+		{ 7500, 7700 },
+		{ 8000, 8190 },
+		{ 8500, 8680 },
+		{ 9000, 9160 },
+		{ 10000, 10120 },
+	};
+	const CalibrationPoint *lower = &calibration[0];
+	const CalibrationPoint *upper = &calibration[1];
+	for (uint32_t index = 1; index < sizeof(calibration) / sizeof(calibration[0]); ++index) {
+		lower = &calibration[index - 1];
+		upper = &calibration[index];
+		if (mv <= upper->actualMv) {
+			break;
+		}
+	}
+	float commandMv = (float)lower->commandMv +
+		((float)mv - (float)lower->actualMv) * (float)(upper->commandMv - lower->commandMv) /
+		(float)(upper->actualMv - lower->actualMv);
+	if (commandMv < (float)MIN_MV) {
+		commandMv = (float)MIN_MV;
+	}
+	if (commandMv > (float)FULL_SCALE_MV) {
+		commandMv = (float)FULL_SCALE_MV;
+	}
+	return 100.0f * commandMv / (float)FULL_SCALE_MV;
 }
 
 // duty = CCR / (ARR + 1). 100 % would need CCR = ARR + 1, which a 16-bit timer cannot hold,

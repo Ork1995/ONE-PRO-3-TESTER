@@ -56,6 +56,55 @@ DAC1 remains available, but its maximum output is now 2.5 V. Firmware clamps
 requests to 0-2500 mV and reports the applied setpoint; the GUI uses the same
 limit. DAC2 remains disabled to reserve PA5 for AI1.
 
+## Output Voltage Calibration
+
+`SensorSupply::VoltageToDutyPercent` now uses inverse piecewise-linear
+interpolation of the user's measured nominal-command/actual-output pairs:
+
+| Original command (mV) | Measured output (mV) |
+| --- | --- |
+| 3000 | 3137 |
+| 3500 | 3656 |
+| 4000 | 4172 |
+| 4500 | 4680 |
+| 5000 | 5190 |
+| 6000 | 6200 |
+| 6500 | 6700 |
+| 7000 | 7200 |
+| 7500 | 7700 |
+| 8000 | 8190 |
+| 8500 | 8680 |
+| 9000 | 9160 |
+| 10000 | 10120 |
+
+The last measurement was confirmed as 10120 mV, not the 1012 printed in the
+image. The separately confirmed 2100-command/326-output startup point is
+excluded because the transition to 3000-command/3137-output has not been
+characterized. It must not be treated as a reliable linear segment.
+
+Within the measured output range 3137-10120 mV, desired output voltage is
+mapped back to the original nominal command, then to PWM. For example,
+requested 5000 mV uses a nominal-command equivalent of approximately 4814 mV;
+7500 mV uses 7300 mV; 10000 mV uses 9875 mV. Users still enter the desired
+voltage, not these internal equivalents. Manual supply commands and AUTO
+pulses share this same calibration.
+
+Outside the measured output range, the nearest segment is extrapolated and
+the nominal-command equivalent is bounded to 2100-15000 mV. Accuracy is NOT
+established there, especially around startup. The GUI and firmware retain
+the original 2100-15000 mV allowed setpoint range. `set vsen` warns for values
+outside the calibration range; supply status reports `cal=interpolated` or
+`cal=extrapolated`. Requested mV in replies remains a setpoint, not a measured
+output. A zero conversion still gives zero PWM; disabling the supply and
+ending a pulse still explicitly drive PWM to zero.
+
+This is open-loop calibration for the measured board and conditions, not
+feedback regulation. Remeasure 5 V, 7.5 V and 10 V with the same output, load
+and supply conditions after flashing. More ascending/descending measurements
+between original commands 2100 and 3000 mV are required to characterize startup
+before supporting accurate lower voltages. Measurements above 10120 mV actual
+output are also needed to validate the upper range.
+
 ## Commands and GUI
 
 `get ain 1`, `get ain 2`, `get ain 3`, and `get ain 4` sample individual inputs.
