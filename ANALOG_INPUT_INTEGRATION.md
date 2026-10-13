@@ -58,8 +58,9 @@ limit. DAC2 remains disabled to reserve PA5 for AI1.
 
 ## Output Voltage Calibration
 
-`SensorSupply::VoltageToDutyPercent` now uses inverse piecewise-linear
-interpolation of the user's measured nominal-command/actual-output pairs:
+`SensorSupply::VoltageToDutyPercent` uses inverse piecewise-linear interpolation
+of measured output voltage versus CCR4 counts for a 65536-tick PWM period.
+The original, pre-calibration measurements were:
 
 | Original command (mV) | Measured output (mV) |
 | --- | --- |
@@ -78,32 +79,60 @@ interpolation of the user's measured nominal-command/actual-output pairs:
 | 10000 | 10120 |
 
 The last measurement was confirmed as 10120 mV, not the 1012 printed in the
-image. The separately confirmed 2100-command/326-output startup point is
-excluded because the transition to 3000-command/3137-output has not been
-characterized. It must not be treated as a reliable linear segment.
+image. A second set of low-voltage measurements was confirmed as taken AFTER
+flashing the first calibration, on the same output/load after settling:
 
-Within the measured output range 3137-10120 mV, desired output voltage is
-mapped back to the original nominal command, then to PWM. For example,
-requested 5000 mV uses a nominal-command equivalent of approximately 4814 mV;
-7500 mV uses 7300 mV; 10000 mV uses 9875 mV. Users still enter the desired
-voltage, not these internal equivalents. Manual supply commands and AUTO
-pulses share this same calibration.
+| Previous calibrated request (mV) | Measured output (mV) | Reconstructed CCR4 |
+| --- | --- | --- |
+| 2150 | 333 | 9175 |
+| 2200 | 335 | 9175 |
+| 2300 | 710 | 9584 |
+| 2350 | 1026 | 9795 |
+| 2400 | 1461 | 10005 |
+| 2450 | 1996 | 10216 |
+| 2500 | 2311 | 10426 |
+| 2550 | 2473 | 10636 |
+| 2600 | 2575 | 10847 |
+| 2700 | 2692 | 11268 |
+| 2750 | 2744 | 11478 |
+| 2800 | 2790 | 11689 |
+| 2850 | 2848 | 11899 |
+| 2900 | 2899 | 12110 |
 
-Outside the measured output range, the nearest segment is extrapolated and
-the nominal-command equivalent is bounded to 2100-15000 mV. Accuracy is NOT
-established there, especially around startup. The GUI and firmware retain
-the original 2100-15000 mV allowed setpoint range. `set vsen` warns for values
-outside the calibration range; supply status reports `cal=interpolated` or
-`cal=extrapolated`. Requested mV in replies remains a setpoint, not a measured
-output. A zero conversion still gives zero PWM; disabling the supply and
-ending a pulse still explicitly drive PWM to zero.
+The low requests were converted back through the PREVIOUS calibration, including
+its 2100-equivalent clamp and float32/timer rounding, to avoid double compensation.
+2150 and 2200 requests both drove CCR4=9175; their readings are merged as 334 mV.
+The historical 2100/326 startup reading is superseded by this representative
+point rather than added as a separate conflicting measurement at the same PWM.
+The original high-voltage measurements are converted directly from their
+nominal PWM formula. The merged table has 26 measured anchors plus an OFF
+anchor (CCR4=0, output=0); this OFF anchor is not a measured powered-supply point.
 
-This is open-loop calibration for the measured board and conditions, not
-feedback regulation. Remeasure 5 V, 7.5 V and 10 V with the same output, load
-and supply conditions after flashing. More ascending/descending measurements
-between original commands 2100 and 3000 mV are required to characterize startup
-before supporting accurate lower voltages. Measurements above 10120 mV actual
-output are also needed to validate the upper range.
+Users enter the desired output voltage, not a corrected command. Example new
+targets: 1000 mV -> CCR4=9778; 1500 -> 10020; 2100 -> 10285; 2500 -> 10692.
+The corrected high targets are preserved: 5000 -> 21031, 7500 -> 31894,
+10000 -> 43145. Manual control and AUTO pulses use this same conversion.
+
+The GUI and firmware now accept integer setpoints from 0 to 15000 mV; the
+2100 mV request restriction and minimum-duty clamp have been removed. Negative
+and above-range GUI values are rejected; direct manual firmware setpoints
+above 15000 mV remain clamped. A zero setpoint clears all rail requests,
+disables the booster and drives PWM to zero. Attempting to enable the booster
+with a zero setpoint keeps it OFF. A zero AUTO pulse remains physically OFF
+throughout its configured duration and replies `vai N OFF pulse_ms=...`.
+
+The measured interpolation range is 334-10120 mV. Below 334 mV, the OFF anchor
+is used as a bounded estimate, NOT a guarantee that the booster can regulate
+those voltages. Above 10120 mV the nearest measured segment is extrapolated.
+PWM remains bounded to CCR4 0-65535. `set vsen` warns outside the measured range,
+and supply status reports `cal=off`, `cal=interpolated` or `cal=extrapolated`.
+Requested mV in replies is still a setpoint, not an actual output measurement.
+
+This is open-loop board-specific calibration, not feedback regulation. Remeasure
+500, 1000, 1500, 2100, 2500 and 3000 mV, then 5 V, 7.5 V and 10 V with the same
+output, load and supply conditions. Check ascending/descending sweeps and cold
+starts to detect hysteresis or startup dependence. Accuracy below 334 mV and
+above 10120 mV remains unverified. No board was flashed during this change.
 
 ## Commands and GUI
 
@@ -156,7 +185,7 @@ VIN does not have to drop below the threshold first. A queued channel whose
 VIN drops to 1 V or below is removed. A running pulse completes its configured
 duration even if VIN falls during the pulse.
 
-Firmware command: `pulse vai <1-4> <2100-15000 mV> <10-3600000 ms>`.
+Firmware command: `pulse vai <1-4> <0-15000 mV> <10-3600000 ms>`.
 The board atomically clears other rail requests, selects the voltage, enables
 the booster and selected VAI, and records a HAL tick deadline. Replies include
 `vai 1 ON pulse_ms=5000` and a full supply status. At the deadline the application

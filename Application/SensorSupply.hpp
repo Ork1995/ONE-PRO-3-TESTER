@@ -33,14 +33,13 @@ class SensorSupply
 public:
 	static constexpr uint8_t VAI_COUNT = 4;
 
-	// Allowed setpoint range. Lower bound = 14 % duty (carried over from the Flex Lite
-	// firmware's 14..100 % limit), upper bound = booster full scale.
-	static constexpr uint32_t MIN_MV = 2100;
+	// Allowed setpoint range; zero disables the supply.
+	static constexpr uint32_t MIN_MV = 0;
 	static constexpr uint32_t MAX_MV = 15000;
 
-	// Nominal PWM scale; VoltageToDutyPercent() applies measured calibration first.
+	// Legacy nominal full scale; conversion uses measured PWM calibration.
 	static constexpr uint32_t FULL_SCALE_MV = 15000;
-	static constexpr uint32_t CALIBRATED_MIN_MV = 3137;
+	static constexpr uint32_t CALIBRATED_MIN_MV = 334;
 	static constexpr uint32_t CALIBRATED_MAX_MV = 10120;
 
 	/// Hardware binding, supplied by the board-specific code (see App::App()).

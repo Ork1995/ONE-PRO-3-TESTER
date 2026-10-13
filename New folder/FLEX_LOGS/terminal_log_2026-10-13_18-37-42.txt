@@ -1,0 +1,122 @@
+--- Log Started: Tue Oct 13 18:37:42 2026 ---
+[18:37:50] Connected to COM16
+[18:37:56] > set vsen 1500
+
+[18:37:56] set vsen 1500
+[18:37:56] vsen set to 1500 mV (booster off)
+[18:37:56] > set vsen_en on
+
+[18:37:56] set vsen_en on
+[18:37:56] vsen_en ON, 1500 mV
+[18:37:56] > set vai 2 on
+
+[18:37:56] set vai 2 on
+[18:37:56] vai 2 ON
+[18:38:02] > set vai 2 off
+
+[18:38:02] set vai 2 off
+[18:38:02] vai 2 OFF
+[18:38:02] > set vsen_en off
+
+[18:38:02] set vsen_en off
+[18:38:02] vsen_en OFF
+[18:38:02] > set vsen 1000
+
+[18:38:02] set vsen 1000
+[18:38:02] vsen set to 1000 mV (booster off)
+[18:38:02] > set vsen_en on
+
+[18:38:02] set vsen_en on
+[18:38:02] vsen_en ON, 1000 mV
+[18:38:02] > set vai 2 on
+
+[18:38:02] set vai 2 on
+[18:38:02] vai 2 ON
+[18:38:08] > set vai 2 off
+
+[18:38:08] set vai 2 off
+[18:38:08] vai 2 OFF
+[18:38:08] > set vsen_en off
+
+[18:38:08] set vsen_en off
+[18:38:08] vsen_en OFF
+[18:38:08] > set vsen 500
+
+[18:38:08] set vsen 500
+[18:38:08] vsen set to 500 mV (booster off)
+[18:38:08] > set vsen_en on
+
+[18:38:08] set vsen_en on
+[18:38:08] vsen_en ON, 500 mV
+[18:38:08] > set vai 2 on
+
+[18:38:08] set vai 2 on
+[18:38:08] vai 2 ON
+[18:38:16] > set vai 2 off
+
+[18:38:16] set vai 2 off
+[18:38:16] vai 2 OFF
+[18:38:16] > set vsen_en off
+
+[18:38:16] set vsen_en off
+[18:38:16] vsen_en OFF
+[18:38:17] > set vsen 900
+
+[18:38:17] set vsen 900
+[18:38:17] vsen set to 900 mV (booster off)
+[18:38:17] > set vsen_en on
+
+[18:38:17] set vsen_en on
+[18:38:17] vsen_en ON, 900 mV
+[18:38:17] > set vai 2 on
+
+[18:38:17] set vai 2 on
+[18:38:17] vai 2 ON
+[18:38:23] > set vai 2 off
+
+[18:38:23] set vai 2 off
+[18:38:23] vai 2 OFF
+[18:38:23] > set vsen_en off
+
+[18:38:23] set vsen_en off
+[18:38:23] vsen_en OFF
+[18:38:24] > set vsen 2100
+
+[18:38:24] set vsen 2100
+[18:38:24] vsen set to 2100 mV (booster off)
+[18:38:24] > set vsen_en on
+
+[18:38:24] set vsen_en on
+[18:38:24] vsen_en ON, 2100 mV
+[18:38:24] > set vai 2 on
+
+[18:38:24] set vai 2 on
+[18:38:24] vai 2 ON
+[18:38:32] > set vai 2 off
+
+[18:38:32] set vai 2 off
+[18:38:32] vai 2 OFF
+[18:38:32] > set vsen_en off
+
+[18:38:32] set vsen_en off
+[18:38:32] vsen_en OFF
+[18:38:33] > set vsen 2600
+
+[18:38:33] set vsen 2600
+[18:38:33] vsen set to 2600 mV (booster off)
+[18:38:33] > set vsen_en on
+
+[18:38:33] set vsen_en on
+[18:38:33] vsen_en ON, 2600 mV
+[18:38:33] > set vai 2 on
+
+[18:38:33] set vai 2 on
+[18:38:33] vai 2 ON
+[18:38:34] > set vai 2 off
+
+[18:38:34] set vai 2 off
+[18:38:34] vai 2 OFF
+[18:38:34] > set vsen_en off
+
+[18:38:34] set vsen_en off
+[18:38:34] vsen_en OFF

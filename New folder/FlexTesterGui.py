@@ -1332,7 +1332,7 @@ class LogAnalyzerEngine:
 SS_COUNT = 4
 SS_DEFAULT_MV = {1: 5000, 2: 7500, 3: 10000, 4: 15000}   # initial presets, one per sensor
 SS_PINS = {1: "PC7", 2: "PB9", 3: "PB8", 4: "PG2"}       # VAIx_VEN pins (display only)
-SS_MV_MIN, SS_MV_MAX = 2100, 15000                      # mirrors SensorSupply::MIN_MV / MAX_MV in the firmware
+SS_MV_MIN, SS_MV_MAX = 0, 15000                         # mirrors SensorSupply::MIN_MV / MAX_MV in the firmware
 SS_ACK_TIMEOUT_MS = 1500                                # max wait for the firmware reply to each command
 SS_STEP_GAP_MS = 20                                     # pause between an acknowledged command and the next one
 SS_COLOR_ON = ("#2e8b57", "white")                      # (background, text) of an active sensor
@@ -2572,13 +2572,13 @@ class FlexTesterGUI:
         if n is None:
             return
         line = line.strip()
-        started = re.fullmatch(rf"vai {n} ON pulse_ms=(\d+)", line)
+        started = re.fullmatch(rf"vai {n} (ON|OFF) pulse_ms=(\d+)", line)
         if started and not self._ss_auto_stopping:
-            if int(started.group(1)) != self._ss_auto_duration_ms:
+            if int(started.group(2)) != self._ss_auto_duration_ms:
                 self._ss_auto_fail("The board acknowledged a different pulse duration.")
                 return
             self._ss_auto_deadline = time.monotonic() + self._ss_auto_duration_ms / 1000 + SS_ACK_TIMEOUT_MS / 1000
-            self.ss_auto_status[n].set(f"ON ({self._ss_auto_duration_ms / 1000:g} s)")
+            self.ss_auto_status[n].set(f"{started.group(1)} ({self._ss_auto_duration_ms / 1000:g} s)")
         elif re.fullmatch(rf"vai {n} OFF pulse (?:complete|cancelled)", line):
             self._ss_auto_active = None
             self._ss_auto_latest.pop(n, None)
@@ -2636,11 +2636,14 @@ class FlexTesterGUI:
             # 1. turn off whichever sensor is active   2. load this sensor's voltage into the common PWM
             # 3. booster on   4. this sensor's rail on
             steps = [(f"set vai {a} off", rf"vai {a} OFF") for a in sorted(self.ss_on - {n})]
-            steps += [
-                (f"set vsen {mv}", r"vsen set to \d+ mV"),
-                ("set vsen_en on", r"vsen_en ON"),
-                (f"set vai {n} on", rf"vai {n} ON"),
-            ]
+            if mv == 0:
+                steps += [("set vsen_en off", r"vsen_en OFF"), ("set vsen 0", r"vsen set to 0 mV")]
+            else:
+                steps += [
+                    (f"set vsen {mv}", r"vsen set to \d+ mV"),
+                    ("set vsen_en on", r"vsen_en ON"),
+                    (f"set vai {n} on", rf"vai {n} ON"),
+                ]
 
         self._ss_steps = steps
         self._ss_set_busy(True)

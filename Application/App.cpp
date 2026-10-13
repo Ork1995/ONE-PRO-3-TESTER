@@ -252,8 +252,9 @@ void App::HandleSetSensorSupply(BufferView<> &token2, TextScanner &scanner, Text
 			if (applied != (uint32_t)mv) {
 				response << " (clamped from " << mv << " mV)";
 			}
-			if (applied < SensorSupply::CALIBRATED_MIN_MV || applied > SensorSupply::CALIBRATED_MAX_MV) {
-				response << " (outside calibrated range 3137-10120 mV)";
+			if (applied != 0 && (applied < SensorSupply::CALIBRATED_MIN_MV || applied > SensorSupply::CALIBRATED_MAX_MV)) {
+				response << " (outside calibrated range " << (long)SensorSupply::CALIBRATED_MIN_MV
+					<< "-" << (long)SensorSupply::CALIBRATED_MAX_MV << " mV)";
 			}
 			if (!_sensorSupply.IsVsenEnabled()) {
 				response << " (booster off)";
@@ -266,7 +267,8 @@ void App::HandleSetSensorSupply(BufferView<> &token2, TextScanner &scanner, Text
 		if (!scanner.IsError()) {
 			if (onOff == "on") {
 				if (_sensorSupply.SetVsenEnable(true)) {
-					response << "vsen_en ON, " << (long)_sensorSupply.GetRequestedVoltage_mV() << " mV";
+					response << (_sensorSupply.IsVsenEnabled() ? "vsen_en ON, " : "vsen_en OFF, ")
+						<< (long)_sensorSupply.GetRequestedVoltage_mV() << " mV";
 				}
 				else {
 					response << "ERROR vsen pwm not running";
@@ -311,8 +313,9 @@ void App::AppendSensorSupplyStatus(TextPrinter &p)
 		  << (_sensorSupply.IsVaiActive(ch) ? "on" : (_sensorSupply.IsVaiRequested(ch) ? "pend" : "off"));
 	}
 	const uint32_t requested = _sensorSupply.GetRequestedVoltage_mV();
-	p << " cal=" << (requested >= SensorSupply::CALIBRATED_MIN_MV && requested <= SensorSupply::CALIBRATED_MAX_MV
-		? "interpolated" : "extrapolated");
+	p << " cal=" << (requested == 0 ? "off" :
+		(requested >= SensorSupply::CALIBRATED_MIN_MV && requested <= SensorSupply::CALIBRATED_MAX_MV
+		? "interpolated" : "extrapolated"));
 }
 
 void App::HandleCommand(const BufferView<> &cmd)
@@ -415,10 +418,11 @@ void App::HandleCommand(const BufferView<> &cmd)
 				long channel, mv, durationMs;
 				scanner >> channel >> mv >> durationMs;
 				if (!scanner.IsError() && channel >= 1 && channel <= SensorSupply::VAI_COUNT &&
-				    mv >= SensorSupply::MIN_MV && mv <= SensorSupply::MAX_MV &&
+				    mv >= 0 && mv <= (long)SensorSupply::MAX_MV &&
 				    durationMs >= 10 && durationMs <= 3600000) {
 					if (_sensorSupply.StartPulse((uint8_t)channel, (uint32_t)mv, (uint32_t)durationMs)) {
-						response << "vai " << channel << " ON pulse_ms=" << durationMs << "\r\n";
+						response << "vai " << channel << (_sensorSupply.IsVaiActive((uint8_t)channel) ? " ON pulse_ms=" : " OFF pulse_ms=")
+							<< durationMs << "\r\n";
 						AppendSensorSupplyStatus(response);
 					}
 					else {

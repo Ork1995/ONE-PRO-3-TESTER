@@ -39,9 +39,6 @@ bool SensorSupply::Init()
 
 uint32_t SensorSupply::SetVoltage_mV(uint32_t mv)
 {
-	if (mv < MIN_MV) {
-		mv = MIN_MV;
-	}
 	if (mv > MAX_MV) {
 		mv = MAX_MV;
 	}
@@ -49,7 +46,10 @@ uint32_t SensorSupply::SetVoltage_mV(uint32_t mv)
 	_requestedMv = mv;
 
 	// While the booster is off the PWM stays at 0 %; the setpoint is applied on enable.
-	if (_vsenEnabled) {
+	if (mv == 0) {
+		AllOff();
+	}
+	else if (_vsenEnabled) {
 		WriteCompare(CompareForVoltage(mv));
 	}
 
@@ -59,6 +59,10 @@ uint32_t SensorSupply::SetVoltage_mV(uint32_t mv)
 bool SensorSupply::SetVsenEnable(bool enable)
 {
 	if (enable) {
+		if (_requestedMv == 0) {
+			SetVsenEnable(false);
+			return true;
+		}
 		if (!_pwmRunning) {
 			return false;
 		}
@@ -106,16 +110,18 @@ bool SensorSupply::SetVaiEnable(uint8_t channel, bool enable)
 
 bool SensorSupply::StartPulse(uint8_t channel, uint32_t mv, uint32_t durationMs)
 {
-	if (channel < 1 || channel > VAI_COUNT || mv < MIN_MV || mv > MAX_MV ||
+	if (channel < 1 || channel > VAI_COUNT || mv > MAX_MV ||
 	    durationMs < 10 || durationMs > 3600000 || !_pwmRunning || _pulseChannel != 0) {
 		return false;
 	}
 	AllOff();
 	SetVoltage_mV(mv);
-	if (!SetVsenEnable(true)) {
-		return false;
+	if (mv != 0) {
+		if (!SetVsenEnable(true)) {
+			return false;
+		}
+		SetVaiEnable(channel, true);
 	}
-	SetVaiEnable(channel, true);
 	_pulseChannel = channel;
 	_pulseStarted = HAL_GetTick();
 	_pulseDuration = durationMs;
@@ -193,8 +199,8 @@ uint32_t SensorSupply::CompareForVoltage(uint32_t mv) const
 // ---------------------------------------------------------------------------------------
 // Voltage -> PWM conversion.
 //
-// Inverse interpolation of the measured command/output pairs. Outside the measured
-// range the nearest segment is extrapolated; the 2100 -> 326 mV startup point is excluded.
+// Measured output versus reconstructed CCR4 counts for a 65536-tick PWM period.
+// The zero anchor is OFF; interpolation below 334 mV is not physically verified.
 // ---------------------------------------------------------------------------------------
 float SensorSupply::VoltageToDutyPercent(uint32_t mv)
 {
@@ -202,23 +208,37 @@ float SensorSupply::VoltageToDutyPercent(uint32_t mv)
 		return 0.0f;
 	}
 	struct CalibrationPoint {
-		uint32_t commandMv;
+		uint32_t pwmCounts;
 		uint32_t actualMv;
 	};
 	static constexpr CalibrationPoint calibration[] = {
-		{ 3000, 3137 },
-		{ 3500, 3656 },
-		{ 4000, 4172 },
-		{ 4500, 4680 },
-		{ 5000, 5190 },
-		{ 6000, 6200 },
-		{ 6500, 6700 },
-		{ 7000, 7200 },
-		{ 7500, 7700 },
-		{ 8000, 8190 },
-		{ 8500, 8680 },
-		{ 9000, 9160 },
-		{ 10000, 10120 },
+		{ 0, 0 },
+		{ 9175, 334 },
+		{ 9584, 710 },
+		{ 9795, 1026 },
+		{ 10005, 1461 },
+		{ 10216, 1996 },
+		{ 10426, 2311 },
+		{ 10636, 2473 },
+		{ 10847, 2575 },
+		{ 11268, 2692 },
+		{ 11478, 2744 },
+		{ 11689, 2790 },
+		{ 11899, 2848 },
+		{ 12110, 2899 },
+		{ 13107, 3137 },
+		{ 15292, 3656 },
+		{ 17476, 4172 },
+		{ 19661, 4680 },
+		{ 21845, 5190 },
+		{ 26214, 6200 },
+		{ 28399, 6700 },
+		{ 30583, 7200 },
+		{ 32768, 7700 },
+		{ 34953, 8190 },
+		{ 37137, 8680 },
+		{ 39322, 9160 },
+		{ 43691, 10120 },
 	};
 	const CalibrationPoint *lower = &calibration[0];
 	const CalibrationPoint *upper = &calibration[1];
@@ -229,16 +249,16 @@ float SensorSupply::VoltageToDutyPercent(uint32_t mv)
 			break;
 		}
 	}
-	float commandMv = (float)lower->commandMv +
-		((float)mv - (float)lower->actualMv) * (float)(upper->commandMv - lower->commandMv) /
+	float counts = (float)lower->pwmCounts +
+		((float)mv - (float)lower->actualMv) * (float)(upper->pwmCounts - lower->pwmCounts) /
 		(float)(upper->actualMv - lower->actualMv);
-	if (commandMv < (float)MIN_MV) {
-		commandMv = (float)MIN_MV;
+	if (counts < 0.0f) {
+		counts = 0.0f;
 	}
-	if (commandMv > (float)FULL_SCALE_MV) {
-		commandMv = (float)FULL_SCALE_MV;
+	if (counts > 65535.0f) {
+		counts = 65535.0f;
 	}
-	return 100.0f * commandMv / (float)FULL_SCALE_MV;
+	return 100.0f * counts / 65536.0f;
 }
 
 // duty = CCR / (ARR + 1). 100 % would need CCR = ARR + 1, which a 16-bit timer cannot hold,

@@ -1,0 +1,282 @@
+--- Log Started: Tue Oct 13 18:12:09 2026 ---
+[18:12:25] Connected to COM16
+[18:12:31] > set vsen 2150
+
+[18:12:31] set vsen 2150
+[18:12:31] vsen set to 2150 mV (outside calibrated range 3137-10120 mV) (booster off)
+[18:12:31] > set vsen_en on
+
+[18:12:31] set vsen_en on
+[18:12:31] vsen_en ON, 2150 mV
+[18:12:31] > set vai 2 on
+
+[18:12:31] set vai 2 on
+[18:12:31] vai 2 ON
+[18:12:45] > set vai 2 off
+
+[18:12:45] set vai 2 off
+[18:12:45] vai 2 OFF
+[18:12:46] > set vsen_en off
+
+[18:12:46] set vsen_en off
+[18:12:46] vsen_en OFF
+[18:12:46] > set vsen 2200
+
+[18:12:46] set vsen 2200
+[18:12:46] vsen set to 2200 mV (outside calibrated range 3137-10120 mV) (booster off)
+[18:12:46] > set vsen_en on
+
+[18:12:46] set vsen_en on
+[18:12:46] vsen_en ON, 2200 mV
+[18:12:46] > set vai 2 on
+
+[18:12:46] set vai 2 on
+[18:12:46] vai 2 ON
+[18:12:59] > set vai 2 off
+
+[18:12:59] set vai 2 off
+[18:12:59] vai 2 OFF
+[18:12:59] > set vsen_en off
+
+[18:12:59] set vsen_en off
+[18:12:59] vsen_en OFF
+[18:12:59] > set vsen 2300
+
+[18:12:59] set vsen 2300
+[18:12:59] vsen set to 2300 mV (outside calibrated range 3137-10120 mV) (booster off)
+[18:12:59] > set vsen_en on
+
+[18:12:59] set vsen_en on
+[18:12:59] vsen_en ON, 2300 mV
+[18:12:59] > set vai 2 on
+
+[18:12:59] set vai 2 on
+[18:12:59] vai 2 ON
+[18:13:23] > set vai 2 off
+
+[18:13:23] set vai 2 off
+[18:13:23] vai 2 OFF
+[18:13:23] > set vsen_en off
+
+[18:13:23] set vsen_en off
+[18:13:23] vsen_en OFF
+[18:13:23] > set vsen 2350
+
+[18:13:24] set vsen 2350
+[18:13:24] vsen set to 2350 mV (outside calibrated range 3137-10120 mV) (booster off)
+[18:13:24] > set vsen_en on
+
+[18:13:24] set vsen_en on
+[18:13:24] vsen_en ON, 2350 mV
+[18:13:24] > set vai 2 on
+
+[18:13:24] set vai 2 on
+[18:13:24] vai 2 ON
+[18:13:35] > set vai 2 off
+
+[18:13:35] set vai 2 off
+[18:13:35] vai 2 OFF
+[18:13:35] > set vsen_en off
+
+[18:13:35] set vsen_en off
+[18:13:35] vsen_en OFF
+[18:13:36] > set vsen 2400
+
+[18:13:36] set vsen 2400
+[18:13:36] vsen set to 2400 mV (outside calibrated range 3137-10120 mV) (booster off)
+[18:13:36] > set vsen_en on
+
+[18:13:36] set vsen_en on
+[18:13:36] vsen_en ON, 2400 mV
+[18:13:36] > set vai 2 on
+
+[18:13:36] set vai 2 on
+[18:13:36] vai 2 ON
+[18:13:49] > set vai 2 off
+
+[18:13:49] set vai 2 off
+[18:13:49] vai 2 OFF
+[18:13:49] > set vsen_en off
+
+[18:13:49] set vsen_en off
+[18:13:49] vsen_en OFF
+[18:13:51] > set vsen 2450
+
+[18:13:51] set vsen 2450
+[18:13:51] vsen set to 2450 mV (outside calibrated range 3137-10120 mV) (booster off)
+[18:13:51] > set vsen_en on
+
+[18:13:51] set vsen_en on
+[18:13:51] vsen_en ON, 2450 mV
+[18:13:51] > set vai 2 on
+
+[18:13:51] set vai 2 on
+[18:13:51] vai 2 ON
+[18:14:01] > set vai 2 off
+
+[18:14:01] set vai 2 off
+[18:14:01] vai 2 OFF
+[18:14:01] > set vsen_en off
+
+[18:14:01] set vsen_en off
+[18:14:01] vsen_en OFF
+[18:14:02] > set vsen 2500
+
+[18:14:02] set vsen 2500
+[18:14:02] vsen set to 2500 mV (outside calibrated range 3137-10120 mV) (booster off)
+[18:14:02] > set vsen_en on
+
+[18:14:02] set vsen_en on
+[18:14:02] vsen_en ON, 2500 mV
+[18:14:02] > set vai 2 on
+
+[18:14:02] set vai 2 on
+[18:14:02] vai 2 ON
+[18:14:12] > set vai 2 off
+
+[18:14:12] set vai 2 off
+[18:14:12] vai 2 OFF
+[18:14:12] > set vsen_en off
+
+[18:14:12] set vsen_en off
+[18:14:12] vsen_en OFF
+[18:14:12] > set vsen 2550
+
+[18:14:12] set vsen 2550
+[18:14:12] vsen set to 2550 mV (outside calibrated range 3137-10120 mV) (booster off)
+[18:14:12] > set vsen_en on
+
+[18:14:12] set vsen_en on
+[18:14:12] vsen_en ON, 2550 mV
+[18:14:12] > set vai 2 on
+
+[18:14:12] set vai 2 on
+[18:14:12] vai 2 ON
+[18:14:24] > set vai 2 off
+
+[18:14:24] set vai 2 off
+[18:14:24] vai 2 OFF
+[18:14:24] > set vsen_en off
+
+[18:14:24] set vsen_en off
+[18:14:24] vsen_en OFF
+[18:14:25] > set vsen 2600
+
+[18:14:25] set vsen 2600
+[18:14:25] vsen set to 2600 mV (outside calibrated range 3137-10120 mV) (booster off)
+[18:14:25] > set vsen_en on
+
+[18:14:25] set vsen_en on
+[18:14:25] vsen_en ON, 2600 mV
+[18:14:25] > set vai 2 on
+
+[18:14:25] set vai 2 on
+[18:14:25] vai 2 ON
+[18:14:35] > set vai 2 off
+
+[18:14:35] set vai 2 off
+[18:14:35] vai 2 OFF
+[18:14:35] > set vsen_en off
+
+[18:14:35] set vsen_en off
+[18:14:35] vsen_en OFF
+[18:14:36] > set vsen 2700
+
+[18:14:36] set vsen 2700
+[18:14:36] vsen set to 2700 mV (outside calibrated range 3137-10120 mV) (booster off)
+[18:14:36] > set vsen_en on
+
+[18:14:36] set vsen_en on
+[18:14:36] vsen_en ON, 2700 mV
+[18:14:36] > set vai 2 on
+
+[18:14:36] set vai 2 on
+[18:14:36] vai 2 ON
+[18:14:48] > set vai 2 off
+
+[18:14:48] set vai 2 off
+[18:14:48] vai 2 OFF
+[18:14:48] > set vsen_en off
+
+[18:14:49] set vsen_en off
+[18:14:49] vsen_en OFF
+[18:14:49] > set vsen 2750
+
+[18:14:49] set vsen 2750
+[18:14:49] vsen set to 2750 mV (outside calibrated range 3137-10120 mV) (booster off)
+[18:14:49] > set vsen_en on
+
+[18:14:49] set vsen_en on
+[18:14:49] vsen_en ON, 2750 mV
+[18:14:49] > set vai 2 on
+
+[18:14:49] set vai 2 on
+[18:14:49] vai 2 ON
+[18:14:58] > set vai 2 off
+
+[18:14:58] set vai 2 off
+[18:14:58] vai 2 OFF
+[18:14:58] > set vsen_en off
+
+[18:14:58] set vsen_en off
+[18:14:58] vsen_en OFF
+[18:14:58] > set vsen 2800
+
+[18:14:59] set vsen 2800
+[18:14:59] vsen set to 2800 mV (outside calibrated range 3137-10120 mV) (booster off)
+[18:14:59] > set vsen_en on
+
+[18:14:59] set vsen_en on
+[18:14:59] vsen_en ON, 2800 mV
+[18:14:59] > set vai 2 on
+
+[18:14:59] set vai 2 on
+[18:14:59] vai 2 ON
+[18:15:09] > set vai 2 off
+
+[18:15:09] set vai 2 off
+[18:15:09] vai 2 OFF
+[18:15:09] > set vsen_en off
+
+[18:15:09] set vsen_en off
+[18:15:09] vsen_en OFF
+[18:15:09] > set vsen 2850
+
+[18:15:09] set vsen 2850
+[18:15:09] vsen set to 2850 mV (outside calibrated range 3137-10120 mV) (booster off)
+[18:15:09] > set vsen_en on
+
+[18:15:09] set vsen_en on
+[18:15:09] vsen_en ON, 2850 mV
+[18:15:09] > set vai 2 on
+
+[18:15:09] set vai 2 on
+[18:15:09] vai 2 ON
+[18:15:22] > set vai 2 off
+
+[18:15:22] set vai 2 off
+[18:15:22] vai 2 OFF
+[18:15:22] > set vsen_en off
+
+[18:15:22] set vsen_en off
+[18:15:22] vsen_en OFF
+[18:15:22] > set vsen 2900
+
+[18:15:22] set vsen 2900
+[18:15:22] vsen set to 2900 mV (outside calibrated range 3137-10120 mV) (booster off)
+[18:15:23] > set vsen_en on
+
+[18:15:23] set vsen_en on
+[18:15:23] vsen_en ON, 2900 mV
+[18:15:23] > set vai 2 on
+
+[18:15:23] set vai 2 on
+[18:15:23] vai 2 ON
+[18:18:55] > set vai 2 off
+
+[18:18:55] set vai 2 off
+[18:18:55] vai 2 OFF
+[18:18:55] > set vsen_en off
+
+[18:18:55] set vsen_en off
+[18:18:55] vsen_en OFF
