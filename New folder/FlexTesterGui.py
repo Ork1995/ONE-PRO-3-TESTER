@@ -1483,8 +1483,10 @@ class FlexTesterGUI:
         self.ain_values[channel]["voltage"].set("VIN: -- mV")
         self.ain_values[channel]["raw"].set("--")
         self.ain_values[channel]["status"].set(status)
+        self._ss_auto_sample(channel, None)
 
     def _ain_reset(self, status):
+        self._ss_auto_reset()
         self.ain_auto.set(self.is_connected and status != "Connection lost")
         self._ain_queue.clear()
         self._ain_pending = None
@@ -1499,10 +1501,10 @@ class FlexTesterGUI:
                 self._ain_pending = None
                 self._ain_queue.clear()
             if self._ain_pending is None:
-                if not self._ain_queue and self.ain_auto.get():
+                if not self._ain_queue and (self.ain_auto.get() or any(var.get() for var in self.ss_auto_vars.values())):
                     for offset in range(4):
                         channel = (self._ain_next_channel - 1 + offset) % 4 + 1
-                        if self.ain_enabled[channel].get():
+                        if (self.ain_auto.get() and self.ain_enabled[channel].get()) or self.ss_auto_vars[channel].get():
                             self._ain_queue.append(channel)
                             self._ain_next_channel = channel % 4 + 1
                             break
@@ -1512,6 +1514,7 @@ class FlexTesterGUI:
                     self._ain_deadline = time.monotonic() + 1.5
                     self.ain_values[channel]["status"].set("Sampling")
                     self.send_command(f"get ain {channel}")
+                self._ss_auto_dispatch()
         self.root.after(250, self._ain_tick)
 
     def _ain_handle_line(self, line):
@@ -1531,6 +1534,7 @@ class FlexTesterGUI:
                 self.ain_values[channel]["raw"].set(str(raw))
                 status = "ADC full scale" if raw == 4095 else datetime.now().strftime("%H:%M:%S")
                 self.ain_values[channel]["status"].set(status)
+                self._ss_auto_sample(channel, mv if raw < 4095 else None)
         elif error or unsupported:
             result = error if error else unsupported
             channel = int(result.group(1))
@@ -2099,6 +2103,7 @@ class FlexTesterGUI:
             except Exception as e:
                 messagebox.showerror("Connection Error", str(e))
         else:
+            self._ss_auto_reset(stop_output=True)
             self.stop_read = True
             if self.serial_port:
                 self.serial_port.close()
@@ -2401,6 +2406,15 @@ class FlexTesterGUI:
         # One entry per sensor: its voltage preset and its widgets. There is no per-sensor PWM.
         self.ss_mv_vars = {}
         self.ss_widgets = {}
+        self.ss_auto_vars = {}
+        self.ss_auto_seconds = {}
+        self.ss_auto_status = {}
+        self._ss_auto_queue = []
+        self._ss_auto_latest = {}
+        self._ss_auto_active = None
+        self._ss_auto_deadline = 0.0
+        self._ss_auto_duration_ms = 0
+        self._ss_auto_stopping = False
         self._ss_row_default = self.root.cget("bg")   # row colour when a sensor is not active
 
         # Running activation sequence
@@ -2450,12 +2464,146 @@ class FlexTesterGUI:
         status.grid(row=0, column=6, sticky="ew", padx=(6, 6))
         panel.columnconfigure(6, weight=1)
         vin = tk.Label(panel, textvariable=self.ain_values[n]["voltage"], anchor="w", width=16)
-        vin.grid(row=1, column=1, columnspan=5, sticky="w", pady=(0, 3))
+        vin.grid(row=1, column=1, sticky="w", pady=(0, 3))
+        self.ss_auto_vars[n] = tk.BooleanVar(value=False)
+        self.ss_auto_seconds[n] = tk.StringVar(value="5")
+        self.ss_auto_status[n] = tk.StringVar(value="Disabled")
+        auto = ttk.Checkbutton(panel, text="AUTO", variable=self.ss_auto_vars[n],
+                               command=lambda sid=n: self._ss_auto_toggle(sid))
+        auto.grid(row=1, column=2, sticky="w")
+        seconds = ttk.Spinbox(panel, from_=0.01, to=3600, increment=1,
+                              textvariable=self.ss_auto_seconds[n], width=7)
+        seconds.grid(row=1, column=3, padx=2)
+        seconds_label = tk.Label(panel, text="s")
+        seconds_label.grid(row=1, column=4)
+        auto_status = tk.Label(panel, textvariable=self.ss_auto_status[n], anchor="w", width=20)
+        auto_status.grid(row=1, column=5, columnspan=2, sticky="ew", padx=6)
 
         self.ss_widgets[n] = {
             "panel": panel, "marker": marker, "entry": entry, "button": button, "status": status, "vin": vin,
-            "tint": [panel, marker, title, volt_label, mv_label, vin],   # widgets that take the row tint
+            "auto": auto, "seconds": seconds, "auto_status": auto_status,
+            "tint": [panel, marker, title, volt_label, mv_label, vin, seconds_label, auto_status],   # widgets that take the row tint
         }
+
+    def _ss_auto_settings(self, n):
+        mv, error = self._ss_parse_mv(n)
+        if error:
+            return None, None, error
+        try:
+            seconds = float(self.ss_auto_seconds[n].get())
+        except ValueError:
+            return None, None, "Duration must be a number of seconds."
+        if not 0.01 <= seconds <= 3600:
+            return None, None, "Duration must be between 0.01 and 3600 seconds."
+        return mv, round(seconds * 1000), None
+
+    def _ss_auto_toggle(self, n):
+        if not self.ss_auto_vars[n].get():
+            self._ss_auto_queue = [channel for channel in self._ss_auto_queue if channel != n]
+            self._ss_auto_latest.pop(n, None)
+            self.ss_auto_status[n].set("Disabled")
+            if self._ss_auto_active == n:
+                self._ss_auto_stopping = True
+                self._ss_auto_deadline = time.monotonic() + SS_ACK_TIMEOUT_MS / 1000
+                self.ss_auto_status[n].set("Stopping")
+                self.send_command(f"stop vai {n}")
+            self._ss_set_busy(self._ss_busy)
+            return
+        _, _, error = self._ss_auto_settings(n)
+        if not self.is_connected or self._ss_busy or error:
+            self.ss_auto_vars[n].set(False)
+            messagebox.showwarning("AUTO", error or "Connect the Tester and wait for the current supply command.")
+            return
+        self._ss_auto_latest.pop(n, None)
+        self.ss_auto_status[n].set("Waiting VIN > 1V")
+        self.ain_auto.set(True)
+        self._ss_set_busy(self._ss_busy)
+
+    def _ss_auto_sample(self, n, mv):
+        if mv is None:
+            self._ss_auto_latest.pop(n, None)
+        else:
+            self._ss_auto_latest[n] = (mv, time.monotonic())
+        if not self.ss_auto_vars[n].get() or n == self._ss_auto_active:
+            return
+        if mv is not None and mv > 1000:
+            if n not in self._ss_auto_queue:
+                self._ss_auto_queue.append(n)
+            self.ss_auto_status[n].set("Queued")
+        else:
+            self._ss_auto_queue = [channel for channel in self._ss_auto_queue if channel != n]
+            self.ss_auto_status[n].set("Waiting VIN > 1V" if mv is not None else "Waiting valid VIN")
+
+    def _ss_auto_dispatch(self):
+        if not self.is_connected:
+            return
+        if self._ss_auto_active is not None:
+            if time.monotonic() >= self._ss_auto_deadline:
+                self._ss_auto_fail("No pulse acknowledgement or completion from the board.")
+            return
+        if self._ss_busy:
+            return
+        while self._ss_auto_queue:
+            n = self._ss_auto_queue.pop(0)
+            mv_in, sampled = self._ss_auto_latest.get(n, (0, 0))
+            if not self.ss_auto_vars[n].get():
+                continue
+            if mv_in <= 1000 or time.monotonic() - sampled > 2:
+                self.ss_auto_status[n].set("Waiting fresh VIN")
+                continue
+            mv, duration_ms, error = self._ss_auto_settings(n)
+            if error:
+                self.ss_auto_vars[n].set(False)
+                self.ss_auto_status[n].set("Invalid settings")
+                self._ss_set_busy(self._ss_busy)
+                messagebox.showwarning("AUTO", f"Sensor {n}: {error}")
+                continue
+            self._ss_auto_active = n
+            self._ss_auto_duration_ms = duration_ms
+            self._ss_auto_stopping = False
+            self._ss_auto_deadline = time.monotonic() + SS_ACK_TIMEOUT_MS / 1000
+            self.ss_auto_status[n].set("Starting")
+            self._ss_set_busy(self._ss_busy)
+            self.send_command(f"pulse vai {n} {mv} {duration_ms}")
+            return
+
+    def _ss_auto_handle_line(self, line):
+        n = self._ss_auto_active
+        if n is None:
+            return
+        line = line.strip()
+        started = re.fullmatch(rf"vai {n} ON pulse_ms=(\d+)", line)
+        if started and not self._ss_auto_stopping:
+            if int(started.group(1)) != self._ss_auto_duration_ms:
+                self._ss_auto_fail("The board acknowledged a different pulse duration.")
+                return
+            self._ss_auto_deadline = time.monotonic() + self._ss_auto_duration_ms / 1000 + SS_ACK_TIMEOUT_MS / 1000
+            self.ss_auto_status[n].set(f"ON ({self._ss_auto_duration_ms / 1000:g} s)")
+        elif re.fullmatch(rf"vai {n} OFF pulse (?:complete|cancelled)", line):
+            self._ss_auto_active = None
+            self._ss_auto_latest.pop(n, None)
+            self._ss_auto_stopping = False
+            self.ss_auto_status[n].set("Waiting VIN > 1V" if self.ss_auto_vars[n].get() else "Disabled")
+            self._ss_set_busy(self._ss_busy)
+        elif re.match(rf"ERROR (?:pulse|stop) vai {n}(?:\s|$)", line):
+            self._ss_auto_fail(f"The board rejected AUTO: {line}")
+
+    def _ss_auto_reset(self, stop_output=False):
+        n = self._ss_auto_active
+        if stop_output and n is not None and self.is_connected:
+            self.send_command(f"stop vai {n}")
+        self._ss_auto_active = None
+        self._ss_auto_queue.clear()
+        self._ss_auto_latest.clear()
+        self._ss_auto_stopping = False
+        for channel in self.ss_auto_vars:
+            self.ss_auto_vars[channel].set(False)
+            self.ss_auto_status[channel].set("Disabled")
+        self._ss_set_busy(self._ss_busy)
+
+    def _ss_auto_fail(self, reason):
+        self._ss_auto_reset(stop_output=True)
+        messagebox.showwarning("AUTO stopped", reason)
 
     def _ss_parse_mv(self, n):
         """Read sensor n's own voltage field. Returns (mV, None) or (None, error message)."""
@@ -2470,7 +2618,7 @@ class FlexTesterGUI:
 
     def _ss_toggle(self, n):
         """ON/OFF button of sensor n."""
-        if self._ss_busy:
+        if self._ss_busy or self._ss_auto_active is not None or any(var.get() for var in self.ss_auto_vars.values()):
             return
         if not self.is_connected:
             messagebox.showwarning("Not Connected", "Please connect to a COM port first.")
@@ -2533,11 +2681,14 @@ class FlexTesterGUI:
 
     def _ss_set_busy(self, busy):
         self._ss_busy = busy
-        for w in self.ss_widgets.values():
-            w["button"].state(["disabled"] if busy else ["!disabled"])
+        manual_disabled = busy or self._ss_auto_active is not None or any(var.get() for var in self.ss_auto_vars.values())
+        for n, w in self.ss_widgets.items():
+            w["button"].state(["disabled"] if manual_disabled else ["!disabled"])
+            w["seconds"].state(["disabled"] if n == self._ss_auto_active else ["!disabled"])
 
     def _ss_on_system_init(self):
         """'system init' resets the firmware's sensor supply to PWM 0 %, booster and all rails off."""
+        self._ss_auto_reset()
         if self._ss_timeout_id is not None:
             self.root.after_cancel(self._ss_timeout_id)
             self._ss_timeout_id = None
@@ -2582,6 +2733,7 @@ class FlexTesterGUI:
 
         if changed:
             self._ss_refresh_ui()
+        self._ss_auto_handle_line(line)
 
         if self._ss_ack is not None:
             if self._ss_ack.search(line):
@@ -2641,7 +2793,14 @@ class FlexTesterGUI:
         mode = self.mode_combo.current() + 1
         self.send_command(f"set mode {mode}")
 
+    @staticmethod
+    def _is_adc_traffic(text):
+        return bool(re.fullmatch(
+            r"(?:>\s*)?get ain [1-4]|ain [1-4] raw=\d+ mv=\d+", text.strip()))
+
     def log(self, text_widget, text, newline=True):
+        if text_widget is self.text_area and self._is_adc_traffic(text):
+            return
         text = re.sub(r'^\d+:\d+:\d+ - ', '', text)
 
         try:

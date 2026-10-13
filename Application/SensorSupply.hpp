@@ -81,6 +81,9 @@ public:
 	 * @return false if the channel is out of range
 	 */
 	bool SetVaiEnable(uint8_t channel, bool enable);
+	bool StartPulse(uint8_t channel, uint32_t mv, uint32_t durationMs);
+	bool StopPulse(uint8_t channel);
+	uint8_t Task();
 
 	/// Everything off: VAIn low, VSEN_ONF low, PWM 0 %, all rail requests cleared. Keeps the setpoint.
 	void AllOff();
@@ -108,6 +111,9 @@ private:
 	bool _vsenEnabled = false;
 	bool _vaiRequested[VAI_COUNT] = {};
 	uint32_t _requestedMv = MIN_MV;
+	uint8_t _pulseChannel = 0;
+	uint32_t _pulseStarted = 0;
+	uint32_t _pulseDuration = 0;
 
 	void WriteCompare(uint32_t compare);
 	uint32_t CompareForVoltage(uint32_t mv) const;

@@ -81,6 +81,55 @@ requirement. Disconnect, reconnect, system initialization and board restart
 clear previous readings; reconnect and initialization restart auto sampling. FLEX CLI's
 second serial port is not used for ADC requests.
 
+Routine `get ain` commands, UART echoes and `ain ... raw=... mv=...` responses
+are hidden from the Main Controller terminal and its text log. VIN still updates.
+ADC errors, initialization diagnostics and output ON/OFF events remain visible.
+
+## AUTO Output Pulses
+
+Each Sensor Supply row has an AUTO checkbox and a duration field in seconds
+(default 5 s, allowed 0.01-3600 s). Its existing Voltage field supplies the
+output setpoint, not the trigger threshold. Mapping is AI1 to VAI1, AI2 to VAI2,
+AI3 to VAI3, and AI4 to VAI4. These are the sensor-supply outputs, not DAC outputs.
+
+After AUTO is enabled, a fresh valid VIN strictly greater than 1000 mV queues
+that channel. At exactly 1000 mV or below there is no trigger. All enabled AUTO
+inputs continue to be polled even if their Analog Inputs sampling checkbox or
+the general Auto sample checkbox is off. Saturated/invalid ADC values cannot
+trigger AUTO, and queued measurements older than 2 seconds are discarded.
+
+The four VAI switches share one VSEN source. Pulses therefore run one at a time
+in FIFO order, each using its own row's configured voltage and duration. Manual
+ON/OFF buttons are disabled while AUTO is enabled. The next output is not started
+until the board confirms the preceding pulse is OFF. A channel can rejoin the
+tail of the queue only after another VIN sample above 1 V following completion;
+VIN does not have to drop below the threshold first. A queued channel whose
+VIN drops to 1 V or below is removed. A running pulse completes its configured
+duration even if VIN falls during the pulse.
+
+Firmware command: `pulse vai <1-4> <2100-15000 mV> <10-3600000 ms>`.
+The board atomically clears other rail requests, selects the voltage, enables
+the booster and selected VAI, and records a HAL tick deadline. Replies include
+`vai 1 ON pulse_ms=5000` and a full supply status. At the deadline the application
+loop turns ALL VAI switches off, disables the booster, sets PWM to zero, and
+reports `vai 1 OFF pulse complete` plus full status. The deadline calculation
+handles the 32-bit tick rollover. Timing resolution depends on the application
+loop service latency; this is not a hard real-time interrupt-driven pulse.
+
+`stop vai <1-4>` cancels an active pulse and reports `OFF pulse cancelled`.
+Unchecking AUTO on the active row sends this command; other channels may keep
+running in AUTO. A normal GUI disconnect also requests cancellation before
+closing the serial port. Reset/restart disables all GUI AUTO selections.
+Rejection or missing pulse acknowledgement/completion disables AUTO and sends
+a best-effort cancellation. If the GUI crashes or the cable is removed during
+a pulse, firmware still ends that pulse at its deadline, and no new pulse is
+started without another GUI request.
+
+Turning VAI off disconnects its supply; actual decay to 0 V depends on the load
+and stored capacitance. Verify the output waveform and off voltage on hardware.
+AUTO requires the updated Tester firmware; it cannot run against older firmware
+that lacks the pulse command. No firmware was flashed during this implementation.
+
 ## Hardware Acceptance
 
 1. Build and flash the Tester firmware, not the Flex Lite firmware.
@@ -91,6 +140,9 @@ second serial port is not used for ADC requests.
 4. Confirm that changing one signal does not change the other three readings.
 5. Verify DAC1 still works; DAC2 must remain disabled while PA5 is AI1.
 6. Test auto sampling together with water-meter simulation and sensor supply.
+7. Enable AUTO with a known duration and input above 1 V; verify the corresponding
+   VAI output turns on at its preset voltage and off after the duration. Test
+   all four mappings, queued triggers, cancellation and cable removal during a pulse.
 
 Software checks do not replace these physical measurements. No board was
 flashed or measured as part of this integration.

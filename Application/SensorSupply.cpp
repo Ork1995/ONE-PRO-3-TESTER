@@ -104,9 +104,50 @@ bool SensorSupply::SetVaiEnable(uint8_t channel, bool enable)
 	return true;
 }
 
+bool SensorSupply::StartPulse(uint8_t channel, uint32_t mv, uint32_t durationMs)
+{
+	if (channel < 1 || channel > VAI_COUNT || mv < MIN_MV || mv > MAX_MV ||
+	    durationMs < 10 || durationMs > 3600000 || !_pwmRunning || _pulseChannel != 0) {
+		return false;
+	}
+	AllOff();
+	SetVoltage_mV(mv);
+	if (!SetVsenEnable(true)) {
+		return false;
+	}
+	SetVaiEnable(channel, true);
+	_pulseChannel = channel;
+	_pulseStarted = HAL_GetTick();
+	_pulseDuration = durationMs;
+	return true;
+}
+
+bool SensorSupply::StopPulse(uint8_t channel)
+{
+	if (channel < 1 || channel > VAI_COUNT) {
+		return false;
+	}
+	if (_pulseChannel == channel) {
+		AllOff();
+		return true;
+	}
+	return _pulseChannel == 0 && !IsVaiRequested(channel);
+}
+
+uint8_t SensorSupply::Task()
+{
+	if (_pulseChannel != 0 && (uint32_t)(HAL_GetTick() - _pulseStarted) >= _pulseDuration) {
+		const uint8_t channel = _pulseChannel;
+		AllOff();
+		return channel;
+	}
+	return 0;
+}
+
 void SensorSupply::AllOff()
 {
 	SetVsenEnable(false);
+	_pulseChannel = 0;
 
 	for (uint8_t i = 0; i < VAI_COUNT; ++i) {
 		_vaiRequested[i] = false;

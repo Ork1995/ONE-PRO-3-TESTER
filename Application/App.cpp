@@ -164,6 +164,15 @@ void App::Task()
 		}
 
 		ControlWaterMeters();
+		const uint8_t completed = _sensorSupply.Task();
+		if (completed != 0) {
+			Buffer<Comm::MAX_RESP_LEN> message;
+			TextPrinter output(message);
+			output << "vai " << (long)completed << " OFF pulse complete\r\n";
+			AppendSensorSupplyStatus(output);
+			output << "\r\n";
+			_comm.SendResponse(message);
+		}
 	}
 }
 
@@ -395,6 +404,23 @@ void App::HandleCommand(const BufferView<> &cmd)
 				}
 			}
 		}
+		else if (token1 == "pulse") {
+			if (token2 == "vai") {
+				long channel, mv, durationMs;
+				scanner >> channel >> mv >> durationMs;
+				if (!scanner.IsError() && channel >= 1 && channel <= SensorSupply::VAI_COUNT &&
+				    mv >= SensorSupply::MIN_MV && mv <= SensorSupply::MAX_MV &&
+				    durationMs >= 10 && durationMs <= 3600000) {
+					if (_sensorSupply.StartPulse((uint8_t)channel, (uint32_t)mv, (uint32_t)durationMs)) {
+						response << "vai " << channel << " ON pulse_ms=" << durationMs << "\r\n";
+						AppendSensorSupplyStatus(response);
+					}
+					else {
+						response << "ERROR pulse vai " << channel << " busy or pwm unavailable";
+					}
+				}
+			}
+		}
 		else if (token1 == "start") {
 			if (token2 == "wm") {
 				long id, cycleTimeMs;
@@ -412,6 +438,15 @@ void App::HandleCommand(const BufferView<> &cmd)
 				if (!scanner.IsError() && id >= 1 && id <= WM_SIM_COUNT) {
 					_wmSim[id - 1].SetStatus(WaterMeterSimulator::Status::Stopped, 0);
 					response << "wm " << id << " stopped";
+				}
+			}
+			else if (token2 == "vai") {
+				long channel;
+				scanner >> channel;
+				if (!scanner.IsError() && channel >= 1 && channel <= SensorSupply::VAI_COUNT &&
+				    _sensorSupply.StopPulse((uint8_t)channel)) {
+					response << "vai " << channel << " OFF pulse cancelled\r\n";
+					AppendSensorSupplyStatus(response);
 				}
 			}
 		}
@@ -469,6 +504,10 @@ void App::HandleCommand(const BufferView<> &cmd)
 			_comm.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " set vai <1-4> on|off\r\n";
+			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			helpPrinter << " pulse vai <1-4> <mV> <10-3600000 ms>\r\n";
+			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			helpPrinter << " stop vai <1-4>\r\n";
 			_comm.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " get vsen\r\n";
