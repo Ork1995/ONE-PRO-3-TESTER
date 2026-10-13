@@ -1,0 +1,986 @@
+--- Log Started: Tue Oct 13 16:20:32 2026 ---
+[16:20:39] Connected to COM16
+[16:20:39] > get ain 1
+
+[16:20:39] get ain 1
+[16:20:39] ain 1 raw=0 mv=0
+[16:20:39] > get ain 2
+
+[16:20:39] get ain 2
+[16:20:39] ain 2 raw=0 mv=0
+[16:20:39] > get ain 3
+
+[16:20:39] get ain 3
+[16:20:40] ain 3 raw=0 mv=0
+[16:20:40] > get ain 4
+
+[16:20:40] get ain 4
+[16:20:40] ain 4 raw=1372 mv=3376
+[16:20:40] > get ain 1
+
+[16:20:40] get ain 1
+[16:20:40] ain 1 raw=0 mv=0
+[16:20:40] > get ain 2
+
+[16:20:40] get ain 2
+[16:20:41] ain 2 raw=0 mv=0
+[16:20:41] > get ain 3
+
+[16:20:41] get ain 3
+[16:20:41] ain 3 raw=0 mv=0
+[16:20:41] > get ain 4
+
+[16:20:41] get ain 4
+[16:20:41] ain 4 raw=1112 mv=2736
+[16:20:41] > get ain 1
+
+[16:20:41] get ain 1
+[16:20:41] ain 1 raw=0 mv=0
+[16:20:41] > get ain 2
+
+[16:20:42] get ain 2
+[16:20:42] ain 2 raw=0 mv=0
+[16:20:42] > get ain 3
+
+[16:20:42] get ain 3
+[16:20:42] ain 3 raw=0 mv=0
+[16:20:42] > get ain 4
+
+[16:20:42] get ain 4
+[16:20:42] ain 4 raw=1089 mv=2679
+[16:20:42] > get ain 1
+
+[16:20:42] get ain 1
+[16:20:42] ain 1 raw=0 mv=0
+[16:20:43] > get ain 2
+
+[16:20:43] get ain 2
+[16:20:43] ain 2 raw=0 mv=0
+[16:20:43] > get ain 3
+
+[16:20:43] get ain 3
+[16:20:43] ain 3 raw=0 mv=0
+[16:20:43] > get ain 4
+
+[16:20:43] get ain 4
+[16:20:43] ain 4 raw=1089 mv=2679
+[16:20:43] > get ain 1
+
+[16:20:43] get ain 1
+[16:20:43] ain 1 raw=0 mv=0
+[16:20:44] > get ain 2
+
+[16:20:44] get ain 2
+[16:20:44] ain 2 raw=0 mv=0
+[16:20:44] > get ain 3
+
+[16:20:44] get ain 3
+[16:20:44] ain 3 raw=0 mv=0
+[16:20:44] > get ain 4
+
+[16:20:44] get ain 4
+[16:20:44] ain 4 raw=1082 mv=2662
+[16:20:44] > get ain 1
+
+[16:20:44] get ain 1
+[16:20:44] ain 1 raw=0 mv=0
+[16:20:45] > get ain 2
+
+[16:20:45] get ain 2
+[16:20:45] ain 2 raw=0 mv=0
+[16:20:45] > get ain 3
+
+[16:20:45] get ain 3
+[16:20:45] ain 3 raw=0 mv=0
+[16:20:45] > get ain 4
+
+[16:20:45] get ain 4
+[16:20:45] ain 4 raw=1082 mv=2662
+[16:20:45] > get ain 1
+
+[16:20:45] get ain 1
+[16:20:46] ain 1 raw=0 mv=0
+[16:20:46] > get ain 2
+
+[16:20:46] get ain 2
+[16:20:46] ain 2 raw=0 mv=0
+[16:20:46] > get ain 3
+
+[16:20:46] get ain 3
+[16:20:46] ain 3 raw=0 mv=0
+[16:20:46] > get ain 4
+
+[16:20:46] get ain 4
+[16:20:46] ain 4 raw=1082 mv=2662
+[16:20:47] > get ain 1
+
+[16:20:47] get ain 1
+[16:20:47] ain 1 raw=0 mv=0
+[16:20:47] > get ain 2
+
+[16:20:47] get ain 2
+[16:20:47] ain 2 raw=0 mv=0
+[16:20:47] > get ain 3
+
+[16:20:47] get ain 3
+[16:20:47] ain 3 raw=0 mv=0
+[16:20:47] > get ain 4
+
+[16:20:47] get ain 4
+[16:20:47] ain 4 raw=1076 mv=2648
+[16:20:48] > get ain 1
+
+[16:20:48] get ain 1
+[16:20:48] > set vsen 7500
+
+[16:20:48] ain 1 raw=0 mv=0
+[16:20:48] set vsen 7500
+[16:20:48] vsen set to 7500 mV (booster off)
+[16:20:48] > set vsen_en on
+
+[16:20:48] set vsen_en on
+[16:20:48] vsen_en ON, 7500 mV
+[16:20:48] > set vai 2 on
+
+[16:20:48] set vai 2 on
+[16:20:48] vai 2 ON
+[16:20:48] > get ain 2
+
+[16:20:48] get ain 2
+[16:20:48] ain 2 raw=0 mv=0
+[16:20:48] > get ain 3
+
+[16:20:48] get ain 3
+[16:20:48] ain 3 raw=0 mv=0
+[16:20:48] > get ain 4
+
+[16:20:48] get ain 4
+[16:20:48] ain 4 raw=1178 mv=2898
+[16:20:49] > get ain 1
+
+[16:20:49] get ain 1
+[16:20:49] ain 1 raw=0 mv=0
+[16:20:49] > get ain 2
+
+[16:20:49] get ain 2
+[16:20:49] ain 2 raw=0 mv=0
+[16:20:49] > get ain 3
+
+[16:20:49] get ain 3
+[16:20:49] ain 3 raw=0 mv=0
+[16:20:49] > get ain 4
+
+[16:20:49] get ain 4
+[16:20:49] ain 4 raw=1198 mv=2948
+[16:20:50] > get ain 1
+
+[16:20:50] get ain 1
+[16:20:50] ain 1 raw=0 mv=0
+[16:20:50] > get ain 2
+
+[16:20:50] get ain 2
+[16:20:50] ain 2 raw=0 mv=0
+[16:20:50] > get ain 3
+
+[16:20:50] get ain 3
+[16:20:50] ain 3 raw=0 mv=0
+[16:20:50] > get ain 4
+
+[16:20:50] get ain 4
+[16:20:50] ain 4 raw=1195 mv=2940
+[16:20:51] > get ain 1
+
+[16:20:51] get ain 1
+[16:20:51] ain 1 raw=0 mv=0
+[16:20:51] > get ain 2
+
+[16:20:51] get ain 2
+[16:20:51] ain 2 raw=0 mv=0
+[16:20:51] > get ain 3
+
+[16:20:51] get ain 3
+[16:20:51] ain 3 raw=0 mv=0
+[16:20:51] > get ain 4
+
+[16:20:52] get ain 4
+[16:20:52] ain 4 raw=1199 mv=2950
+[16:20:52] > get ain 1
+
+[16:20:52] get ain 1
+[16:20:52] ain 1 raw=0 mv=0
+[16:20:52] > get ain 2
+
+[16:20:52] get ain 2
+[16:20:52] ain 2 raw=0 mv=0
+[16:20:52] > get ain 3
+
+[16:20:52] get ain 3
+[16:20:52] ain 3 raw=0 mv=0
+[16:20:53] > get ain 4
+
+[16:20:53] get ain 4
+[16:20:53] ain 4 raw=1202 mv=2958
+[16:20:53] > get ain 1
+
+[16:20:53] get ain 1
+[16:20:53] ain 1 raw=0 mv=0
+[16:20:53] > get ain 2
+
+[16:20:53] get ain 2
+[16:20:53] ain 2 raw=0 mv=0
+[16:20:53] > get ain 3
+
+[16:20:53] get ain 3
+[16:20:53] ain 3 raw=0 mv=0
+[16:20:54] > get ain 4
+
+[16:20:54] get ain 4
+[16:20:54] ain 4 raw=1200 mv=2953
+[16:20:54] > get ain 1
+
+[16:20:54] get ain 1
+[16:20:54] ain 1 raw=0 mv=0
+[16:20:54] > get ain 2
+
+[16:20:54] get ain 2
+[16:20:54] ain 2 raw=0 mv=0
+[16:20:54] > get ain 3
+
+[16:20:54] get ain 3
+[16:20:54] ain 3 raw=0 mv=0
+[16:20:55] > get ain 4
+
+[16:20:55] get ain 4
+[16:20:55] ain 4 raw=1199 mv=2950
+[16:20:55] > get ain 1
+
+[16:20:55] get ain 1
+[16:20:55] ain 1 raw=0 mv=0
+[16:20:55] > get ain 2
+
+[16:20:55] get ain 2
+[16:20:55] ain 2 raw=0 mv=0
+[16:20:55] > get ain 3
+
+[16:20:55] get ain 3
+[16:20:56] ain 3 raw=0 mv=0
+[16:20:56] > get ain 4
+
+[16:20:56] get ain 4
+[16:20:56] ain 4 raw=1204 mv=2962
+[16:20:56] > get ain 1
+
+[16:20:56] get ain 1
+[16:20:56] ain 1 raw=2317 mv=5701
+[16:20:56] > get ain 2
+
+[16:20:56] get ain 2
+[16:20:56] ain 2 raw=0 mv=0
+[16:20:57] > get ain 3
+
+[16:20:57] get ain 3
+[16:20:57] ain 3 raw=0 mv=0
+[16:20:57] > get ain 4
+
+[16:20:57] get ain 4
+[16:20:57] ain 4 raw=1198 mv=2948
+[16:20:57] > get ain 1
+
+[16:20:57] get ain 1
+[16:20:57] ain 1 raw=0 mv=0
+[16:20:57] > get ain 2
+
+[16:20:57] get ain 2
+[16:20:57] ain 2 raw=0 mv=0
+[16:20:58] > get ain 3
+
+[16:20:58] get ain 3
+[16:20:58] ain 3 raw=0 mv=0
+[16:20:58] > get ain 4
+
+[16:20:58] get ain 4
+[16:20:58] ain 4 raw=1203 mv=2960
+[16:20:58] > get ain 1
+
+[16:20:58] get ain 1
+[16:20:58] ain 1 raw=0 mv=0
+[16:20:58] > get ain 2
+
+[16:20:58] get ain 2
+[16:20:58] ain 2 raw=0 mv=0
+[16:20:59] > get ain 3
+
+[16:20:59] get ain 3
+[16:20:59] ain 3 raw=0 mv=0
+[16:20:59] > get ain 4
+
+[16:20:59] get ain 4
+[16:20:59] ain 4 raw=1201 mv=2955
+[16:20:59] > get ain 1
+
+[16:20:59] get ain 1
+[16:20:59] ain 1 raw=3081 mv=7581
+[16:20:59] > get ain 2
+
+[16:20:59] get ain 2
+[16:21:00] ain 2 raw=0 mv=0
+[16:21:00] > get ain 3
+
+[16:21:00] get ain 3
+[16:21:00] ain 3 raw=0 mv=0
+[16:21:00] > get ain 4
+
+[16:21:00] get ain 4
+[16:21:00] ain 4 raw=1199 mv=2950
+[16:21:00] > get ain 1
+
+[16:21:00] get ain 1
+[16:21:00] ain 1 raw=3084 mv=7588
+[16:21:01] > get ain 2
+
+[16:21:01] get ain 2
+[16:21:01] ain 2 raw=0 mv=0
+[16:21:01] > get ain 3
+
+[16:21:01] get ain 3
+[16:21:01] ain 3 raw=0 mv=0
+[16:21:01] > get ain 4
+
+[16:21:01] get ain 4
+[16:21:01] ain 4 raw=1199 mv=2950
+[16:21:01] > get ain 1
+
+[16:21:01] get ain 1
+[16:21:01] ain 1 raw=3088 mv=7598
+[16:21:02] > get ain 2
+
+[16:21:02] get ain 2
+[16:21:02] ain 2 raw=0 mv=0
+[16:21:02] > get ain 3
+
+[16:21:02] get ain 3
+[16:21:02] ain 3 raw=0 mv=0
+[16:21:02] > get ain 4
+
+[16:21:02] get ain 4
+[16:21:02] ain 4 raw=1196 mv=2943
+[16:21:02] > get ain 1
+
+[16:21:02] get ain 1
+[16:21:02] ain 1 raw=3091 mv=7605
+[16:21:03] > get ain 2
+
+[16:21:03] get ain 2
+[16:21:03] ain 2 raw=0 mv=0
+[16:21:03] > get ain 3
+
+[16:21:03] get ain 3
+[16:21:03] ain 3 raw=0 mv=0
+[16:21:03] > get ain 4
+
+[16:21:03] get ain 4
+[16:21:03] ain 4 raw=1194 mv=2938
+[16:21:03] > get ain 1
+
+[16:21:03] get ain 1
+[16:21:04] ain 1 raw=3086 mv=7593
+[16:21:04] > get ain 2
+
+[16:21:04] get ain 2
+[16:21:04] ain 2 raw=0 mv=0
+[16:21:04] > get ain 3
+
+[16:21:04] get ain 3
+[16:21:04] ain 3 raw=0 mv=0
+[16:21:04] > get ain 4
+
+[16:21:04] get ain 4
+[16:21:04] ain 4 raw=1195 mv=2940
+[16:21:05] > get ain 1
+
+[16:21:05] get ain 1
+[16:21:05] ain 1 raw=3076 mv=7569
+[16:21:05] > get ain 2
+
+[16:21:05] get ain 2
+[16:21:05] ain 2 raw=0 mv=0
+[16:21:05] > get ain 3
+
+[16:21:05] get ain 3
+[16:21:05] ain 3 raw=0 mv=0
+[16:21:05] > get ain 4
+
+[16:21:05] get ain 4
+[16:21:05] ain 4 raw=1191 mv=2930
+[16:21:06] > get ain 1
+
+[16:21:06] get ain 1
+[16:21:06] ain 1 raw=3096 mv=7618
+[16:21:06] > get ain 2
+
+[16:21:06] get ain 2
+[16:21:06] ain 2 raw=0 mv=0
+[16:21:06] > get ain 3
+
+[16:21:06] get ain 3
+[16:21:06] ain 3 raw=0 mv=0
+[16:21:06] > get ain 4
+
+[16:21:06] get ain 4
+[16:21:06] ain 4 raw=1193 mv=2935
+[16:21:07] > get ain 1
+
+[16:21:07] get ain 1
+[16:21:07] ain 1 raw=3081 mv=7581
+[16:21:07] > get ain 2
+
+[16:21:07] get ain 2
+[16:21:07] ain 2 raw=0 mv=0
+[16:21:07] > get ain 3
+
+[16:21:07] get ain 3
+[16:21:07] ain 3 raw=0 mv=0
+[16:21:07] > get ain 4
+
+[16:21:07] get ain 4
+[16:21:07] ain 4 raw=1190 mv=2928
+[16:21:08] > get ain 1
+
+[16:21:08] get ain 1
+[16:21:08] ain 1 raw=0 mv=0
+[16:21:08] > get ain 2
+
+[16:21:08] get ain 2
+[16:21:08] ain 2 raw=0 mv=0
+[16:21:08] > get ain 3
+
+[16:21:08] get ain 3
+[16:21:08] ain 3 raw=0 mv=0
+[16:21:08] > get ain 4
+
+[16:21:09] get ain 4
+[16:21:09] ain 4 raw=1197 mv=2945
+[16:21:09] > get ain 1
+
+[16:21:09] get ain 1
+[16:21:09] ain 1 raw=0 mv=0
+[16:21:09] > get ain 2
+
+[16:21:09] get ain 2
+[16:21:09] ain 2 raw=0 mv=0
+[16:21:09] > get ain 3
+
+[16:21:09] get ain 3
+[16:21:09] ain 3 raw=0 mv=0
+[16:21:10] > get ain 4
+
+[16:21:10] get ain 4
+[16:21:10] ain 4 raw=1253 mv=3083
+[16:21:10] > get ain 1
+
+[16:21:10] get ain 1
+[16:21:10] ain 1 raw=0 mv=0
+[16:21:10] > get ain 2
+
+[16:21:10] get ain 2
+[16:21:10] ain 2 raw=0 mv=0
+[16:21:10] > get ain 3
+
+[16:21:10] get ain 3
+[16:21:10] ain 3 raw=3088 mv=7598
+[16:21:11] > get ain 4
+
+[16:21:11] get ain 4
+[16:21:11] ain 4 raw=1242 mv=3056
+[16:21:11] > get ain 1
+
+[16:21:11] get ain 1
+[16:21:11] ain 1 raw=0 mv=0
+[16:21:11] > get ain 2
+
+[16:21:11] get ain 2
+[16:21:11] ain 2 raw=0 mv=0
+[16:21:11] > get ain 3
+
+[16:21:11] get ain 3
+[16:21:11] ain 3 raw=3090 mv=7603
+[16:21:12] > get ain 4
+
+[16:21:12] get ain 4
+[16:21:12] ain 4 raw=1247 mv=3068
+[16:21:12] > get ain 1
+
+[16:21:12] get ain 1
+[16:21:12] ain 1 raw=0 mv=0
+[16:21:12] > get ain 2
+
+[16:21:12] get ain 2
+[16:21:12] ain 2 raw=0 mv=0
+[16:21:12] > get ain 3
+
+[16:21:12] get ain 3
+[16:21:13] ain 3 raw=3083 mv=7586
+[16:21:13] > get ain 4
+
+[16:21:13] get ain 4
+[16:21:13] ain 4 raw=1244 mv=3061
+[16:21:13] > get ain 1
+
+[16:21:13] get ain 1
+[16:21:13] ain 1 raw=0 mv=0
+[16:21:13] > get ain 2
+
+[16:21:13] get ain 2
+[16:21:13] ain 2 raw=0 mv=0
+[16:21:14] > get ain 3
+
+[16:21:14] get ain 3
+[16:21:14] ain 3 raw=3091 mv=7605
+[16:21:14] > get ain 4
+
+[16:21:14] get ain 4
+[16:21:14] ain 4 raw=1250 mv=3076
+[16:21:14] > get ain 1
+
+[16:21:14] get ain 1
+[16:21:14] ain 1 raw=0 mv=0
+[16:21:14] > get ain 2
+
+[16:21:14] get ain 2
+[16:21:14] ain 2 raw=0 mv=0
+[16:21:15] > get ain 3
+
+[16:21:15] get ain 3
+[16:21:15] ain 3 raw=3077 mv=7571
+[16:21:15] > get ain 4
+
+[16:21:15] get ain 4
+[16:21:15] ain 4 raw=1246 mv=3066
+[16:21:15] > get ain 1
+
+[16:21:15] get ain 1
+[16:21:15] ain 1 raw=0 mv=0
+[16:21:15] > get ain 2
+
+[16:21:15] get ain 2
+[16:21:15] ain 2 raw=0 mv=0
+[16:21:16] > get ain 3
+
+[16:21:16] get ain 3
+[16:21:16] ain 3 raw=3085 mv=7591
+[16:21:16] > get ain 4
+
+[16:21:16] get ain 4
+[16:21:16] ain 4 raw=1189 mv=2926
+[16:21:16] > get ain 1
+
+[16:21:16] get ain 1
+[16:21:16] ain 1 raw=0 mv=0
+[16:21:16] > get ain 2
+
+[16:21:16] get ain 2
+[16:21:16] ain 2 raw=0 mv=0
+[16:21:17] > get ain 3
+
+[16:21:17] get ain 3
+[16:21:17] ain 3 raw=0 mv=0
+[16:21:17] > get ain 4
+
+[16:21:17] get ain 4
+[16:21:17] ain 4 raw=1201 mv=2955
+[16:21:17] > get ain 1
+
+[16:21:17] get ain 1
+[16:21:17] ain 1 raw=0 mv=0
+[16:21:17] > get ain 2
+
+[16:21:18] get ain 2
+[16:21:18] ain 2 raw=0 mv=0
+[16:21:18] > get ain 3
+
+[16:21:18] get ain 3
+[16:21:18] ain 3 raw=0 mv=0
+[16:21:18] > get ain 4
+
+[16:21:18] get ain 4
+[16:21:18] ain 4 raw=1203 mv=2960
+[16:21:18] > get ain 1
+
+[16:21:18] get ain 1
+[16:21:18] ain 1 raw=0 mv=0
+[16:21:19] > get ain 2
+
+[16:21:19] get ain 2
+[16:21:19] ain 2 raw=0 mv=0
+[16:21:19] > get ain 3
+
+[16:21:19] get ain 3
+[16:21:19] ain 3 raw=0 mv=0
+[16:21:19] > get ain 4
+
+[16:21:19] get ain 4
+[16:21:19] ain 4 raw=1197 mv=2945
+[16:21:19] > get ain 1
+
+[16:21:19] get ain 1
+[16:21:19] ain 1 raw=0 mv=0
+[16:21:20] > get ain 2
+
+[16:21:20] get ain 2
+[16:21:20] ain 2 raw=0 mv=0
+[16:21:20] > get ain 3
+
+[16:21:20] get ain 3
+[16:21:20] > set vai 2 off
+
+[16:21:20] ain 3 raw=0 mv=0
+[16:21:20] set vai 2 off
+[16:21:20] vai 2 OFF
+[16:21:20] > set vsen_en off
+
+[16:21:20] set vsen_en off
+[16:21:20] vsen_en OFF
+[16:21:20] > get ain 4
+
+[16:21:20] get ain 4
+[16:21:20] ain 4 raw=1167 mv=2871
+[16:21:20] > get ain 1
+
+[16:21:20] get ain 1
+[16:21:20] ain 1 raw=0 mv=0
+[16:21:21] > get ain 2
+
+[16:21:21] get ain 2
+[16:21:21] ain 2 raw=0 mv=0
+[16:21:21] > get ain 3
+
+[16:21:21] get ain 3
+[16:21:21] ain 3 raw=0 mv=0
+[16:21:21] > get ain 4
+
+[16:21:21] get ain 4
+[16:21:21] ain 4 raw=1082 mv=2662
+[16:21:21] > get ain 1
+
+[16:21:21] get ain 1
+[16:21:21] ain 1 raw=0 mv=0
+[16:21:22] > get ain 2
+
+[16:21:22] get ain 2
+[16:21:22] ain 2 raw=0 mv=0
+[16:21:22] > get ain 3
+
+[16:21:22] get ain 3
+[16:21:22] ain 3 raw=0 mv=0
+[16:21:22] > get ain 4
+
+[16:21:22] get ain 4
+[16:21:22] ain 4 raw=1079 mv=2655
+[16:21:22] > get ain 1
+
+[16:21:22] get ain 1
+[16:21:23] ain 1 raw=0 mv=0
+[16:21:23] > get ain 2
+
+[16:21:23] get ain 2
+[16:21:23] ain 2 raw=0 mv=0
+[16:21:23] > get ain 3
+
+[16:21:23] get ain 3
+[16:21:23] ain 3 raw=0 mv=0
+[16:21:23] > get ain 4
+
+[16:21:23] get ain 4
+[16:21:23] ain 4 raw=1079 mv=2655
+[16:21:24] > get ain 1
+
+[16:21:24] get ain 1
+[16:21:24] ain 1 raw=0 mv=0
+[16:21:24] > get ain 2
+
+[16:21:24] get ain 2
+[16:21:24] ain 2 raw=0 mv=0
+[16:21:24] > get ain 3
+
+[16:21:24] get ain 3
+[16:21:24] ain 3 raw=0 mv=0
+[16:21:24] > get ain 4
+
+[16:21:24] get ain 4
+[16:21:24] ain 4 raw=1076 mv=2648
+[16:21:25] > get ain 1
+
+[16:21:25] get ain 1
+[16:21:25] ain 1 raw=0 mv=0
+[16:21:25] > get ain 2
+
+[16:21:25] get ain 2
+[16:21:25] ain 2 raw=0 mv=0
+[16:21:25] > get ain 3
+
+[16:21:25] get ain 3
+[16:21:25] ain 3 raw=0 mv=0
+[16:21:25] > get ain 4
+
+[16:21:25] get ain 4
+[16:21:25] ain 4 raw=1075 mv=2645
+[16:21:26] > get ain 1
+
+[16:21:26] get ain 1
+[16:21:26] ain 1 raw=0 mv=0
+[16:21:26] > get ain 2
+
+[16:21:26] get ain 2
+[16:21:26] ain 2 raw=0 mv=0
+[16:21:26] > get ain 3
+
+[16:21:26] get ain 3
+[16:21:26] ain 3 raw=0 mv=0
+[16:21:26] > get ain 4
+
+[16:21:26] get ain 4
+[16:21:27] ain 4 raw=1074 mv=2643
+[16:21:27] > get ain 1
+
+[16:21:27] get ain 1
+[16:21:27] ain 1 raw=0 mv=0
+[16:21:27] > get ain 2
+
+[16:21:27] get ain 2
+[16:21:27] ain 2 raw=0 mv=0
+[16:21:27] > get ain 3
+
+[16:21:27] get ain 3
+[16:21:27] ain 3 raw=0 mv=0
+[16:21:28] > get ain 4
+
+[16:21:28] get ain 4
+[16:21:28] ain 4 raw=1075 mv=2645
+[16:21:28] > get ain 1
+
+[16:21:28] get ain 1
+[16:21:28] ain 1 raw=0 mv=0
+[16:21:28] > get ain 2
+
+[16:21:28] get ain 2
+[16:21:28] ain 2 raw=0 mv=0
+[16:21:28] > get ain 3
+
+[16:21:28] get ain 3
+[16:21:28] ain 3 raw=0 mv=0
+[16:21:29] > get ain 4
+
+[16:21:29] get ain 4
+[16:21:29] ain 4 raw=1075 mv=2645
+[16:21:29] > get ain 1
+
+[16:21:29] get ain 1
+[16:21:29] ain 1 raw=0 mv=0
+[16:21:29] > get ain 2
+
+[16:21:29] get ain 2
+[16:21:29] ain 2 raw=0 mv=0
+[16:21:29] > get ain 3
+
+[16:21:29] get ain 3
+[16:21:29] ain 3 raw=0 mv=0
+[16:21:30] > get ain 4
+
+[16:21:30] get ain 4
+[16:21:30] ain 4 raw=1075 mv=2645
+[16:21:30] > get ain 1
+
+[16:21:30] get ain 1
+[16:21:30] ain 1 raw=0 mv=0
+[16:21:30] > get ain 2
+
+[16:21:30] get ain 2
+[16:21:30] ain 2 raw=0 mv=0
+[16:21:30] > get ain 3
+
+[16:21:30] get ain 3
+[16:21:31] ain 3 raw=0 mv=0
+[16:21:31] > get ain 4
+
+[16:21:31] get ain 4
+[16:21:31] ain 4 raw=1074 mv=2643
+[16:21:31] > get ain 1
+
+[16:21:31] get ain 1
+[16:21:31] ain 1 raw=0 mv=0
+[16:21:31] > get ain 2
+
+[16:21:31] get ain 2
+[16:21:31] ain 2 raw=0 mv=0
+[16:21:31] > get ain 3
+
+[16:21:32] get ain 3
+[16:21:32] ain 3 raw=0 mv=0
+[16:21:32] > get ain 4
+
+[16:21:32] get ain 4
+[16:21:32] ain 4 raw=1075 mv=2645
+[16:21:32] > get ain 1
+
+[16:21:32] get ain 1
+[16:21:32] ain 1 raw=0 mv=0
+[16:21:32] > get ain 2
+
+[16:21:32] get ain 2
+[16:21:32] ain 2 raw=0 mv=0
+[16:21:33] > get ain 3
+
+[16:21:33] get ain 3
+[16:21:33] ain 3 raw=0 mv=0
+[16:21:33] > get ain 4
+
+[16:21:33] get ain 4
+[16:21:33] ain 4 raw=1073 mv=2640
+[16:21:33] > get ain 1
+
+[16:21:33] get ain 1
+[16:21:33] ain 1 raw=0 mv=0
+[16:21:33] > get ain 2
+
+[16:21:33] get ain 2
+[16:21:33] ain 2 raw=0 mv=0
+[16:21:34] > get ain 3
+
+[16:21:34] get ain 3
+[16:21:34] ain 3 raw=0 mv=0
+[16:21:34] > get ain 4
+
+[16:21:34] get ain 4
+[16:21:34] ain 4 raw=1078 mv=2652
+[16:21:34] > get ain 1
+
+[16:21:34] get ain 1
+[16:21:34] ain 1 raw=0 mv=0
+[16:21:34] > get ain 2
+
+[16:21:34] get ain 2
+[16:21:34] ain 2 raw=0 mv=0
+[16:21:35] > get ain 3
+
+[16:21:35] get ain 3
+[16:21:35] ain 3 raw=0 mv=0
+[16:21:35] > get ain 4
+
+[16:21:35] get ain 4
+[16:21:35] ain 4 raw=1076 mv=2648
+[16:21:35] > get ain 1
+
+[16:21:35] get ain 1
+[16:21:35] ain 1 raw=0 mv=0
+[16:21:35] > get ain 2
+
+[16:21:36] get ain 2
+[16:21:36] ain 2 raw=0 mv=0
+[16:21:36] > get ain 3
+
+[16:21:36] get ain 3
+[16:21:36] ain 3 raw=0 mv=0
+[16:21:36] > get ain 4
+
+[16:21:36] get ain 4
+[16:21:36] ain 4 raw=1075 mv=2645
+[16:21:36] > get ain 1
+
+[16:21:36] get ain 1
+[16:21:36] ain 1 raw=0 mv=0
+[16:21:37] > get ain 2
+
+[16:21:37] get ain 2
+[16:21:37] ain 2 raw=0 mv=0
+[16:21:37] > get ain 3
+
+[16:21:37] get ain 3
+[16:21:37] ain 3 raw=0 mv=0
+[16:21:37] > get ain 4
+
+[16:21:37] get ain 4
+[16:21:37] ain 4 raw=1075 mv=2645
+[16:21:37] > get ain 1
+
+[16:21:37] get ain 1
+[16:21:37] ain 1 raw=0 mv=0
+[16:21:38] > get ain 2
+
+[16:21:38] get ain 2
+[16:21:38] ain 2 raw=0 mv=0
+[16:21:38] > get ain 3
+
+[16:21:38] get ain 3
+[16:21:38] ain 3 raw=0 mv=0
+[16:21:38] > get ain 4
+
+[16:21:38] get ain 4
+[16:21:38] ain 4 raw=1076 mv=2648
+[16:21:38] > get ain 1
+
+[16:21:38] get ain 1
+[16:21:38] ain 1 raw=0 mv=0
+[16:21:39] > get ain 2
+
+[16:21:39] get ain 2
+[16:21:39] ain 2 raw=0 mv=0
+[16:21:39] > get ain 3
+
+[16:21:39] get ain 3
+[16:21:39] ain 3 raw=0 mv=0
+[16:21:39] > get ain 4
+
+[16:21:39] get ain 4
+[16:21:39] ain 4 raw=1075 mv=2645
+[16:21:39] > get ain 1
+
+[16:21:39] get ain 1
+[16:21:40] ain 1 raw=0 mv=0
+[16:21:40] > get ain 2
+
+[16:21:40] get ain 2
+[16:21:40] ain 2 raw=0 mv=0
+[16:21:40] > get ain 3
+
+[16:21:40] get ain 3
+[16:21:40] ain 3 raw=0 mv=0
+[16:21:40] > get ain 4
+
+[16:21:40] get ain 4
+[16:21:40] ain 4 raw=1075 mv=2645
+[16:21:41] > get ain 1
+
+[16:21:41] get ain 1
+[16:21:41] ain 1 raw=0 mv=0
+[16:21:41] > get ain 2
+
+[16:21:41] get ain 2
+[16:21:41] ain 2 raw=0 mv=0
+[16:21:41] > get ain 3
+
+[16:21:41] get ain 3
+[16:21:41] ain 3 raw=0 mv=0
+[16:21:41] > get ain 4
+
+[16:21:41] get ain 4
+[16:21:41] ain 4 raw=1074 mv=2643
+[16:21:42] > get ain 1
+
+[16:21:42] get ain 1
+[16:21:42] ain 1 raw=0 mv=0
+[16:21:42] > get ain 2
+
+[16:21:42] get ain 2
+[16:21:42] ain 2 raw=0 mv=0
+[16:21:42] > get ain 3
+
+[16:21:42] get ain 3
+[16:21:42] ain 3 raw=0 mv=0
+[16:21:42] > get ain 4
+
+[16:21:42] get ain 4
+[16:21:42] ain 4 raw=1075 mv=2645
+[16:21:43] > get ain 1
+
+[16:21:43] get ain 1
+[16:21:43] ain 1 raw=0 mv=0

@@ -10,6 +10,7 @@
 #include "gpio.h"
 #include "TextScanner.hpp"
 #include "TextPrinter.hpp"
+#include "adc.h"
 
 App::App():
 	_comm { _board._commUart },
@@ -59,9 +60,89 @@ void App::Init()
 
 	_realTimer.Set(0,0,0);
 	
-	_dac.Init();
+	_dac.Init(false);
 	_dac.SetVoltage(0.0f);
-	_dac.SetVoltage2(0.0f);
+	InitAnalogInputs();
+}
+
+void App::InitAnalogInputs()
+{
+	_analogReady = false;
+	GPIO_InitTypeDef pullupControl = {};
+	pullupControl.Mode = GPIO_MODE_OUTPUT_PP;
+	pullupControl.Pull = GPIO_NOPULL;
+	pullupControl.Speed = GPIO_SPEED_FREQ_LOW;
+	pullupControl.Pin = MCU_AI2DI1_NEN_Pin | MCU_AI2DI2_NEN_Pin;
+	HAL_GPIO_WritePin(GPIOD, pullupControl.Pin, GPIO_PIN_SET);
+	HAL_GPIO_Init(GPIOD, &pullupControl);
+	pullupControl.Pin = MCU_AI2DI3_NEN_Pin;
+	HAL_GPIO_WritePin(MCU_AI2DI3_NEN_GPIO_Port, pullupControl.Pin, GPIO_PIN_SET);
+	HAL_GPIO_Init(MCU_AI2DI3_NEN_GPIO_Port, &pullupControl);
+	pullupControl.Pin = MCU_AI2DI4_NEN_Pin;
+	HAL_GPIO_WritePin(MCU_AI2DI4_NEN_GPIO_Port, pullupControl.Pin, GPIO_PIN_SET);
+	HAL_GPIO_Init(MCU_AI2DI4_NEN_GPIO_Port, &pullupControl);
+	HAL_GPIO_WritePin(I_SNS1_SEL_GPIO_Port, I_SNS1_SEL_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(I_SNS2_SEL_GPIO_Port, I_SNS2_SEL_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(I_SNS3_SEL_GPIO_Port, I_SNS3_SEL_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(I_SNS4_SEL_GPIO_Port, I_SNS4_SEL_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(V_SNS1_10K_GPIO_Port, V_SNS1_10K_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(V_SNS2_10K_GPIO_Port, V_SNS2_10K_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(V_SNS3_10K_GPIO_Port, V_SNS3_10K_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(V_SNS4_10K_GPIO_Port, V_SNS4_10K_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(V_SNS1_3K3_GPIO_Port, V_SNS1_3K3_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(V_SNS2_3K3_GPIO_Port, V_SNS2_3K3_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(V_SNS3_3K3_GPIO_Port, V_SNS3_3K3_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(V_SNS4_3K3_GPIO_Port, V_SNS4_3K3_Pin, GPIO_PIN_SET);
+	osDelay(50);
+	HAL_SYSCFG_DisableVREFBUF();
+	HAL_SYSCFG_VREFBUF_VoltageScalingConfig(SYSCFG_VREFBUF_VOLTAGE_SCALE1);
+	HAL_SYSCFG_VREFBUF_HighImpedanceConfig(SYSCFG_VREFBUF_HIGH_IMPEDANCE_DISABLE);
+	if (HAL_SYSCFG_EnableVREFBUF() != HAL_OK) {
+		return;
+	}
+	if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED) != HAL_OK ||
+	    HAL_ADCEx_Calibration_Start(&hadc3, ADC_SINGLE_ENDED) != HAL_OK) {
+		return;
+	}
+	MODIFY_REG(hadc1.Instance->SQR1, ADC_SQR1_L, 0UL);
+	MODIFY_REG(hadc3.Instance->SQR1, ADC_SQR1_L, 0UL);
+	_analogReady = true;
+}
+
+void App::ReadAnalogInput(uint8_t channel, TextPrinter &response)
+{
+	if (!_analogReady) {
+		response << "ERROR ain " << (long)channel << " not ready";
+		return;
+	}
+	ADC_HandleTypeDef *adc = channel <= 2 ? &hadc1 : &hadc3;
+	const uint32_t channels[] = { ADC_CHANNEL_10, ADC_CHANNEL_6, ADC_CHANNEL_3, ADC_CHANNEL_4 };
+	ADC_ChannelConfTypeDef config = {};
+	config.Channel = channels[channel - 1];
+	config.Rank = ADC_REGULAR_RANK_1;
+	config.SamplingTime = ADC_SAMPLETIME_247CYCLES_5;
+	config.SingleDiff = ADC_SINGLE_ENDED;
+	config.OffsetNumber = ADC_OFFSET_NONE;
+	if (HAL_ADC_ConfigChannel(adc, &config) != HAL_OK) {
+		response << "ERROR ain " << (long)channel << " config";
+		return;
+	}
+	uint32_t sum = 0;
+	for (uint8_t sample = 0; sample < 8; ++sample) {
+		if (HAL_ADC_Start(adc) != HAL_OK || HAL_ADC_PollForConversion(adc, 10) != HAL_OK) {
+			HAL_ADC_Stop(adc);
+			response << "ERROR ain " << (long)channel << " conversion";
+			return;
+		}
+		sum += HAL_ADC_GetValue(adc);
+		if (HAL_ADC_Stop(adc) != HAL_OK) {
+			response << "ERROR ain " << (long)channel << " stop";
+			return;
+		}
+	}
+	const uint32_t raw = (sum + 4) / 8;
+	const uint32_t mv = (raw * ANALOG_VREF_MV * 133UL + (4095UL * 33UL) / 2) / (4095UL * 33UL);
+	response << "ain " << (long)channel << " raw=" << (long)raw << " mv=" << (long)mv;
 }
 
 void App::Task()
@@ -71,6 +152,8 @@ void App::Task()
 	Buffer<100> startupMsg;
 	TextPrinter p(startupMsg);
 	p << "App Started\r\n";
+	p << "ADC init=" << (_analogReady ? "ready" : "failed")
+	  << " configured_vref=" << (long)ANALOG_VREF_MV << "mV\r\n";
 	_comm.SendResponse(startupMsg);
 
 	for(;;)
@@ -247,6 +330,7 @@ void App::HandleCommand(const BufferView<> &cmd)
 				long mv;
 				scanner >> mv;
 				if (!scanner.IsError()) {
+					mv = mv < 0 ? 0 : (mv > (long)ANALOG_VREF_MV ? (long)ANALOG_VREF_MV : mv);
 					_dac.SetVoltage((float)mv / 1000.0f);
 					response << "DAC set to " << mv << "mV";
 				}
@@ -255,6 +339,7 @@ void App::HandleCommand(const BufferView<> &cmd)
 				long mv;
 				scanner >> mv;
 				if (!scanner.IsError()) {
+					mv = mv < 0 ? 0 : (mv > (long)ANALOG_VREF_MV ? (long)ANALOG_VREF_MV : mv);
 					_dac.SetVoltage((float)mv / 1000.0f);
 					response << "DAC1 set to " << mv << "mV";
 				}
@@ -263,8 +348,7 @@ void App::HandleCommand(const BufferView<> &cmd)
 				long mv;
 				scanner >> mv;
 				if (!scanner.IsError()) {
-					_dac.SetVoltage2((float)mv / 1000.0f);
-					response << "DAC2 set to " << mv << "mV";
+					response << "ERROR dac2 unavailable: PA5 reserved for ain 1";
 				}
 			}
 			else if (token2 == "vsen" || token2 == "vsen_en" || token2 == "vai") {
@@ -288,7 +372,14 @@ void App::HandleCommand(const BufferView<> &cmd)
 
 		}
 		else if (token1 == "get") {
-			if (token2 == "time") {
+			if (token2 == "ain") {
+				long channel;
+				scanner >> channel;
+				if (!scanner.IsError() && channel >= 1 && channel <= 4) {
+					ReadAnalogInput((uint8_t)channel, response);
+				}
+			}
+			else if (token2 == "time") {
 				int hour, minute, second;
 				if (_realTimer.Get(hour, minute, second)) {
 					response << "sys time " << hour << ":" << minute << ":" << second;
@@ -365,7 +456,7 @@ void App::HandleCommand(const BufferView<> &cmd)
 			helpPrinter << " set dac1 <mV>\r\n";
 			_comm.SendResponse(helpBuf); helpBuf.Reset();
 
-			helpPrinter << " set dac2 <mV>\r\n";
+			helpPrinter << " get ain <1-4> (0-10V; PA5 reserved for AI1, DAC2 disabled)\r\n";
 			_comm.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " set ps <id> on|off\r\n";

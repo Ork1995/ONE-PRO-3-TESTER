@@ -51,8 +51,11 @@ private:
 	std::array<DigitalOutput, PS_COUNT> _psOut;
 	RealTimer _realTimer;
 	DacControl _dac;
+	bool _analogReady = false;
 
 	void Init();
+	void InitAnalogInputs();
+	void ReadAnalogInput(uint8_t channel, TextPrinter &response);
 	void ControlWaterMeters();
 	void ToggleWaterMeter(int wmIdx, TextPrinter &response);
 	void HandleCommand(const BufferView<> &cmd);

@@ -51,7 +51,7 @@ Application/App.o: ../Application/App.cpp ../Application/App.hpp \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
  ../Application/CLIManager.h ../Application/RealTimer.hpp \
  ../Application/DacControl.hpp ../Application/SensorSupply.hpp \
- ../Core/Inc/tim.h ../Application/TextScanner.hpp
+ ../Core/Inc/tim.h ../Application/TextScanner.hpp ../Core/Inc/adc.h
 ../Application/App.hpp:
 ../Application/Board.hpp:
 ../Application/Uart.hpp:
@@ -116,3 +116,4 @@ Application/App.o: ../Application/App.cpp ../Application/App.hpp \
 ../Application/SensorSupply.hpp:
 ../Core/Inc/tim.h:
 ../Application/TextScanner.hpp:
+../Core/Inc/adc.h:

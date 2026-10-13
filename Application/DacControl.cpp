@@ -6,13 +6,14 @@
  */
 
 #include "DacControl.hpp"
+#include "main.h"
 #include <algorithm>
 
 DacControl::DacControl() : _isInitialized(false)
 {
 }
 
-void DacControl::Init()
+void DacControl::Init(bool enableChannel2)
 {
 	if (_isInitialized) return;
 
@@ -34,12 +35,17 @@ void DacControl::Init()
 
 	// 4. Configure PA5 as Analog (Mode 11) — DAC1 Channel 2
 	// Set PA5 to Analog mode (11)
-	GPIOA->MODER |= (3U << (5 * 2));
-	// No Pull-up/Pull-down (00)
-	GPIOA->PUPDR &= ~(3U << (5 * 2));
+	if (enableChannel2) {
+		GPIOA->MODER |= (3U << (5 * 2));
+		// No Pull-up/Pull-down (00)
+		GPIOA->PUPDR &= ~(3U << (5 * 2));
 
-	// 5. Enable DAC Channel 2
-	DAC1->CR |= DAC_CR_EN2;
+		// 5. Enable DAC Channel 2
+		DAC1->CR |= DAC_CR_EN2;
+	}
+	else {
+		DAC1->CR &= ~DAC_CR_EN2;
+	}
 
 	_isInitialized = true;
 }
@@ -56,8 +62,9 @@ void DacControl::SetValue(uint16_t value)
 
 void DacControl::SetVoltage(float voltage)
 {
-	// Vref is typically 3.3V
-	uint16_t value = (uint16_t)((voltage / 3.3f) * 4095.0f);
+	const float reference = ANALOG_VREF_MV / 1000.0f;
+	voltage = std::max(0.0f, std::min(reference, voltage));
+	uint16_t value = (uint16_t)((voltage / reference) * 4095.0f);
 	SetValue(value);
 }
 
@@ -73,7 +80,8 @@ void DacControl::SetValue2(uint16_t value)
 
 void DacControl::SetVoltage2(float voltage)
 {
-	// Vref is typically 3.3V
-	uint16_t value = (uint16_t)((voltage / 3.3f) * 4095.0f);
+	const float reference = ANALOG_VREF_MV / 1000.0f;
+	voltage = std::max(0.0f, std::min(reference, voltage));
+	uint16_t value = (uint16_t)((voltage / reference) * 4095.0f);
 	SetValue2(value);
 }

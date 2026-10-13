@@ -1,0 +1,86 @@
+--- Log Started: Tue Oct 13 15:25:57 2026 ---
+[15:27:09] Connected to COM16
+[15:27:27] > set vsen 7500
+
+[15:27:27] set vsen 7500
+[15:27:27] vsen set to 7500 mV (booster off)
+[15:27:27] > set vsen_en on
+
+[15:27:27] set vsen_en on
+[15:27:27] vsen_en ON, 7500 mV
+[15:27:27] > set vai 2 on
+
+[15:27:27] set vai 2 on
+[15:27:27] vai 2 ON
+[15:27:29] > set vai 2 off
+
+[15:27:29] set vai 2 off
+[15:27:30] vai 2 OFF
+[15:27:30] > set vsen_en off
+
+[15:27:30] set vsen_en off
+[15:27:30] vsen_en OFF
+[15:27:33] > set vsen 5000
+
+[15:27:33] set vsen 5000
+[15:27:33] vsen set to 5000 mV (booster off)
+[15:27:33] > set vsen_en on
+
+[15:27:33] set vsen_en on
+[15:27:33] vsen_en ON, 5000 mV
+[15:27:33] > set vai 1 on
+
+[15:27:33] set vai 1 on
+[15:27:33] vai 1 ON
+[15:27:35] > set vai 1 off
+
+[15:27:35] set vai 1 off
+[15:27:35] vai 1 OFF
+[15:27:35] > set vsen_en off
+
+[15:27:35] set vsen_en off
+[15:27:35] vsen_en OFF
+[15:27:44] > set vsen 7500
+
+[15:27:44] set vsen 7500
+[15:27:44] vsen set to 7500 mV (booster off)
+[15:27:44] > set vsen_en on
+
+[15:27:44] set vsen_en on
+[15:27:44] vsen_en ON, 7500 mV
+[15:27:44] > set vai 2 on
+
+[15:27:44] set vai 2 on
+[15:27:44] vai 2 ON
+[15:27:46] > set vai 2 off
+
+[15:27:46] set vai 2 off
+[15:27:46] vai 2 OFF
+[15:27:46] > set vsen_en off
+
+[15:27:46] set vsen_en off
+[15:27:46] vsen_en OFF
+[15:28:04] > set vsen 7500
+
+[15:28:04] set vsen 7500
+[15:28:04] vsen set to 7500 mV (booster off)
+[15:28:04] > set vsen_en on
+
+[15:28:04] set vsen_en on
+[15:28:04] vsen_en ON, 7500 mV
+[15:28:04] > set vai 2 on
+
+[15:28:04] set vai 2 on
+[15:28:04] vai 2 ON
+[15:28:24] > get vsen
+
+[15:28:24] get vsen
+[15:28:24] vsen en=1 mv=7500 ccr4=32768 duty=50.00% pwm=run vai1=off vai2=on vai3=off vai4=off
+[15:28:32] > set vai 2 off
+
+[15:28:32] set vai 2 off
+[15:28:32] vai 2 OFF
+[15:28:32] > set vsen_en off
+
+[15:28:32] set vsen_en off
+[15:28:32] vsen_en OFF

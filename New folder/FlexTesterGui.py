@@ -1412,6 +1412,15 @@ class FlexTesterGUI:
         self.notebook = ttk.Notebook(root)
         self.notebook.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
+        self.ain_values = {
+            channel: {
+                "voltage": tk.StringVar(value="VIN: -- mV"),
+                "raw": tk.StringVar(value="--"),
+                "status": tk.StringVar(value="Not sampled"),
+            }
+            for channel in range(1, 5)
+        }
+
         self.tab1 = ttk.Frame(self.notebook)
         self.notebook.add(self.tab1, text="Main Controller")
         self.setup_tab1(self.tab1)
@@ -1420,11 +1429,119 @@ class FlexTesterGUI:
         self.notebook.add(self.tab2, text="FLEX CLI")
         self.setup_tab2(self.tab2)
 
+        self.analog_tab = ttk.Frame(self.notebook)
+        self.notebook.add(self.analog_tab, text="Analog Inputs")
+        self._build_analog_inputs(self.analog_tab)
+
         self.tab4 = ttk.Frame(self.notebook)
         self.notebook.add(self.tab4, text="Log Analyzer")
         self.setup_tab4(self.tab4)
 
         self.refresh_ports()
+
+    def _build_analog_inputs(self, parent):
+        self.ain_enabled = {}
+        self.ain_auto = tk.BooleanVar(value=True)
+        self._ain_queue = []
+        self._ain_pending = None
+        self._ain_deadline = 0.0
+        self._ain_next_channel = 1
+        toolbar = ttk.Frame(parent)
+        toolbar.pack(fill=tk.X, padx=12, pady=12)
+        ttk.Checkbutton(toolbar, text="Auto sample", variable=self.ain_auto).pack(side=tk.LEFT)
+        ttk.Button(toolbar, text="Read selected", command=self._ain_read_selected).pack(side=tk.LEFT, padx=12)
+        table = ttk.Frame(parent)
+        table.pack(fill=tk.X, padx=12)
+        for column, heading in enumerate(("Sample", "Input", "VIN (mV)", "ADC (0-4095)", "Status", "")):
+            ttk.Label(table, text=heading).grid(row=0, column=column, sticky="w", padx=8, pady=8)
+        table.columnconfigure(4, weight=1)
+        for channel, pin in enumerate(("PA5", "PA1", "PC2", "PC3"), start=1):
+            self.ain_enabled[channel] = tk.BooleanVar(value=True)
+            ttk.Checkbutton(table, variable=self.ain_enabled[channel]).grid(row=channel, column=0, padx=8)
+            ttk.Label(table, text=f"AI{channel} / {pin}").grid(row=channel, column=1, sticky="w", padx=8)
+            for column, key in enumerate(("voltage", "raw", "status"), start=2):
+                ttk.Label(table, textvariable=self.ain_values[channel][key],
+                          width=16 if key == "voltage" else None).grid(
+                    row=channel, column=column, sticky="w", padx=8, pady=8)
+            ttk.Button(table, text="Read", command=lambda channel=channel: self._ain_request(channel)).grid(
+                row=channel, column=5, padx=8)
+        self.root.after(250, self._ain_tick)
+
+    def _ain_request(self, channel):
+        if not self.is_connected:
+            messagebox.showwarning("Not Connected", "Please connect to the Tester COM port first.")
+            return
+        if channel != self._ain_pending and channel not in self._ain_queue:
+            self._ain_queue.append(channel)
+
+    def _ain_read_selected(self):
+        for channel in range(1, 5):
+            if self.ain_enabled[channel].get():
+                self._ain_request(channel)
+
+    def _ain_clear_value(self, channel, status):
+        self.ain_values[channel]["voltage"].set("VIN: -- mV")
+        self.ain_values[channel]["raw"].set("--")
+        self.ain_values[channel]["status"].set(status)
+
+    def _ain_reset(self, status):
+        self.ain_auto.set(self.is_connected and status != "Connection lost")
+        self._ain_queue.clear()
+        self._ain_pending = None
+        self._ain_next_channel = 1
+        for channel in range(1, 5):
+            self._ain_clear_value(channel, status)
+
+    def _ain_tick(self):
+        if self.is_connected:
+            if self._ain_pending is not None and time.monotonic() >= self._ain_deadline:
+                self._ain_clear_value(self._ain_pending, "No response")
+                self._ain_pending = None
+                self._ain_queue.clear()
+            if self._ain_pending is None:
+                if not self._ain_queue and self.ain_auto.get():
+                    for offset in range(4):
+                        channel = (self._ain_next_channel - 1 + offset) % 4 + 1
+                        if self.ain_enabled[channel].get():
+                            self._ain_queue.append(channel)
+                            self._ain_next_channel = channel % 4 + 1
+                            break
+                if self._ain_queue:
+                    channel = self._ain_queue.pop(0)
+                    self._ain_pending = channel
+                    self._ain_deadline = time.monotonic() + 1.5
+                    self.ain_values[channel]["status"].set("Sampling")
+                    self.send_command(f"get ain {channel}")
+        self.root.after(250, self._ain_tick)
+
+    def _ain_handle_line(self, line):
+        line = line.strip()
+        if line == "App Started":
+            self._ain_reset("Board restarted")
+            return
+        match = re.fullmatch(r"ain ([1-4]) raw=(\d+) mv=(\d+)", line)
+        error = re.fullmatch(r"ERROR ain ([1-4]) (.+)", line)
+        unsupported = re.fullmatch(r"ERROR get ain ([1-4])(?: \(Scanner Error\))?", line)
+        if match:
+            channel, raw, mv = map(int, match.groups())
+            if raw > 4095 or mv > 10076:
+                self._ain_clear_value(channel, "Invalid response")
+            else:
+                self.ain_values[channel]["voltage"].set(f"VIN: {mv} mV")
+                self.ain_values[channel]["raw"].set(str(raw))
+                status = "ADC full scale" if raw == 4095 else datetime.now().strftime("%H:%M:%S")
+                self.ain_values[channel]["status"].set(status)
+        elif error or unsupported:
+            result = error if error else unsupported
+            channel = int(result.group(1))
+            self._ain_clear_value(channel, error.group(2) if error else "Firmware update required")
+            if unsupported:
+                self.ain_auto.set(False)
+                self._ain_queue.clear()
+        else:
+            return
+        if self._ain_pending == channel:
+            self._ain_pending = None
 
     def setup_tab1(self, parent):
         main_pane = tk.PanedWindow(parent, orient=tk.HORIZONTAL)
@@ -1488,7 +1605,7 @@ class FlexTesterGUI:
         sensor_frame.pack(fill=tk.X, padx=5, pady=5)
         self.sensor_widgets = {}
         self._build_sensor_panel(sensor_frame, 1, "Sensor 1 — DAC1 / PA4")
-        self._build_sensor_panel(sensor_frame, 2, "Sensor 2 — DAC2 / PA5")
+        ttk.Label(sensor_frame, text="DAC2 unavailable: PA5 assigned to AI1").pack(side=tk.LEFT, padx=5)
 
         self._build_sensor_supply_section(left_frame)
 
@@ -1543,8 +1660,8 @@ class FlexTesterGUI:
             ("PS 4", "PC12", "Output (ON/OFF)"),
             ("PS 5", "PD2", "Output (ON/OFF)"),
             ("", "", ""),
-            ("DAC 1", "PA4", "Analog Output 0-3.3V"),
-            ("DAC 2", "PA5", "Analog Output 0-3.3V"),
+            ("DAC 1", "PA4", "Analog Output 0-2.5V"),
+            ("AI1", "PA5", "Analog Input / DAC2 disabled"),
         ]
         for item in pinout_data:
             self.tree.insert("", tk.END, values=item)
@@ -1971,6 +2088,8 @@ class FlexTesterGUI:
                 self.serial_port.dtr = False
                 self.serial_port.rts = False
                 self.is_connected = True
+                self.buffer_1 = ""
+                self._ain_reset("Not sampled")
                 self.btn_connect.config(text="Disconnect")
                 self.stop_read = False
                 self.read_thread = threading.Thread(target=self.read_serial)
@@ -1984,6 +2103,7 @@ class FlexTesterGUI:
             if self.serial_port:
                 self.serial_port.close()
             self.is_connected = False
+            self._ain_reset("Disconnected")
             self.btn_connect.config(text="Connect")
             self.log(self.text_area, "Disconnected")
 
@@ -2020,11 +2140,13 @@ class FlexTesterGUI:
                                         self.root.after(0, self.stop_wm_pulse, wm_id)
                                 self.root.after(0, self.log, self.text_area, line, True)
                                 self.root.after(0, self._ss_handle_line, line)
+                                self.root.after(0, self._ain_handle_line, line)
                     except:
                         pass
                 time.sleep(0.01)
             except Exception as e:
                 self.root.after(0, self.log, self.text_area, f"\nError reading: {e}\n")
+                self.root.after(0, self._ain_reset, "Connection lost")
                 break
 
     def send_command(self, cmd):
@@ -2039,6 +2161,7 @@ class FlexTesterGUI:
             self.log(self.text_area, f"> {cmd}\n")
             if cmd.strip().lower() == "system init":
                 self._ss_on_system_init()   # firmware powers the sensor supply down on 'system init'
+                self._ain_reset("Not sampled")
         except Exception as e:
             self.log(self.text_area, f"Error sending: {e}\n")
 
@@ -2181,7 +2304,7 @@ class FlexTesterGUI:
         panel.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=5, pady=5)
 
         fields = {}
-        defaults = {"x1": "0.0", "x2": "3.3", "y1": "0", "y2": "10", "desired": "0"}
+        defaults = {"x1": "0.0", "x2": "2.5", "y1": "0", "y2": "10", "desired": "0"}
         labels = {"x1": "X1 (min V):", "x2": "X2 (max V):", "y1": "Y1 (value at X1):",
                   "y2": "Y2 (value at X2):", "desired": "Desired value:"}
 
@@ -2224,7 +2347,7 @@ class FlexTesterGUI:
             return None, "X2/Y2 must differ from X1/Y1"
 
         voltage = x1 + (desired - y1) * (x2 - x1) / (y2 - y1)
-        voltage = max(0.0, min(3.3, voltage))
+        voltage = max(0.0, min(2.5, voltage))
         return voltage, None
 
     def _on_sensor_field_change(self, sensor_id):
@@ -2326,10 +2449,12 @@ class FlexTesterGUI:
         status = tk.Label(panel, text="OFF", anchor="w", relief="groove", bd=1, padx=6, width=20)
         status.grid(row=0, column=6, sticky="ew", padx=(6, 6))
         panel.columnconfigure(6, weight=1)
+        vin = tk.Label(panel, textvariable=self.ain_values[n]["voltage"], anchor="w", width=16)
+        vin.grid(row=1, column=1, columnspan=5, sticky="w", pady=(0, 3))
 
         self.ss_widgets[n] = {
-            "panel": panel, "marker": marker, "entry": entry, "button": button, "status": status,
-            "tint": [panel, marker, title, volt_label, mv_label],   # widgets that take the row tint
+            "panel": panel, "marker": marker, "entry": entry, "button": button, "status": status, "vin": vin,
+            "tint": [panel, marker, title, volt_label, mv_label, vin],   # widgets that take the row tint
         }
 
     def _ss_parse_mv(self, n):

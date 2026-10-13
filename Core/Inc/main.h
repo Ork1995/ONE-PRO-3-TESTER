@@ -127,6 +127,16 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN Private defines */
 
+#define ANALOG_VREF_MV 2500U
+#define MCU_AI2DI1_NEN_Pin GPIO_PIN_15
+#define MCU_AI2DI1_NEN_GPIO_Port GPIOD
+#define MCU_AI2DI2_NEN_Pin GPIO_PIN_3
+#define MCU_AI2DI2_NEN_GPIO_Port GPIOD
+#define MCU_AI2DI3_NEN_Pin GPIO_PIN_0
+#define MCU_AI2DI3_NEN_GPIO_Port GPIOE
+#define MCU_AI2DI4_NEN_Pin GPIO_PIN_6
+#define MCU_AI2DI4_NEN_GPIO_Port GPIOB
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
