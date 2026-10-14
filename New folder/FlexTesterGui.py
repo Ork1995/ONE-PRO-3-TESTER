@@ -1597,20 +1597,6 @@ class FlexTesterGUI:
         self.entry_time.pack(side=tk.LEFT, padx=5)
         ttk.Label(r2, text="(HH:MM)").pack(side=tk.LEFT)
 
-        r4 = ttk.Frame(cmd_frame)
-        r4.pack(fill=tk.X, pady=2)
-        ttk.Label(r4, text="DAC (mV):").pack(side=tk.LEFT, padx=5)
-        self.entry_dac = ttk.Entry(r4, width=8)
-        self.entry_dac.insert(0, "1500")
-        self.entry_dac.pack(side=tk.LEFT)
-        ttk.Button(r4, text="Set DAC", command=self.cmd_set_dac).pack(side=tk.LEFT, padx=5)
-
-        sensor_frame = ttk.LabelFrame(left_frame, text="Simulated Analog Sensors")
-        sensor_frame.pack(fill=tk.X, padx=5, pady=5)
-        self.sensor_widgets = {}
-        self._build_sensor_panel(sensor_frame, 1, "Sensor 1 — DAC1 / PA4")
-        ttk.Label(sensor_frame, text="DAC2 unavailable: PA5 assigned to AI1").pack(side=tk.LEFT, padx=5)
-
         self._build_sensor_supply_section(left_frame)
 
         term_frame = ttk.LabelFrame(left_frame, text="Terminal Output")
@@ -1664,8 +1650,7 @@ class FlexTesterGUI:
             ("PS 4", "PC12", "Output (ON/OFF)"),
             ("PS 5", "PD2", "Output (ON/OFF)"),
             ("", "", ""),
-            ("DAC 1", "PA4", "Analog Output 0-2.5V"),
-            ("AI1", "PA5", "Analog Input / DAC2 disabled"),
+            ("AI1", "PA5", "Analog Input"),
         ]
         for item in pinout_data:
             self.tree.insert("", tk.END, values=item)

@@ -1,0 +1,58 @@
+--- Log Started: Wed Oct 14 09:57:04 2026 ---
+[10:00:49] Connected to COM16
+[10:00:51] > set vsen 7500
+
+[10:00:51] set vsen 7500
+[10:00:51] vsen set to 7500 mV (booster off)
+[10:00:51] > set vsen_en on
+
+[10:00:51] set vsen_en on
+[10:00:51] vsen_en ON, 7500 mV
+[10:00:51] > set vai 2 on
+
+[10:00:51] set vai 2 on
+[10:00:51] vai 2 ON
+[10:00:55] > set vai 2 off
+
+[10:00:55] set vai 2 off
+[10:00:55] vai 2 OFF
+[10:00:55] > set vsen_en off
+
+[10:00:55] set vsen_en off
+[10:00:55] vsen_en OFF
+[10:01:03] > set vsen 7500
+
+[10:01:03] set vsen 7500
+[10:01:03] vsen set to 7500 mV (booster off)
+[10:01:03] > set vsen_en on
+
+[10:01:03] set vsen_en on
+[10:01:03] vsen_en ON, 7500 mV
+[10:01:03] > set vai 2 on
+
+[10:01:03] set vai 2 on
+[10:01:03] vai 2 ON
+[10:01:42] > set vai 2 off
+
+[10:01:42] set vai 2 off
+[10:01:42] vai 2 OFF
+[10:01:42] > set vsen_en off
+
+[10:01:42] set vsen_en off
+[10:01:42] vsen_en OFF
+[10:02:22] > toggle wm 2
+
+[10:02:22] toggle wm 2
+[10:02:22] wm 2 manual on
+[10:02:28] > toggle wm 2
+
+[10:02:28] toggle wm 2
+[10:02:28] wm 2 manual off
+[10:02:32] > start wm 2 1000
+
+[10:02:33] start wm 2 1000
+[10:02:33] wm 2 started
+[10:02:43] > stop wm 2
+
+[10:02:43] stop wm 2
+[10:02:43] wm 2 stopped

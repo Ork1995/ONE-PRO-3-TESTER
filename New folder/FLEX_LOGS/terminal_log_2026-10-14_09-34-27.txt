@@ -1,0 +1,51 @@
+--- Log Started: Wed Oct 14 09:34:27 2026 ---
+[09:35:36] Connected to COM16
+[09:35:51] > set vsen 7500
+
+[09:35:51] set vsen 7500
+[09:35:51] vsen set to 7500 mV (booster off)
+[09:35:51] > set vsen_en on
+
+[09:35:51] set vsen_en on
+[09:35:51] vsen_en ON, 7500 mV
+[09:35:51] > set vai 2 on
+
+[09:35:51] set vai 2 on
+[09:35:51] vai 2 ON
+[09:36:42] > pulse vai 1 5000 5000
+
+[09:36:42] pulse vai 1 5000 5000
+[09:36:42] vai 1 ON pulse_ms=5000
+[09:36:42] vsen en=1 mv=5000 ccr4=21031 duty=32.09% pwm=run vai1=on vai2=off vai3=off vai4=off cal=interpolated
+[09:36:47] vai 1 OFF pulse complete
+[09:36:47] vsen en=0 mv=5000 ccr4=0 duty=0.00% pwm=run vai1=off vai2=off vai3=off vai4=off cal=interpolated
+[09:37:24] > pulse vai 4 15000 5000
+
+[09:37:24] pulse vai 4 15000 5000
+[09:37:24] vai 4 ON pulse_ms=5000
+[09:37:25] vsen en=1 mv=15000 ccr4=65535 duty=100.00% pwm=run vai1=off vai2=off vai3=off vai4=on cal=extrapolated
+[09:37:26] > stop vai 4
+
+[09:37:26] stop vai 4
+[09:37:26] vai 4 OFF pulse cancelled
+[09:37:26] vsen en=0 mv=15000 ccr4=0 duty=0.00% pwm=run vai1=off vai2=off vai3=off vai4=off cal=extrapolated
+[09:41:29] > set vsen 15000
+
+[09:41:30] set vsen 15000
+[09:41:30] vsen set to 15000 mV (outside calibrated range 334-10120 mV) (booster off)
+[09:41:30] > set vsen_en on
+
+[09:41:30] set vsen_en on
+[09:41:30] vsen_en ON, 15000 mV
+[09:41:30] > set vai 2 on
+
+[09:41:30] set vai 2 on
+[09:41:30] vai 2 ON
+[09:41:35] > set vai 2 off
+
+[09:41:35] set vai 2 off
+[09:41:35] vai 2 OFF
+[09:41:36] > set vsen_en off
+
+[09:41:36] set vsen_en off
+[09:41:36] vsen_en OFF
