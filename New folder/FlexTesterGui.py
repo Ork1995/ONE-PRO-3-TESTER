@@ -7,6 +7,7 @@ import time
 import json
 import re
 import os
+import math
 from datetime import datetime, timedelta
 import matplotlib
 matplotlib.use('TkAgg')
@@ -2391,6 +2392,7 @@ class FlexTesterGUI:
         # One entry per sensor: its voltage preset and its widgets. There is no per-sensor PWM.
         self.ss_mv_vars = {}
         self.ss_widgets = {}
+        self.ss_scaling = {}
         self.ss_auto_vars = {}
         self.ss_auto_seconds = {}
         self.ss_auto_status = {}
@@ -2431,44 +2433,125 @@ class FlexTesterGUI:
         var = tk.StringVar(value=str(SS_DEFAULT_MV[n]))
         self.ss_mv_vars[n] = var
 
+        scaling = ttk.Frame(panel)
+        scaling.grid(row=0, column=0, columnspan=7, sticky="ew", padx=4, pady=(3, 0))
+        mode = tk.StringVar(value="Manual")
+        ttk.Combobox(scaling, textvariable=mode, values=("Manual", "Automatic"),
+                     state="readonly", width=10).grid(row=0, column=0, padx=(0, 6))
+        numeric_check = (self.root.register(self._ss_scaling_numeric_input), "%P")
+        fields = {}
+        for column, (key, label, default) in enumerate(
+                (("x1", "X1 mV", "0"), ("x2", "X2 mV", "15000"),
+                 ("y1", "Y1", "0"), ("y2", "Y2", "100")), start=1):
+            field = tk.StringVar(value=default)
+            fields[key] = field
+            cell = ttk.Frame(scaling)
+            cell.grid(row=0, column=column, padx=3)
+            ttk.Label(cell, text=label, padding=0).pack(side=tk.LEFT)
+            ttk.Entry(cell, textvariable=field, width=7, validate="key",
+                      validatecommand=numeric_check).pack(side=tk.LEFT, padx=(3, 0))
+        fields["desired"] = tk.StringVar(value=f"{SS_DEFAULT_MV[n] / 150:g}")
+        ttk.Label(scaling, text="Engineering value", padding=0).grid(row=1, column=0, pady=3)
+        engineering_entry = ttk.Entry(scaling, textvariable=fields["desired"], width=9,
+                                      validate="key", validatecommand=numeric_check)
+        engineering_entry.grid(row=1, column=1, sticky="w", padx=3)
+        scaling_status = tk.StringVar()
+        ttk.Label(scaling, textvariable=scaling_status, padding=0, wraplength=340).grid(
+            row=1, column=2, columnspan=3, sticky="w", padx=3)
+        self.ss_scaling[n] = {"mode": mode, "fields": fields, "status": scaling_status,
+                              "engineering_entry": engineering_entry, "error": None}
+
         marker = tk.Label(panel, text="●", width=2, fg=SS_MARKER_OFF)
-        marker.grid(row=0, column=0, padx=(4, 0), pady=3)
+        marker.grid(row=2, column=0, padx=(4, 0), pady=3)
         title = tk.Label(panel, text=f"Sensor {n}  (VAI{n} / {SS_PINS[n]})", font=("", 9, "bold"),
                          anchor="w", width=20)
-        title.grid(row=0, column=1, sticky="w", padx=(0, 6))
+        title.grid(row=2, column=1, sticky="w", padx=(0, 6))
         volt_label = tk.Label(panel, text="Voltage:")
-        volt_label.grid(row=0, column=2)
-        entry = ttk.Entry(panel, textvariable=var, width=7, justify="right")
-        entry.grid(row=0, column=3, padx=2)
+        volt_label.grid(row=2, column=2)
+        entry = ttk.Entry(panel, textvariable=var, width=7, justify="right", validate="key",
+                  validatecommand=(self.root.register(lambda text: not text or text.isascii() and text.isdigit()), "%P"))
+        entry.grid(row=2, column=3, padx=2)
         mv_label = tk.Label(panel, text="mV")
-        mv_label.grid(row=0, column=4, padx=(0, 6))
+        mv_label.grid(row=2, column=4, padx=(0, 6))
         button = ttk.Button(panel, text="ON", width=6, style="Supply.TButton",
                             command=lambda sid=n: self._ss_toggle(sid))
-        button.grid(row=0, column=5, padx=2)
+        button.grid(row=2, column=5, padx=2)
         status = tk.Label(panel, text="OFF", anchor="w", relief="groove", bd=1, padx=6, width=20)
-        status.grid(row=0, column=6, sticky="ew", padx=(6, 6))
+        status.grid(row=2, column=6, sticky="ew", padx=(6, 6))
         panel.columnconfigure(6, weight=1)
         vin = tk.Label(panel, textvariable=self.ain_values[n]["voltage"], anchor="w", width=16)
-        vin.grid(row=1, column=1, sticky="w", pady=(0, 3))
+        vin.grid(row=3, column=1, sticky="w", pady=(0, 3))
         self.ss_auto_vars[n] = tk.BooleanVar(value=False)
         self.ss_auto_seconds[n] = tk.StringVar(value="5")
         self.ss_auto_status[n] = tk.StringVar(value="Disabled")
         auto = ttk.Checkbutton(panel, text="AUTO", variable=self.ss_auto_vars[n],
                                command=lambda sid=n: self._ss_auto_toggle(sid))
-        auto.grid(row=1, column=2, sticky="w")
+        auto.grid(row=3, column=2, sticky="w")
         seconds = ttk.Spinbox(panel, from_=0.01, to=3600, increment=1,
                               textvariable=self.ss_auto_seconds[n], width=7)
-        seconds.grid(row=1, column=3, padx=2)
+        seconds.grid(row=3, column=3, padx=2)
         seconds_label = tk.Label(panel, text="s")
-        seconds_label.grid(row=1, column=4)
+        seconds_label.grid(row=3, column=4)
         auto_status = tk.Label(panel, textvariable=self.ss_auto_status[n], anchor="w", width=20)
-        auto_status.grid(row=1, column=5, columnspan=2, sticky="ew", padx=6)
+        auto_status.grid(row=3, column=5, columnspan=2, sticky="ew", padx=6)
 
         self.ss_widgets[n] = {
             "panel": panel, "marker": marker, "entry": entry, "button": button, "status": status, "vin": vin,
             "auto": auto, "seconds": seconds, "auto_status": auto_status,
             "tint": [panel, marker, title, volt_label, mv_label, vin, seconds_label, auto_status],   # widgets that take the row tint
         }
+        for field in (mode, var, *fields.values()):
+            field.trace_add("write", lambda *_, sid=n: self._ss_scaling_update(sid))
+        self._ss_scaling_update(n)
+
+    @staticmethod
+    def _ss_scaling_numeric_input(text):
+        return bool(re.fullmatch(r"[+-]?(?:[0-9]*(?:\.[0-9]*)?)(?:[eE][+-]?[0-9]*)?", text))
+
+    def _ss_scaling_update(self, n):
+        scaling = self.ss_scaling[n]
+        automatic = scaling["mode"].get() == "Automatic"
+        self.ss_widgets[n]["entry"].configure(state="readonly" if automatic else "normal")
+        scaling["engineering_entry"].configure(state="normal" if automatic else "disabled")
+        scaling["error"] = None
+        warning = ""
+        try:
+            values = {key: float(field.get()) for key, field in scaling["fields"].items()
+                      if key != "desired" or automatic}
+            if not all(math.isfinite(value) for value in values.values()):
+                raise ValueError
+            x1, x2, y1, y2 = (values[key] for key in ("x1", "x2", "y1", "y2"))
+            if y1 == y2:
+                raise ValueError("Y1 and Y2 must differ.")
+            if automatic:
+                desired = values["desired"]
+                if not min(y1, y2) <= desired <= max(y1, y2):
+                    warning = "Warning: engineering value outside Y1-Y2 range."
+                mv = x1 + (desired - y1) * (x2 - x1) / (y2 - y1)
+                if not math.isfinite(mv):
+                    raise ValueError("Calculated mV is not finite.")
+                if not SS_MV_MIN <= mv <= SS_MV_MAX:
+                    raise ValueError(f"Calculated mV must be {SS_MV_MIN}-{SS_MV_MAX}.")
+                rounded = str(round(mv))
+                if self.ss_mv_vars[n].get() != rounded:
+                    self.ss_mv_vars[n].set(rounded)
+                message = warning or f"Calculated: {rounded} mV"
+            else:
+                if x1 == x2:
+                    raise ValueError("X1 and X2 must differ for inverse scaling.")
+                mv = float(self.ss_mv_vars[n].get())
+                engineering = y1 + (mv - x1) * (y2 - y1) / (x2 - x1)
+                if not math.isfinite(engineering):
+                    raise ValueError
+                message = f"Engineering: {engineering:g}"
+                if not min(x1, x2) <= mv <= max(x1, x2):
+                    message += " (outside scaling range)"
+            scaling["status"].set(message)
+        except (ValueError, OverflowError) as error:
+            message = str(error) if str(error) and not str(error).startswith("could not convert") else "Enter finite numeric values."
+            scaling["status"].set(f"{warning + ' ' if warning else ''}Error: {message}")
+            if automatic:
+                scaling["error"] = message
 
     def _ss_auto_settings(self, n):
         mv, error = self._ss_parse_mv(n)
@@ -2592,6 +2675,9 @@ class FlexTesterGUI:
 
     def _ss_parse_mv(self, n):
         """Read sensor n's own voltage field. Returns (mV, None) or (None, error message)."""
+        scaling = self.ss_scaling[n]
+        if scaling["mode"].get() == "Automatic" and scaling["error"]:
+            return None, scaling["error"]
         text = self.ss_mv_vars[n].get().strip()
         try:
             mv = int(text)

@@ -56,3 +56,6 @@
 
 [10:02:43] stop wm 2
 [10:02:43] wm 2 stopped
+[10:09:57] 
+Error reading: ClearCommError failed (PermissionError(13, 'Access is denied.', None, 5))
+
