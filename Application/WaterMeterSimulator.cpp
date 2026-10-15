@@ -23,8 +23,16 @@ void WaterMeterSimulator::Set(bool isHigh)
 
 void WaterMeterSimulator::SetManualHigh()
 {
+    _durationMs = 0;
     _status = Status::ManualHigh;
     Set(true);
+}
+
+void WaterMeterSimulator::Start(uint32_t cycleTimeMs, uint32_t durationMs)
+{
+    SetStatus(Status::Started, cycleTimeMs);
+    _runStartedMs = Clock::GetTimeMsec();
+    _durationMs = durationMs;
 }
 
 /**
@@ -43,6 +51,7 @@ void WaterMeterSimulator::SetManualHigh()
  */
 void WaterMeterSimulator::SetStatus(Status status, uint32_t cycleTimeMs)
 {
+    _durationMs = 0;
     uint32_t onTimeMs    = cycleTimeMs ? (cycleTimeMs * PULSE_ON_PERCENT / 100) : 0xFFFFFFFF;
     uint32_t offTimeMs   = cycleTimeMs ? (cycleTimeMs - onTimeMs)                 : 0xFFFFFFFF;
     uint32_t newPeriodMs = onTimeMs;   // _periodMs stores the ON duration
@@ -153,6 +162,12 @@ void WaterMeterSimulator::PrintStatus(TextPrinter &printer)
 WaterMeterSimulator::StateChange WaterMeterSimulator::Task(bool isValvesOpened)
 {
     StateChange change = StateChange::None;
+
+    if (_status == Status::Started && _durationMs != 0 &&
+        (uint32_t)(Clock::GetTimeMsec() - _runStartedMs) >= _durationMs) {
+        SetStatus(Status::Stopped, 0);
+        return StateChange::Stopped;
+    }
 
     if (_status == Status::Started) {
         // Free-running pulse generation — independent of valve state

@@ -5,8 +5,13 @@ import sys
 import queue
 import threading
 import json
+import importlib.util
+import shutil
+import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
@@ -70,6 +75,7 @@ class FakeSerial:
         self.enabled = False
         self.rails = {channel: "off" for channel in range(1, 5)}
         self.pulse = None
+        self.wm_durations = {channel: 0 for channel in range(1, 5)}
         self.silent = set()
         self.reject = set()
         self.vin = {channel: (0, 0) for channel in range(1, 5)}
@@ -107,6 +113,11 @@ class FakeSerial:
         self.all_off()
         self.emit(f"vai {channel} OFF pulse complete", self.supply())
 
+    def complete_wm(self, channel):
+        self.wm[channel][0] = "stopped"
+        self.wm_durations[channel] = 0
+        self.emit(f"wm {channel} stopped working at 12:00:00 | wm1=5 wm2=0 wm3=0 wm4=0")
+
     def write(self, data):
         command = data.decode().strip()
         self.commands.append(command)
@@ -124,8 +135,14 @@ class FakeSerial:
         elif parts[:2] == ["get", "ain"]:
             raw, mv = self.vin[int(parts[2])]
             self.emit(f"ain {parts[2]} raw={raw} mv={mv}")
+        elif parts[:2] == ["start", "wm_timed"]:
+            channel, cycle, duration = map(int, parts[2:])
+            self.wm[channel] = ["started", cycle]
+            self.wm_durations[channel] = duration
+            self.emit(f"wm {channel} started duration_ms={duration}")
         elif parts[:2] in (["stop", "wm"], ["start", "wm"], ["toggle", "wm"]):
             channel = int(parts[2])
+            self.wm_durations[channel] = 0
             if parts[0] == "stop":
                 self.wm[channel][0] = "stopped"
             elif parts[0] == "start":
@@ -269,6 +286,24 @@ class ClientTests(unittest.TestCase):
         self.client.get_help()
         with self.assertRaises(TesterError):
             self.client.set_time("25:99")
+
+    def test_timed_wm_command_completion_and_legacy_fallback_safety(self):
+        result = self.client.start_wm(1, 1000, 5000)
+        self.assertEqual(result["duration_ms"], 5000)
+        self.assertIn("start wm_timed 1 1000 5000", self.serial.commands)
+        self.serial.complete_wm(1)
+        self.client.get_time()
+        self.assertEqual(self.client.get_status()["wm"][1]["state"], "stopped")
+        self.assertTrue(any(event["type"] == "wm.stopped" for event in self.client.get_events()["events"]))
+        self.client.start_wm(1, 1000, 0)
+        self.assertEqual(self.serial.commands[-2], "start wm 1 1000")
+        self.assertEqual(self.serial.wm_durations[1], 0)
+        self.client.stop_wm(1)
+        self.serial.reject.add("start wm_timed 2 1000 5000")
+        with self.assertRaises(TesterError) as caught:
+            self.client.start_wm(2, 1000, 5000)
+        self.assertEqual(caught.exception.code, "unsupported")
+        self.assertNotIn("start wm 2 1000", self.serial.commands)
 
     def test_serial_loss_marks_outputs_unknown(self):
         self.serial.incoming.put(OSError("Cable removed"))
@@ -418,6 +453,9 @@ class CliTests(unittest.TestCase):
     def test_grammar(self):
         self.assertEqual(parse_cli("on wm1"), ("wm.on", {"channel": 1}))
         self.assertEqual(parse_cli("START WM1 CYCLE_MS 1000"), ("wm.start", {"channel": 1, "cycle_ms": 1000}))
+        self.assertEqual(parse_cli("START WM1 DURATION_MS 5000"), ("wm.start", {"channel": 1, "duration_ms": 5000}))
+        self.assertEqual(parse_cli("START WM1 CYCLE_MS 1000 DURATION_MS 5000"),
+                 ("wm.start", {"channel": 1, "cycle_ms": 1000, "duration_ms": 5000}))
         self.assertEqual(parse_cli("SCALE VAI1 X1 0 X2 10000 Y1 0 Y2 100")[1]["x2"], 10000)
         self.assertEqual(parse_cli("AUTO VAI2 ON DURATION_MS 5000")[1]["duration_ms"], 5000)
         self.assertEqual(parse_cli("SAMPLE AI1 AI3 ON")[1]["channels"], [1, 3])
@@ -724,6 +762,355 @@ class HttpTests(unittest.TestCase):
         self.assertEqual(body["error"]["code"], "conflict")
         self.assertTrue(body["result"]["cleanup"]["verified"])
         self.assertFalse(self.client.get_status()["auto"])
+
+    def test_channel_batch_wm_duration_and_validation(self):
+        for index, duration in enumerate((5000, 0, None)):
+            code, body = self.request(payload={"RequestId": f"wm-duration-{index}", "Commands": [
+                {"Port": "WM", "PortNum": 1, "Action": "Start", "Cycle_ms": 1000, "Duration_ms": duration}]})
+            self.assertEqual(code, 200, body)
+            self.assertEqual(body["result"]["commands"][0]["result"]["duration_ms"], duration or 0)
+            self.assertEqual(self.serial.wm_durations[1], duration or 0)
+        for index, duration in enumerate((-1, 0.5, True, 3600001, 1, 10, 19, "1000", float("inf"))):
+            before = len(self.serial.commands)
+            payload = {"RequestId": f"bad-wm-duration-{index}", "Commands": [
+                {"Port": "WM", "PortNum": 1, "Action": "Start", "Duration_ms": duration}]}
+            raw = json.dumps(payload).replace("Infinity", "1e999")   # JSON has no infinity literal
+            code, body = self.request(raw=raw.encode())
+            self.assertEqual(code, 400, (duration, body))
+            self.assertEqual(len(self.serial.commands), before, "rejected request must not reach the tester")
+
+    def test_channel_batch_wm_duration_boundaries(self):
+        for index, duration in enumerate((20, 30000, 3600000, 5000.0)):
+            code, body = self.request(payload={"RequestId": f"wm-boundary-{index}", "Commands": [
+                {"Port": "WM", "PortNum": 2, "Action": "Start", "Cycle_ms": 1000, "Duration_ms": duration}]})
+            self.assertEqual(code, 200, (duration, body))
+            self.assertEqual(self.serial.wm_durations[2], int(duration))
+            self.assertIn(f"start wm_timed 2 1000 {int(duration)}", self.serial.commands)
+        # Duration 0 / omitted / null all mean continuous and use the original firmware command.
+        for index, extra in enumerate(({"Duration_ms": 0}, {}, {"Duration_ms": None})):
+            code, body = self.request(payload={"RequestId": f"wm-continuous-{index}", "Commands": [
+                {"Port": "WM", "PortNum": 3, "Action": "Start", "Cycle_ms": 1000, **extra}]})
+            self.assertEqual(code, 200, body)
+            self.assertEqual(body["result"]["commands"][0]["result"]["duration_ms"], 0)
+            self.assertEqual(self.serial.wm_durations[3], 0)
+        self.assertNotIn("start wm_timed 3 1000 0", self.serial.commands)
+
+    def test_wm_stop_before_timeout_cancels_the_timer(self):
+        code, body = self.request(payload={"RequestId": "wm-timed-stop", "Commands": [
+            {"Port": "WM", "PortNum": 1, "Action": "Start", "Cycle_ms": 1000, "Duration_ms": 30000},
+            {"Port": "WM", "PortNum": 1, "Action": "Stop"}]})
+        self.assertEqual(code, 200, body)
+        self.assertEqual(self.serial.wm[1][0], "stopped")
+        self.assertEqual(self.serial.wm_durations[1], 0)
+
+    def test_duration_ms_is_rejected_for_other_wm_actions_without_side_effects(self):
+        before = len(self.serial.commands)
+        for index, action in enumerate(("On", "Off", "Stop")):
+            code, body = self.request(payload={"RequestId": f"wm-bad-duration-{index}", "Commands": [
+                {"Port": "WM", "PortNum": 1, "Action": action, "Duration_ms": 30000}]})
+            self.assertEqual(code, 400, body)
+            self.assertIn("only valid for WM Start", body["error"]["message"])
+        for index, command in enumerate((
+                {"Port": "AI", "PortNum": 1, "Action": "Read", "Duration_ms": 20},
+                {"Port": "VAI", "PortNum": 1, "Action": "On", "Duration_ms": 20},
+                {"Port": "VAI", "PortNum": 1, "Action": "Off", "Duration_ms": 20},
+                {"Port": "VAI", "PortNum": 1, "Action": "Stop", "Duration_ms": 20})):
+            code, body = self.request(payload={"RequestId": f"other-bad-duration-{index}", "Commands": [command]})
+            self.assertEqual(code, 400, body)
+            self.assertIn("Duration_ms is not valid", body["error"]["message"])
+        # An explicit null is the same as omission everywhere.
+        code, body = self.request(payload={"RequestId": "null-duration-stop", "Commands": [
+            {"Port": "WM", "PortNum": 1, "Action": "Stop", "Duration_ms": None}]})
+        self.assertEqual(code, 200, body)
+        self.assertNotIn("start wm_timed", " ".join(self.serial.commands[before:]))
+
+    def test_legacy_wm_start_action_accepts_duration(self):
+        code, body = self.request(payload={"id": "legacy-timed", "action": "wm.start",
+                                           "args": {"channel": 1, "cycle_ms": 1000, "duration_ms": 30000}})
+        self.assertEqual(code, 200, body)
+        self.assertEqual(body["result"]["duration_ms"], 30000)
+        self.assertIn("start wm_timed 1 1000 30000", self.serial.commands)
+        for index, args in enumerate(({"channel": 1, "duration_ms": 10}, {"channel": 1, "duration_ms": -5},
+                                      {"channel": 1, "duration_ms": 3600001})):
+            code, body = self.request(payload={"id": f"legacy-bad-{index}", "action": "wm.start", "args": args})
+            self.assertEqual(code, 400, body)
+        # duration_ms is not an argument of any other WM action.
+        for action in ("wm.on", "wm.off", "wm.stop"):
+            code, body = self.request(payload={"id": f"legacy-{action}", "action": action,
+                                               "args": {"channel": 1, "duration_ms": 30000}})
+            self.assertEqual(code, 400, body)
+
+    def test_wm_example_files(self):
+        folder = Path(__file__).parent
+        for name, expected_duration in (("FlexTesterApi.examples.wm-continuous.json", 0),
+                                        ("FlexTesterApi.examples.wm-timed-30s.json", 30000)):
+            payload = json.loads((folder / name).read_text(encoding="utf-8"))
+            command = payload["Commands"][0]
+            self.assertEqual((command["Port"], command["PortNum"], command["Action"], command["Cycle_ms"],
+                              command["Duration_ms"]), ("WM", 1, "Start", 1000, expected_duration))
+            code, body = self.request(payload=payload)
+            self.assertEqual(code, 200, (name, body))
+            self.assertEqual(body["result"]["commands"][0]["result"]["duration_ms"], expected_duration)
+            self.assertEqual(self.serial.wm_durations[1], expected_duration)
+            self.client.stop_wm(1)
+
+    def test_capabilities_describe_wm_duration(self):
+        code, body = self.request("/api/v1/capabilities")
+        self.assertEqual(code, 200)
+        self.assertEqual(body["result"]["wm_duration_ms"], [20, 3600000])
+        self.assertEqual(body["result"]["wm_duration_continuous_value"], 0)
+
+
+class GuiWmDurationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        path = Path(__file__).with_name("FlexTesterGui.py")
+        spec = importlib.util.spec_from_file_location("wm_gui_test", path)
+        cls.module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.module)
+
+    def test_duration_handlers_and_validation(self):
+        controller = self.module.FlexTesterGUI
+        sent, started, stopped = [], [], []
+        variable = lambda value: SimpleNamespace(get=lambda: value)
+        instance = SimpleNamespace(
+            wm_rate_vars={1: variable("1000")}, wm_duration_vars={1: variable("5000")},
+            send_command=sent.append, start_wm_pulse=started.append, stop_wm_pulse=stopped.append,
+            _parse_positive_rate=controller._parse_positive_rate, _parse_wm_duration=controller._parse_wm_duration)
+        controller._cmd_wm_start(instance, 1)
+        self.assertEqual(sent, ["start wm_timed 1 1000 5000"])
+        self.assertFalse(started)
+        controller._wm_handle_line(instance, "wm 1 started duration_ms=5000")
+        controller._wm_handle_line(instance, "wm 1 stopped working at 12:00:00 | wm1=5")
+        self.assertEqual(started, [1])
+        self.assertEqual(stopped, [1])
+        controller._wm_handle_line(instance, "ERROR start wm_timed 1 1000 5000")
+        self.assertEqual(stopped, [1, 1])
+        instance.wm_duration_vars[1] = variable("0")
+        controller._cmd_wm_start(instance, 1)
+        self.assertEqual(sent[-1], "start wm 1 1000")
+        with patch.object(self.module.messagebox, "showwarning") as warning:
+            instance.wm_duration_vars[1] = variable("-1")
+            before = len(sent)
+            controller._cmd_wm_start(instance, 1)
+            self.assertTrue(warning.called)
+            self.assertEqual(len(sent), before)
+        for value in ("nan", "inf", "1.5", "3600001", "-1", "1", "10", "19", "", "abc"):
+            self.assertIsNotNone(controller._parse_wm_duration(value)[1], value)
+        for value, expected in (("0", 0), ("20", 20), ("30000", 30000), ("3600000", 3600000), (" 1000 ", 1000)):
+            self.assertEqual(controller._parse_wm_duration(value), (expected, None), value)
+
+    def test_help_text_and_tooltip_class(self):
+        self.assertEqual(self.module.WM_DURATION_HELP,
+                         "0 = run indefinitely until Stop. Any positive value = stop automatically "
+                         "after the specified duration.")
+        root = self.module.tk.Tk()
+        try:
+            root.attributes("-alpha", 0)
+            label = self.module.ttk.Label(root, text="x")
+            label.pack()
+            tip = self.module.ToolTip(label, "help text")
+            tip._show()
+            self.assertIsNotNone(tip._window)
+            self.assertEqual(tip._window.winfo_children()[0].cget("text"), "help text")
+            tip._hide()
+            self.assertIsNone(tip._window)
+            tip._schedule()
+            self.assertIsNotNone(tip._after_id)
+            tip._hide()
+            self.assertIsNone(tip._after_id)
+        finally:
+            root.destroy()
+
+    def test_duration_widgets_exist_without_serial_connection(self):
+        root = self.module.tk.Tk()
+        attached = []
+
+        class RecordingToolTip(self.module.ToolTip):
+            def __init__(self, widget, text, *args, **kwargs):
+                attached.append((widget, text))
+                super().__init__(widget, text, *args, **kwargs)
+
+        try:
+            root.attributes("-alpha", 0)
+            with tempfile.TemporaryDirectory() as directory:
+                with patch.object(self.module, "__file__", str(Path(directory) / "FlexTesterGui.py")), \
+                        patch.object(self.module, "ToolTip", RecordingToolTip), \
+                        patch.object(self.module.FlexTesterGUI, "refresh_ports"):
+                    instance = self.module.FlexTesterGUI(root)
+                    root.update()
+                    self.assertFalse(instance.is_connected)
+                    self.assertEqual([instance.wm_duration_vars[channel].get() for channel in range(1, 6)], ["0"] * 5)
+                    def descendants(widget):
+                        for child in widget.winfo_children():
+                            yield child
+                            yield from descendants(child)
+                    def entries_for(variables):
+                        names = {str(value) for value in variables.values()}
+                        return [widget for widget in descendants(root)
+                                if isinstance(widget, self.module.ttk.Entry)
+                                and str(widget.cget("textvariable")) in names]
+                    entries = entries_for(instance.wm_duration_vars)
+                    self.assertEqual(len(entries), 5)
+                    for entry in entries:
+                        self.assertGreater(entry.winfo_width(), 30)
+                        self.assertLessEqual(entry.winfo_x() + entry.winfo_width(), entry.master.winfo_width())
+                    # The header is labelled exactly "Duration (ms)".
+                    headers = [widget for widget in descendants(root)
+                               if isinstance(widget, self.module.ttk.Label) and widget.cget("text") == "Duration (ms)"]
+                    self.assertEqual(len(headers), 1)
+                    # Duration sits directly beside Cycle, in the same row, for every WM row.
+                    cycle_entries = entries_for(instance.wm_rate_vars)
+                    self.assertEqual(len(cycle_entries), 5)
+                    cycle_by_row = {entry.grid_info()["row"]: entry.grid_info()["column"] for entry in cycle_entries}
+                    for entry in entries:
+                        info = entry.grid_info()
+                        self.assertEqual(info["column"], cycle_by_row[info["row"]] + 1)
+                    self.assertEqual(headers[0].grid_info()["column"], min(cycle_by_row.values()) + 1)
+                    # The header and every Duration entry carry the exact help text.
+                    expected = self.module.WM_DURATION_HELP
+                    self.assertEqual({text for _, text in attached}, {expected})
+                    attached_widgets = {str(widget) for widget, _ in attached}
+                    self.assertIn(str(headers[0]), attached_widgets)
+                    self.assertTrue({str(entry) for entry in entries} <= attached_widgets)
+        finally:
+            root.destroy()
+
+
+class FirmwareWmDurationTests(unittest.TestCase):
+    def test_actual_cpp_timer_with_fake_clock_and_gpio(self):
+        compiler = shutil.which("g++")
+        if compiler is None:
+            self.skipTest("Native g++ is required for firmware behavioral tests.")
+        application = Path(__file__).resolve().parent.parent / "Application"
+        gpio_header = """#pragma once
+#include <cstdint>
+struct GPIO_TypeDef {};
+enum GPIO_PinState { GPIO_PIN_RESET = 0, GPIO_PIN_SET = 1 };
+void HAL_GPIO_WritePin(GPIO_TypeDef*, int, GPIO_PinState);
+"""
+        harness = """#include "WaterMeterSimulator.hpp"
+#include "Clock.hpp"
+#include <cassert>
+static uint32_t currentTime = 0;
+static GPIO_TypeDef gpio;
+uint32_t Clock::GetTimeMsec() { return currentTime; }
+void HAL_GPIO_WritePin(GPIO_TypeDef*, int, GPIO_PinState) {}
+TextPrinter& TextPrinter::operator<<(const char*) { return *this; }
+TextPrinter& TextPrinter::operator<<(long) { return *this; }
+static WaterMeterSimulator meter(int channel) {
+    WaterMeterSimulator result{};
+    result._port = &gpio;
+    result._pin = channel;
+    result._id = channel;
+    result._status = WaterMeterSimulator::Status::Stopped;
+    return result;
+}
+int main() {
+    using Status = WaterMeterSimulator::Status;
+    using Change = WaterMeterSimulator::StateChange;
+    auto first = meter(1);
+    auto second = meter(2);
+    currentTime = 100;
+    first.Start(1000, 5000);
+    currentTime = 5099;
+    assert(first.Task(false) == Change::None);
+    assert(first._status == Status::Started);
+    currentTime = 5100;
+    assert(first.Task(false) == Change::Stopped);
+    assert(first._status == Status::Stopped && !first._isHigh);
+    assert(first._cycleTimeMs == 1000 && first._durationMs == 0);
+    first.Start(1000, 0);
+    currentTime += 3600001;
+    assert(first.Task(false) == Change::None && first._status == Status::Started);
+    first.SetStatus(Status::Stopped, 0);
+    assert(!first._isHigh);
+    currentTime = 100;
+    first.Start(1000, 10);
+    currentTime = 105;
+    first.Start(1000, 20);
+    currentTime = 110;
+    assert(first.Task(false) == Change::None);
+    currentTime = 125;
+    assert(first.Task(false) == Change::Stopped);
+    currentTime = 300;
+    first.Start(1000, 10);
+    second.Start(500, 20);
+    currentTime = 310;
+    assert(first.Task(false) == Change::Stopped);
+    assert(second.Task(false) == Change::None && second._status == Status::Started);
+    currentTime = 320;
+    assert(second.Task(false) == Change::Stopped);
+    currentTime = 0xfffffff0u;
+    first.Start(1000, 32);
+    currentTime = 0x0000000fu;
+    assert(first.Task(false) == Change::None);
+    currentTime = 0x00000010u;
+    assert(first.Task(false) == Change::Stopped && !first._isHigh);
+    first.Start(1000, 10);
+    first.SetManualHigh();
+    currentTime += 100;
+    assert(first.Task(false) == Change::None && first._status == Status::ManualHigh && first._isHigh);
+    first.Start(1000, 10);
+    first.SetStatus(Status::Stopped, 0);
+    first.Start(1000, 0);
+    currentTime += 100;
+    assert(first.Task(false) == Change::None && first._status == Status::Started);
+
+    // Timeout while the output is HIGH must drive it LOW (fresh meter: LOW phase is 950 ms, HIGH 50 ms).
+    auto third = meter(3);
+    currentTime = 1000;
+    third.Start(1000, 980);
+    currentTime = 1960;
+    assert(third.Task(false) == Change::None && third._isHigh);
+    currentTime = 1980;
+    assert(third.Task(false) == Change::Stopped && !third._isHigh && third._status == Status::Stopped);
+
+    // WM Stop before the timeout cancels the timer: no late Stopped event, output stays LOW.
+    auto fourth = meter(4);
+    currentTime = 5000;
+    fourth.Start(1000, 5000);
+    currentTime = 6000;
+    fourth.SetStatus(Status::Stopped, 0);
+    assert(!fourth._isHigh && fourth._durationMs == 0);
+    currentTime = 11000;
+    assert(fourth.Task(false) == Change::None && fourth._status == Status::Stopped && !fourth._isHigh);
+
+    // Pulses follow Cycle_ms for the whole Duration_ms: 100 ms cycle, 1000 ms run = 10 rising edges.
+    auto fifth = meter(1);
+    currentTime = 20000;
+    fifth.Start(100, 1000);
+    Change last = Change::None;
+    uint32_t stoppedAt = 0;
+    for (uint32_t elapsed = 1; elapsed <= 1500 && last != Change::Stopped; ++elapsed) {
+        currentTime = 20000 + elapsed;
+        last = fifth.Task(false);
+        stoppedAt = elapsed;
+    }
+    assert(last == Change::Stopped && stoppedAt == 1000);
+    assert(fifth._pulseCount == 10 && !fifth._isHigh);
+
+    // A timed run shorter than the LOW phase of the first cycle yields no pulse but still ends LOW.
+    auto sixth = meter(2);
+    currentTime = 40000;
+    sixth.Start(1000, 500);
+    currentTime = 40500;
+    assert(sixth.Task(false) == Change::Stopped && sixth._pulseCount == 0 && !sixth._isHigh);
+}
+"""
+        with tempfile.TemporaryDirectory() as directory:
+            temporary = Path(directory)
+            (temporary / "gpio.h").write_text(gpio_header, encoding="ascii")
+            (temporary / "wm_test.cpp").write_text(harness, encoding="ascii")
+            executable = temporary / "wm_test.exe"
+            compile_result = subprocess.run(
+                [compiler, "-std=c++14", "-ffunction-sections", "-fdata-sections", "-I", str(temporary),
+                 "-I", str(application), str(application / "WaterMeterSimulator.cpp"),
+                 str(temporary / "wm_test.cpp"), "-Wl,--gc-sections", "-o", str(executable)],
+                capture_output=True, text=True, timeout=30)
+            self.assertEqual(compile_result.returncode, 0, compile_result.stdout + compile_result.stderr)
+            result = subprocess.run([str(executable)], capture_output=True, text=True, timeout=5)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
 
 if __name__ == "__main__":

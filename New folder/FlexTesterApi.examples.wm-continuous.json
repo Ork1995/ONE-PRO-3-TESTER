@@ -1,0 +1,12 @@
+{
+  "RequestId": "wm1-continuous-001",
+  "Commands": [
+    {
+      "Port": "WM",
+      "PortNum": 1,
+      "Action": "Start",
+      "Cycle_ms": 1000,
+      "Duration_ms": 0
+    }
+  ]
+}

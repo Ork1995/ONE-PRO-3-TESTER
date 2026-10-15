@@ -1,0 +1,41 @@
+--- Log Started: Thu Oct 15 16:26:14 2026 ---
+[16:26:29] Connected to COM16
+[16:26:32] > stop wm 1
+
+[16:26:32] stop wm 1
+[16:26:32] wm 1 stopped
+[16:26:38] > start wm_timed 1 1000 5000
+
+[16:26:38] start wm_timed 1 1000 5000
+[16:26:38] ERROR start wm_timed 1 1000 5000
+[16:26:52] > start wm_timed 1 1000 10000
+
+[16:26:52] start wm_timed 1 1000 10000
+[16:26:52] ERROR start wm_timed 1 1000 10000
+[16:27:06] > start wm_timed 1 1000 10000
+
+[16:27:06] start wm_timed 1 1000 10000
+[16:27:06] ERROR start wm_timed 1 1000 10000
+[16:33:14] Disconnected
+[16:35:03] Connected to COM16
+[16:35:04] > start wm_timed 1 1000 10000
+
+[16:35:04] start wm_timed 1 1000 10000
+[16:35:04] wm 1 started duration_ms=10000
+[16:35:08] > stop wm 1
+
+[16:35:08] stop wm 1
+[16:35:08] wm 1 stopped
+[16:35:13] > start wm_timed 1 1000 5000
+
+[16:35:13] start wm_timed 1 1000 5000
+[16:35:13] wm 1 started duration_ms=5000
+[16:35:18] wm 1 stopped working at 00:00:24 | wm1=8 wm2=0 wm3=0 wm4=0
+[16:35:20] > stop wm 1
+
+[16:35:20] stop wm 1
+[16:35:20] wm 1 stopped
+[16:36:14] App Started
+[16:36:14] ADC init=ready configured_vref=2500mV
+[16:36:20] App Started
+[16:36:20] ADC init=ready configured_vref=2500mV

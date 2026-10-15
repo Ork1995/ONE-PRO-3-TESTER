@@ -1354,13 +1354,57 @@ SS_RE_STATUS = re.compile(r'vsen en=(\d) mv=(\d+) ccr4=(\d+) duty=([\d.]+)% pwm=
 SS_RE_ERROR = re.compile(r'\bERROR\b')
 SS_RE_OWN_ERROR = re.compile(r'\bERROR vsen\b')   # the supply's own error: "ERROR vsen pwm not running"
 
+# -----------------------------------------------------------------------------
+# WM pulse generator - GUI constants (mirror FlexTesterApi.py / App::HandleCommand)
+# -----------------------------------------------------------------------------
+WM_CYCLE_MIN_MS, WM_CYCLE_MAX_MS = 20, 3600000
+WM_DURATION_MIN_MS, WM_DURATION_MAX_MS = 20, 3600000     # Duration (ms) = 0 means run until Stop
+WM_DURATION_HELP = ("0 = run indefinitely until Stop. "
+                    "Any positive value = stop automatically after the specified duration.")
+
+
+class ToolTip:
+    """Minimal hover tooltip for a Tk widget."""
+
+    def __init__(self, widget, text, delay_ms=400):
+        self.widget, self.text, self.delay_ms = widget, text, delay_ms
+        self._after_id = None
+        self._window = None
+        widget.bind("<Enter>", self._schedule, add="+")
+        widget.bind("<Leave>", self._hide, add="+")
+        widget.bind("<ButtonPress>", self._hide, add="+")
+
+    def _schedule(self, _event=None):
+        self._hide()
+        self._after_id = self.widget.after(self.delay_ms, self._show)
+
+    def _show(self):
+        self._after_id = None
+        if self._window is not None:
+            return
+        x = self.widget.winfo_rootx() + 12
+        y = self.widget.winfo_rooty() + self.widget.winfo_height() + 4
+        self._window = tk.Toplevel(self.widget)
+        self._window.wm_overrideredirect(True)
+        self._window.wm_geometry(f"+{x}+{y}")
+        tk.Label(self._window, text=self.text, justify=tk.LEFT, wraplength=280, background="#ffffe0",
+                 relief=tk.SOLID, borderwidth=1, padx=4, pady=2).pack()
+
+    def _hide(self, _event=None):
+        if self._after_id is not None:
+            self.widget.after_cancel(self._after_id)
+            self._after_id = None
+        if self._window is not None:
+            self._window.destroy()
+            self._window = None
+
 
 class FlexTesterGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("FLEX Tester Controller")
         # Taller than before: the Sensor Supply section adds ~200 px to the main tab
-        self.root.geometry("1000x%d" % min(900, max(700, self.root.winfo_screenheight() - 100)))
+        self.root.geometry("1200x%d" % min(900, max(700, self.root.winfo_screenheight() - 100)))
 
         timestamp_str = time.strftime("%Y-%m-%d_%H-%M-%S")
         self._logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "FLEX_LOGS")
@@ -1666,39 +1710,48 @@ class FlexTesterGUI:
         # Header
         ttk.Label(cb_frame, text="Show",    font=('', 8, 'bold')).grid(row=0, column=0, sticky='w')
         ttk.Label(cb_frame, text="Cycle ms", font=('', 8, 'bold')).grid(row=0, column=1, sticky='w', padx=2)
-        ttk.Label(cb_frame, text="Start",   font=('', 8, 'bold')).grid(row=0, column=2, sticky='w', padx=1)
-        ttk.Label(cb_frame, text="Stop",    font=('', 8, 'bold')).grid(row=0, column=3, sticky='w', padx=1)
-        ttk.Label(cb_frame, text="Trigger", font=('', 8, 'bold')).grid(row=0, column=4, sticky='w', padx=1)
-        ttk.Label(cb_frame, text="On/Off",  font=('', 8, 'bold')).grid(row=0, column=5, sticky='w', padx=1)
+        duration_header = ttk.Label(cb_frame, text="Duration (ms)", font=('', 8, 'bold'))
+        duration_header.grid(row=0, column=2, sticky='w', padx=2)
+        ToolTip(duration_header, WM_DURATION_HELP)
+        ttk.Label(cb_frame, text="Start",   font=('', 8, 'bold')).grid(row=0, column=3, sticky='w', padx=1)
+        ttk.Label(cb_frame, text="Stop",    font=('', 8, 'bold')).grid(row=0, column=4, sticky='w', padx=1)
+        ttk.Label(cb_frame, text="Trigger", font=('', 8, 'bold')).grid(row=0, column=5, sticky='w', padx=1)
+        ttk.Label(cb_frame, text="On/Off",  font=('', 8, 'bold')).grid(row=0, column=6, sticky='w', padx=1)
 
         self.wm_show_vars = {}
         self.wm_rate_vars = {}
+        self.wm_duration_vars = {}
         for i in range(1, 6):
             show_var = tk.BooleanVar(value=True)
             self.wm_show_vars[i] = show_var
             rate_var = tk.StringVar(value="1000")
             self.wm_rate_vars[i] = rate_var
+            duration_var = tk.StringVar(value="0")
+            self.wm_duration_vars[i] = duration_var
             rate_var.trace_add('write', lambda *_, wid=i: self._on_rate_change(wid))
             ttk.Checkbutton(cb_frame, text=f'WM {i}', variable=show_var,
                             command=self.update_wm_graph).grid(row=i, column=0, sticky='w', pady=2)
             ttk.Entry(cb_frame, textvariable=rate_var, width=5).grid(row=i, column=1, padx=2, pady=2)
+            duration_entry = ttk.Entry(cb_frame, textvariable=duration_var, width=8)
+            duration_entry.grid(row=i, column=2, padx=2, pady=2)
+            ToolTip(duration_entry, WM_DURATION_HELP)
             ttk.Button(cb_frame, text="▶", width=2,
                        command=lambda wid=i: self._cmd_wm_start(wid)
-                       ).grid(row=i, column=2, padx=1)
+                       ).grid(row=i, column=3, padx=1)
             ttk.Button(cb_frame, text="■", width=2,
                        command=lambda wid=i: self._cmd_wm_stop(wid)
-                       ).grid(row=i, column=3, padx=1)
+                       ).grid(row=i, column=4, padx=1)
             ttk.Button(cb_frame, text="T", width=2,
                        command=lambda wid=i: self._cmd_wm_trigger(wid)
-                       ).grid(row=i, column=4, padx=1)
+                       ).grid(row=i, column=5, padx=1)
             # The new board has only WM1-WM4
             if i <= 4:
                 ttk.Button(cb_frame, text="ON/OFF", width=7,
                            command=lambda wid=i: self._cmd_wm_toggle(wid)
-                           ).grid(row=i, column=5, padx=1)
+                           ).grid(row=i, column=6, padx=1)
 
         ttk.Button(cb_frame, text="Reset Graph", command=self.reset_wm_graph).grid(
-            row=6, column=0, columnspan=6, pady=8, sticky='ew')
+            row=6, column=0, columnspan=7, pady=8, sticky='ew')
 
         fig_frame = ttk.Frame(graph_outer)
         fig_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -1819,8 +1872,12 @@ class FlexTesterGUI:
         rate, error = self._parse_positive_rate(self.wm_rate_vars[wm_id].get())
         if error:
             return   # silently ignore while typing — no popup spam on every keystroke
-        # Send updated cycle time to firmware
-        self.send_command(f"start wm {wm_id} {int(rate)}")
+        duration, error = self._parse_wm_duration(self.wm_duration_vars[wm_id].get())
+        if error:
+            return
+        command = (f"start wm_timed {wm_id} {int(rate)} {duration}" if duration
+                   else f"start wm {wm_id} {int(rate)}")
+        self.send_command(command)
         # Cancel the pending GUI toggle and reschedule immediately with new rate
         if self.wm_after_ids[wm_id] is not None:
             self.root.after_cancel(self.wm_after_ids[wm_id])
@@ -1834,17 +1891,52 @@ class FlexTesterGUI:
             value = float(text)
         except (TypeError, ValueError):
             return None, "Rate must be a number"
-        if value <= 0:
-            return None, "Rate must be greater than 0"
+        if (not math.isfinite(value) or not value.is_integer()
+                or not WM_CYCLE_MIN_MS <= value <= WM_CYCLE_MAX_MS):
+            return None, f"Cycle must be an integer from {WM_CYCLE_MIN_MS} to {WM_CYCLE_MAX_MS} ms"
         return value, None
 
+    @staticmethod
+    def _parse_wm_duration(text):
+        """Duration (ms): 0 = run until Stop, otherwise an integer 20..3600000."""
+        message = (f"Duration must be 0 (run until Stop) or an integer from "
+                   f"{WM_DURATION_MIN_MS} to {WM_DURATION_MAX_MS} ms")
+        try:
+            value = float(text)
+        except (TypeError, ValueError):
+            return None, message
+        if not math.isfinite(value) or not value.is_integer():
+            return None, message
+        if value != 0 and not WM_DURATION_MIN_MS <= value <= WM_DURATION_MAX_MS:
+            return None, message
+        return int(value), None
+
     def _cmd_wm_start(self, wm_id):
+        if not 1 <= wm_id <= 4:
+            messagebox.showwarning("Invalid WM", "The tester supports WM1-WM4 only.")
+            return
         rate, error = self._parse_positive_rate(self.wm_rate_vars[wm_id].get())
         if error:
             messagebox.showwarning("Invalid Rate", f"WM{wm_id}: {error}")
             return
-        self.send_command(f"start wm {wm_id} {int(rate)}")
-        self.start_wm_pulse(wm_id)
+        duration, error = self._parse_wm_duration(self.wm_duration_vars[wm_id].get())
+        if error:
+            messagebox.showwarning("Invalid Duration", f"WM{wm_id}: {error}")
+            return
+        command = (f"start wm_timed {wm_id} {int(rate)} {duration}" if duration
+                   else f"start wm {wm_id} {int(rate)}")
+        self.send_command(command)
+        if not duration:
+            self.start_wm_pulse(wm_id)
+
+    def _wm_handle_line(self, line):
+        started = re.fullmatch(r"wm ([1-4]) started(?: duration_ms=\d+| working at .*)?", line.strip())
+        stopped = re.match(r"wm ([1-4]) stopped(?: working|$)", line.strip())
+        rejected = re.match(r"ERROR start wm_timed ([1-4])(?:\s|$)", line.strip())
+        if started:
+            self.start_wm_pulse(int(started[1]))
+        elif stopped or rejected:
+            self.stop_wm_pulse(int((stopped or rejected)[1]))
 
     def _cmd_wm_stop(self, wm_id):
         self.send_command(f"stop wm {wm_id}")
@@ -2111,8 +2203,6 @@ class FlexTesterGUI:
                             if line:
                                 valve_open  = re.search(r'valve (\d+) open',  line)
                                 valve_close = re.search(r'valve (\d+) close', line)
-                                wm_started  = re.search(r'wm (\d+) started working', line)
-                                wm_stopped  = re.search(r'wm (\d+) stopped working', line)
                                 if valve_open:
                                     wm_id = int(valve_open.group(1))
                                     if 1 <= wm_id <= 5:
@@ -2121,17 +2211,10 @@ class FlexTesterGUI:
                                     wm_id = int(valve_close.group(1))
                                     if 1 <= wm_id <= 5:
                                         self.root.after(0, self.stop_wm_pulse, wm_id)
-                                elif wm_started:
-                                    wm_id = int(wm_started.group(1))
-                                    if 1 <= wm_id <= 5:
-                                        self.root.after(0, self.start_wm_pulse, wm_id)
-                                elif wm_stopped:
-                                    wm_id = int(wm_stopped.group(1))
-                                    if 1 <= wm_id <= 5:
-                                        self.root.after(0, self.stop_wm_pulse, wm_id)
                                 self.root.after(0, self.log, self.text_area, line, True)
                                 self.root.after(0, self._ss_handle_line, line)
                                 self.root.after(0, self._ain_handle_line, line)
+                                self.root.after(0, self._wm_handle_line, line)
                     except:
                         pass
                 time.sleep(0.01)

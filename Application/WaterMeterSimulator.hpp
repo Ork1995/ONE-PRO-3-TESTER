@@ -35,6 +35,8 @@ struct WaterMeterSimulator
 	bool _isHigh;
 	uint32_t _tLastSwitch;
 	int _pulseCount = 0;
+	uint32_t _runStartedMs = 0;
+	uint32_t _durationMs = 0;
 
 	// Resume state — saved when stopping mid-cycle
 	bool _savedIsHigh = false;        // pin state at the moment of stop
@@ -43,6 +45,7 @@ struct WaterMeterSimulator
 
 	void Set(bool isHigh);
 	void SetManualHigh();
+	void Start(uint32_t cycleTimeMs, uint32_t durationMs = 0);
 	void SetStatus(Status status, uint32_t cycleTimeMs);
 	void PrintStatus(TextPrinter &printer);
 	StateChange Task(bool isValvesOpened);

@@ -41,6 +41,24 @@ def integer(value, name: str, minimum: int, maximum: int) -> int:
     return int(value)
 
 
+WM_DURATION_MIN_MS = 20
+WM_DURATION_MAX_MS = 3600000
+
+
+def wm_duration(value, name: str = "Duration_ms") -> int:
+    """WM Start run time: None/omitted or 0 = continuous until Stop, else 20..3600000 ms."""
+    if value is None:
+        return 0
+    try:
+        duration = integer(value, name, 0, WM_DURATION_MAX_MS)
+    except TesterError:
+        duration = -1
+    if duration != 0 and not WM_DURATION_MIN_MS <= duration <= WM_DURATION_MAX_MS:
+        raise TesterError("validation", f"{name} must be an integer: 0 (continuous) or "
+                                        f"{WM_DURATION_MIN_MS}..{WM_DURATION_MAX_MS} ms.")
+    return duration
+
+
 def number(value, name: str) -> float:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise TesterError("validation", f"{name} must be a finite number.")
@@ -135,7 +153,12 @@ def prepare_channel_commands(commands, configs):
             elif port == "VAI" and action == "pulse":
                 allowed = {"Manual_voltage", "Duration_ms"}
             elif port == "WM" and action == "start":
-                allowed = {"Cycle_ms"}
+                allowed = {"Cycle_ms", "Duration_ms"}
+            if command.get("Duration_ms") is not None and "Duration_ms" not in allowed:
+                scope = ("WM Start" if port == "WM"
+                         else "WM Start, VAI Configure (AUTO) and VAI Pulse")
+                raise TesterError("validation", f"Duration_ms is not valid for {port} {action.capitalize()}; "
+                                                f"it is only valid for {scope}.")
             irrelevant = {name for name in command if name not in allowed | {"Port", "PortNum", "Action"}
                           and command[name] is not None}
             if irrelevant:
@@ -186,6 +209,7 @@ def prepare_channel_commands(commands, configs):
             elif port == "WM" and action == "start":
                 period = command.get("Cycle_ms")
                 item["cycle_ms"] = integer(1000 if period is None else period, "Cycle_ms", 20, 3600000)
+                item["duration_ms"] = wm_duration(command.get("Duration_ms"))
             prepared.append(item)
         except TesterError as error:
             raise TesterError(error.code, f"Commands[{index}]: {error}", error.outcome) from None
@@ -319,6 +343,7 @@ class TesterClient:
         self._wm_observed = None
         self._supply_observed = None
         self._wm = {}
+        self._wm_stop_counts = {channel: 0 for channel in range(1, 5)}
         self._supply = None
         self._last_safe_off = None
         self._wm_observed = None
@@ -406,6 +431,13 @@ class TesterClient:
         match = re.fullmatch(r"vai ([1-4]) OFF pulse (complete|cancelled)", line)
         if match and self._active and self._active["channel"] == int(match[1]):
             self._active["completion"] = match[2]
+        wm_stopped = re.match(r"wm ([1-4]) stopped working(?:\s|$)", line)
+        if wm_stopped:
+            channel = int(wm_stopped[1])
+            self._wm_stop_counts[channel] += 1
+            if channel in self._wm:
+                self._wm[channel]["state"] = "stopped"
+            self._event("wm.stopped", channel=channel)
         if line.startswith("vsen en="):
             self._supply = parse_supply_status(line)
             self._supply_observed = self._clock()
@@ -441,6 +473,8 @@ class TesterClient:
                     continue
                 if line.startswith("ERROR"):
                     code = "unsupported" if re.match(r"ERROR get ain [1-4](?: \(Scanner Error\))?$", line) else "firmware"
+                    if command.startswith("start wm_timed ") and line.startswith("ERROR start wm_timed "):
+                        code = "unsupported"
                     raise TesterError(code, line)
                 if not matched and re.fullmatch(pattern, line):
                     matched = True
@@ -626,6 +660,8 @@ class TesterClient:
         return {"api_version": "1", "wm_channels": [1, 2, 3, 4], "sensor_channels": [1, 2, 3, 4],
                 "voltage_mv": [0, 15000], "pulse_duration_ms": [10, 3600000],
                 "wm_cycle_ms_host_policy": [20, 3600000], "vin_max_mv": 10076,
+                "wm_duration_ms": [WM_DURATION_MIN_MS, WM_DURATION_MAX_MS], "wm_duration_continuous_value": 0,
+                "wm_timed_requires_updated_firmware": True,
                 "calibrated_mv": [334, 10120], "trigger_wm": False,
                 "trigger_limitation": "Firmware calls wm.Task(false); valve triggering is unavailable.",
                 "safe_off_on_connect_and_disconnect": True, "shared_sensor_supply": True,
@@ -648,15 +684,24 @@ class TesterClient:
                 self._verification_failed("WM HIGH verification failed.")
             return {"channel": channel, "state": "manual on", "changed": True}
 
-    def start_wm(self, channel: int, cycle_ms: int = 1000):
-        channel_id(channel)
-        integer(cycle_ms, "cycle_ms", 20, 3600000)
+    def start_wm(self, channel: int, cycle_ms: int = 1000, duration_ms: int = 0):
+        channel = channel_id(channel)
+        cycle_ms = integer(cycle_ms, "cycle_ms", 20, 3600000)
+        duration_ms = wm_duration(duration_ms, "duration_ms")
         with self._exclusive():
-            self._command(f"start wm {channel} {cycle_ms}", rf"wm {channel} started")
+            self._drain()
+            previous_stops = self._wm_stop_counts[channel]
+            if duration_ms:
+                self._command(f"start wm_timed {channel} {cycle_ms} {duration_ms}",
+                              rf"wm {channel} started duration_ms={duration_ms}")
+            else:
+                self._command(f"start wm {channel} {cycle_ms}", rf"wm {channel} started")
             status = self._get_wm()[channel]
-            if status != {"state": "started", "cycle_ms": cycle_ms}:
+            finished = duration_ms and self._wm_stop_counts[channel] > previous_stops
+            expected_state = "stopped" if finished else "started"
+            if status != {"state": expected_state, "cycle_ms": cycle_ms}:
                 self._verification_failed("WM start verification failed.")
-            return {"channel": channel, **status}
+            return {"channel": channel, **status, "duration_ms": duration_ms}
 
     def stop_wm(self, channel: int):
         channel_id(channel)
@@ -819,7 +864,7 @@ class TesterClient:
                             result = self.pulse_sensor(channel, command["mv"], command["duration_ms"])
                     elif port == "WM":
                         if action == "Start":
-                            result = self.start_wm(channel, command["cycle_ms"])
+                            result = self.start_wm(channel, command["cycle_ms"], command["duration_ms"])
                         elif action == "Stop":
                             result = self.stop_wm(channel)
                         else:
@@ -1104,7 +1149,7 @@ class TesterClient:
 
 
 CLI_HELP = """PORTS | CONNECT <port> | DISCONNECT | STATUS | CAPABILITIES | SAFE_OFF | EXIT
-ON WM1 | OFF WM1 | START WM1 CYCLE_MS 1000 | STOP WM1
+ON WM1 | OFF WM1 | START WM1 [CYCLE_MS 1000] [DURATION_MS 0] | STOP WM1
 MODE VAI1 MANUAL|AUTOMATIC | SET VAI1 MV 5000 | VALUE VAI1 50
 SCALE VAI1 X1 0 X2 10000 Y1 0 Y2 100
 ON VAI1 | OFF VAI1 | PULSE VAI1 MV 5000 DURATION_MS 2000 | STOP VAI1
@@ -1208,11 +1253,11 @@ def parse_cli(command: str):
             if kind == "WM":
                 if len(tokens) == 2 and verb in ("ON", "OFF", "STOP"):
                     return "wm." + verb.lower(), args
-                if len(tokens) in (2, 4) and verb == "START":
-                    if len(tokens) == 4:
-                        if upper[2] != "CYCLE_MS":
-                            raise TesterError("validation", "Expected CYCLE_MS.")
-                        args["cycle_ms"] = cli_number(tokens[3])
+                if len(tokens) in (2, 4, 6) and verb == "START":
+                    for key, value in zip(upper[2::2], tokens[3::2]):
+                        if key not in ("CYCLE_MS", "DURATION_MS") or key.lower() in args:
+                            raise TesterError("validation", "Expected unique CYCLE_MS or DURATION_MS options.")
+                        args[key.lower()] = cli_number(value)
                     return "wm.start", args
             if kind == "AI" and verb == "VIN" and len(tokens) == 2:
                 return "vin.read", args

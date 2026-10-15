@@ -1,7 +1,10 @@
 # Flex Tester Headless API
 
 Independent Python library, persistent CLI and local HTTP/JSON service for the
-Main Controller. The existing GUI and firmware are not modified or imported.
+Main Controller. The API module does not import the GUI. Timed WM pulses
+(`Duration_ms`) additionally rely on a small firmware command, `start wm_timed`,
+and a Duration field in the GUI; see
+[WM Start And Duration_ms](#wm-start-and-duration_ms).
 The GUI must release the tester's COM port before this tool connects.
 
 ## Implementation Status
@@ -18,21 +21,25 @@ Known defects are documented in [Known Defects](#known-defects).
 All output examples in this manual are illustrative, code-compatible examples,
 not physical tester captures. Port identifiers, timestamps, operation IDs,
 monotonic times and measured values will vary. The last recorded automated
-run passed 43 tests against fake serial; see [Test Record](#test-record).
+run passed 55 tests (fake serial, loopback HTTP, GUI widgets and a host-built
+copy of the firmware pulse timer); see [Test Record](#test-record).
 
 ### Project Layout And Exact Paths
 
 ```text
 ONE PRO 3 TESTER/
-  Application/                    Existing tester firmware; unchanged
+  Application/                    Tester firmware; WM Duration_ms support added (reflash required)
   Core/                           Existing board configuration; unchanged
   Drivers/                        Existing embedded drivers; unchanged
   Middlewares/                    Existing firmware dependencies; unchanged
   New folder/
     FlexTesterApi.py               Required runtime entry point and Python API
     FlexTesterApi.md               This user manual; optional at runtime
+    FlexTesterApi.examples.json    Sendable combined VAI AUTO + timed WM batch
+    FlexTesterApi.examples.wm-continuous.json   Sendable WM Start, Duration_ms=0
+    FlexTesterApi.examples.wm-timed-30s.json    Sendable WM Start, Duration_ms=30000
     test_flex_tester_api.py        Isolated automated tests; optional at runtime
-    FlexTesterGui.py               Existing GUI; not imported or required
+    FlexTesterGui.py               Existing GUI (WM Duration field added); not imported by the API
     FLEX_LOGS/                    Existing GUI logs; not required
     __pycache__/                  Optional Python-generated cache
 ```
@@ -78,7 +85,10 @@ not the adjacent `Netafim_Flex_Lite` repository. Quote paths containing spaces.
 - A killed process, removed cable, host crash or power failure cannot guarantee
   OFF. Steady WM outputs and continuous WM pulses may persist on the board.
   Sensor timed pulses have a firmware deadline, but software cannot verify it
-  while disconnected. This tool is not a hardware emergency stop.
+  while disconnected. Timed WM pulses (`Duration_ms` of 20 or more) also end on
+  a firmware timer, so they stop by themselves even if the host is lost;
+  continuous WM pulses (`Duration_ms` 0) do not. This tool is not a hardware
+  emergency stop.
 - Remote-shell EXIT only detaches that shell. It does not stop a shared server
   or other clients' outputs. Send `SAFE_OFF` or `DISCONNECT` explicitly, or stop
   the server normally with Ctrl+C.
@@ -161,8 +171,8 @@ not consistently normalized before serial formatting in the legacy interface
 | `EXIT` | None | None | No result printed; direct exit or remote detach | `EXIT` |
 | `ON WM<n>` | WM channel | None | Steady HIGH, or no-op if already HIGH | `ON WM1` |
 | `OFF WM<n>` | WM channel | None | Stop and drive LOW | `OFF WM1` |
-| `START WM<n> [CYCLE_MS <ms>]` | WM channel | Cycle: 1000ms; allowed 20..3600000 | Begin continuous pulses | `START WM1 CYCLE_MS 1000` |
-| `STOP WM<n>` | WM channel | None | Stop and drive LOW; retain period | `STOP WM1` |
+| `START WM<n> [CYCLE_MS <ms>] [DURATION_MS <ms>]` | WM channel | Cycle: 1000ms; allowed 20..3600000. Duration: 0 (continuous); allowed 0 or 20..3600000. The two options may appear in either order | Begin pulses. Duration 0 runs until STOP; a positive Duration stops automatically and drives LOW | `START WM1 CYCLE_MS 1000 DURATION_MS 30000` |
+| `STOP WM<n>` | WM channel | None | Stop immediately, cancel any Duration timer and drive LOW; retain period | `STOP WM1` |
 | `MODE VAI<n> <MANUAL\|AUTOMATIC>` | VAI and mode | None; initial mode manual | Host configuration only | `MODE VAI1 MANUAL` |
 | `SET VAI<n> MV <mv>` | VAI and 0..15000mV | None; initial presets 5000/7500/10000/15000 | Update manual host setpoint, not output | `SET VAI1 MV 5000` |
 | `SCALE VAI<n> X1 <x1> X2 <x2> Y1 <y1> Y2 <y2>` | VAI and all four points | None; initial points 0/15000/0/100 | Update host scaling, not output | `SCALE VAI1 X1 0 X2 10000 Y1 0 Y2 100` |
@@ -205,6 +215,11 @@ can resume a saved partial phase after STOP/START. Do not assume a fresh first
 edge or a reset pulse counter. The old GUI graph is a simulation, not a
 hardware measurement. Valve-based TRIGGER is not offered: the current firmware
 calls `wm.Task(false)` and cannot respond to a real valve trigger.
+
+START accepts an optional run time, `Duration_ms` (CLI `DURATION_MS`): `0` or
+omitted pulses until STOP, while 20..3600000ms makes the firmware stop the
+pulses by itself and drive the output LOW. Full rules, examples and the
+firmware requirement are in [WM Start And Duration_ms](#wm-start-and-duration_ms).
 
 ### Sensor Scaling And Shared Supply
 
@@ -296,12 +311,16 @@ with TesterClient() as tester:
     tester.set_wm_output(1, True)
     tester.set_wm_output(1, True)
     tester.stop_wm(1)
+    tester.start_wm(1, cycle_ms=1000, duration_ms=30000)  # pulses, then stops itself after 30 s
+    tester.start_wm(2, cycle_ms=1000)                     # duration_ms=0: pulses until stop_wm(2)
+    tester.stop_wm(2)
     operation = tester.pulse_sensor(1, 5000, 2000, wait=True)
     assert operation["status"] == "completed"
 ```
 
 `TesterError` carries `code`, `outcome` and `to_dict()`. `get_status(refresh=True)`
 queries WM and supply status; ordinary get_status returns a cache snapshot.
+`start_wm(channel, cycle_ms=1000, duration_ms=0)`,
 `configure_sampling([1,2], enabled=True)`, `configure_auto(1, True, 5000)`,
 `get_operation(id)`, `wait_operation(id, timeout_ms=10000)` and
 `get_events(after=0, timeout_ms=0)` are also available.
@@ -389,7 +408,7 @@ Its previous example-test-plan contents have been replaced by this batch.
 
 ```json
 {
-  "RequestId": "batch-auto-vai1-wm1-001",
+  "RequestId": "batch-auto-vai1-timed-wm1-001",
   "Commands": [
     {
       "Port": "VAI", "PortNum": 1, "Action": "Configure",
@@ -403,16 +422,21 @@ Its previous example-test-plan contents have been replaced by this batch.
       "X1": null, "Y1": null, "X2": null, "Y2": null,
       "Output_Value": null, "Operation_Mode": null,
       "Manual_voltage": null, "Auto_Enabled": null,
-      "Cycle_ms": 1000, "Duration_ms": null
+      "Cycle_ms": 1000, "Duration_ms": 5000
     }
   ]
 }
 ```
 
 This maps 50 engineering units to 5000mV, arms VAI1 AUTO with a 5000ms pulse
-duration, then starts WM1 at a 1000ms period. VAI1 waits for a fresh, valid AI1
+duration, then starts WM1 at a 1000ms period for 5000ms (the WM1 Duration_ms:
+WM1 stops by itself after 5 seconds; it is unrelated to the VAI1 AUTO pulse
+duration above). VAI1 waits for a fresh, valid AI1
 reading strictly above 1000mV before pulsing. It can retrigger on new readings
 after completion while VIN remains high. WM1 starts independently of VIN.
+The WM-only examples are
+[FlexTesterApi.examples.wm-continuous.json](FlexTesterApi.examples.wm-continuous.json) and
+[FlexTesterApi.examples.wm-timed-30s.json](FlexTesterApi.examples.wm-timed-30s.json).
 Only send this file after approving the load, wiring and voltage limits.
 Do not append a manual VAI On after arming AUTO; manual supply commands conflict
 while AUTO is armed. Successful arming does not prove a pulse has occurred.
@@ -508,14 +532,172 @@ completion, a new qualifying sample can retrigger without a falling edge.
 | VAI / Off | None | Disable the selected manual sensor or cancel its manual pulse, subject to ownership. |
 | VAI / Stop | None | Cancel timed output; manually enabled sensors need Off. |
 | VAI / Pulse | Manual_voltage, Duration_ms | Duration_ms required, 10..3600000. Manual_voltage optionally overrides the pulse voltage, 0..15000; null uses the configured resolved voltage. Does not change the stored preset/mode. |
-| WM / Start | Cycle_ms | Null or omitted uses 1000; allowed 20..3600000. |
-| WM / On, Off, Stop | None | Steady HIGH, LOW or stop using the existing WM semantics. |
+| WM / Start | Cycle_ms, Duration_ms | Cycle_ms: null or omitted uses 1000; allowed 20..3600000. Duration_ms: null or omitted uses 0 (continuous); allowed 0 or 20..3600000. |
+| WM / On, Off, Stop | None | Steady HIGH, LOW or stop using the existing WM semantics. A non-null Duration_ms is a validation error. |
 | AI / Read | None | Read a fresh VIN sample from the selected channel. |
 
 Trigger returns unsupported. Batch connection/system/time/sampling operations
 are not defined; use the legacy request format for those actions. Direct Python
 callers may use tester.execute_channel_batch(commands) with the same Commands
 array; HTTP supplies RequestId deduplication.
+
+Duration_ms is action-specific: it is the AUTO pulse length in VAI / Configure,
+the pulse length in VAI / Pulse, and the run time in WM / Start. Any other
+Port/Action combination rejects a non-null Duration_ms.
+
+#### WM Start And Duration_ms
+
+`Duration_ms` sets how long WM / Start keeps generating pulses at Cycle_ms:
+
+| Duration_ms | Behavior |
+| --- | --- |
+| omitted, null or `0` | Continuous. Pulses continue forever until WM Stop (or SAFE_OFF / disconnect). |
+| `20`..`3600000` | Timed. The firmware stops the pulses by itself once that many milliseconds have passed since the Start was received, and the output returns LOW. |
+| anything else | HTTP 400 validation error; nothing is sent to the tester. This covers negative values, 1..19, values above 3600000, fractions, booleans and strings. Integer-valued floats such as `30000.0` are accepted and normalized. |
+
+Rules:
+
+- Duration_ms is accepted for the WM port only on Start. WM On, Off and Stop
+  reject a non-null Duration_ms (HTTP 400, `only valid for WM Start`), as do
+  AI Read and VAI On, Off and Stop. VAI Configure and VAI Pulse keep their own,
+  separate Duration_ms (see above); the legacy `wm.on`, `wm.off` and `wm.stop`
+  actions have no `duration_ms` argument.
+- The timer starts when the board receives Start and is independent for each of
+  WM1..WM4. Another Start on the same channel replaces the Cycle_ms and
+  Duration_ms and restarts the timer; a Start with Duration_ms 0 turns a timed
+  run into a continuous one.
+- WM Stop, SAFE_OFF and disconnect before the timeout stop the output at once
+  (LOW) and cancel the timer; no later automatic stop occurs.
+- The timeout is enforced by the firmware, not by this host program, so it
+  still happens if the host disconnects or crashes. When it fires the board
+  sends the unsolicited line `wm <n> stopped working at <hh:mm:ss> | wm1=...`.
+  The API turns that into a `wm.stopped` event and marks the cached WM status
+  stopped. The firmware does not report the time remaining.
+- The result of a Start reports the validated `duration_ms`. Verification
+  expects state `started`, or `stopped` when the stop notification has already
+  arrived (for example Duration_ms 20); any other state is an unsafe failure.
+- Pulse shape is the existing 5% HIGH / 95% LOW at Cycle_ms. A fresh start
+  begins LOW, so the first rising edge comes after 95% of the cycle; a
+  Duration_ms shorter than that produces no pulse and still ends LOW. The number
+  of pulses is therefore about Duration_ms / Cycle_ms, not an exact count.
+  Firmware can resume a saved partial phase after Stop/Start with an unchanged
+  Cycle_ms, as described under WM Semantics.
+- A nonzero Duration_ms requires the updated firmware (`start wm_timed`).
+  Firmware without it answers `ERROR start wm_timed ...`, which the API reports
+  as `unsupported` (HTTP 422); the API does **not** fall back to a continuous
+  start, so an old board is never left pulsing forever by a timed request.
+  Duration_ms 0 uses the original `start wm` command and works on any firmware.
+  `GET /api/v1/capabilities` reports `wm_duration_ms`,
+  `wm_duration_continuous_value` and `wm_timed_requires_updated_firmware`.
+
+Continuous pulse generation
+([FlexTesterApi.examples.wm-continuous.json](FlexTesterApi.examples.wm-continuous.json)):
+
+```json
+{
+  "RequestId": "wm1-continuous-001",
+  "Commands": [
+    {
+      "Port": "WM",
+      "PortNum": 1,
+      "Action": "Start",
+      "Cycle_ms": 1000,
+      "Duration_ms": 0
+    }
+  ]
+}
+```
+
+Timed pulse generation for 30 seconds
+([FlexTesterApi.examples.wm-timed-30s.json](FlexTesterApi.examples.wm-timed-30s.json)):
+
+```json
+{
+  "RequestId": "wm1-timed-30s-001",
+  "Commands": [
+    {
+      "Port": "WM",
+      "PortNum": 1,
+      "Action": "Start",
+      "Cycle_ms": 1000,
+      "Duration_ms": 30000
+    }
+  ]
+}
+```
+
+Send either file the same way as the combined example (change RequestId for
+each new execution):
+
+```powershell
+$body = Get-Content ".\New folder\FlexTesterApi.examples.wm-timed-30s.json" -Raw
+Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:8765/api/v1/commands" -ContentType "application/json" -Body $body
+```
+
+The HTTP 200 reply to the 30 second request:
+
+```json
+{
+  "api_version": "1", "id": "wm1-timed-30s-001", "ok": true, "status": "completed",
+  "result": {
+    "status": "completed",
+    "commands": [{
+      "index": 0, "Port": "WM", "PortNum": 1, "Action": "Start", "status": "completed",
+      "result": {"channel": 1, "state": "started", "cycle_ms": 1000, "duration_ms": 30000},
+      "error": null
+    }],
+    "cleanup": null, "error": null
+  },
+  "error": null, "timestamp": "2026-10-15T12:00:00+00:00"
+}
+```
+
+The continuous request replies the same way with `"duration_ms": 0` and uses
+the firmware command `start wm 1 1000`; the timed one uses
+`start wm_timed 1 1000 30000`. Success means the board accepted the command and
+reported the channel running. To see the automatic stop, read the `wm.stopped`
+event (`GET /api/v1/events`) or send POST action `status` with `{"refresh":true}`;
+plain `GET /api/v1/status` only returns the cache.
+
+The same request in the other interfaces:
+
+```text
+tester> START WM1 CYCLE_MS 1000 DURATION_MS 30000
+tester> START WM1 CYCLE_MS 1000
+```
+
+```json
+{"id":"wm-timed-001","action":"wm.start","args":{"channel":1,"cycle_ms":1000,"duration_ms":30000}}
+```
+
+Rejected requests, such as `Duration_ms` 19, a boolean, or any non-null
+Duration_ms on a WM Stop, reply HTTP 400 and send nothing to the tester:
+
+```json
+{
+  "api_version": "1", "id": "wm-bad-duration-001", "ok": false, "status": "failed",
+  "result": null,
+  "error": {"code": "validation", "message": "Commands[0]: Duration_ms must be an integer: 0 (continuous) or 20..3600000 ms.", "outcome": "failed"},
+  "timestamp": "2026-10-15T12:00:00+00:00"
+}
+```
+
+```json
+{
+  "api_version": "1", "id": "wm-bad-duration-002", "ok": false, "status": "failed",
+  "result": null,
+  "error": {"code": "validation", "message": "Commands[0]: Duration_ms is not valid for WM Stop; it is only valid for WM Start.", "outcome": "failed"},
+  "timestamp": "2026-10-15T12:00:00+00:00"
+}
+```
+
+The GUI's WM Pulse Monitor has a matching **Duration (ms)** field beside
+**Cycle ms** for each WM row (default 0). Hovering over the header or any field
+shows: "0 = run indefinitely until Stop. Any positive value = stop automatically
+after the specified duration." The GUI accepts the same 0 or 20..3600000 range,
+sends `start wm` for 0 and `start wm_timed` otherwise, and ends the graph trace
+when the board reports `stopped working`. Editing Cycle while a WM runs re-sends
+Start, which restarts the Duration timer.
 
 #### Execution, Errors And Responses
 
@@ -578,7 +760,7 @@ The dispatcher exposes these actions consistently to local/remote callers:
 | `connection.disconnect`, `safety.off` | none |
 | `status` | optional refresh boolean |
 | `wm.on`, `wm.off`, `wm.stop` | channel |
-| `wm.start` | channel, optional cycle_ms |
+| `wm.start` | channel, optional cycle_ms (20..3600000, default 1000), optional duration_ms (0 = continuous, default 0; otherwise 20..3600000) |
 | `sensor.on`, `sensor.off`, `sensor.stop` | channel |
 | `sensor.pulse` | channel, mv, duration_ms; HTTP is asynchronous |
 | `sensor.voltage` | channel, mv |
@@ -605,6 +787,7 @@ is exposed.
 | High-level behavior | Existing firmware request |
 | --- | --- |
 | WM pulses / stop | `start wm 1 1000` / `stop wm 1` |
+| Timed WM pulses (Duration_ms 20..3600000) | `start wm_timed 1 1000 30000`; stops itself, `stop wm 1` cancels it |
 | Steady WM HIGH | `get status`, conditional `toggle wm 1`, `get status` |
 | WM status | `get status` |
 | Safe sensor reset | `set vsen 0` |
@@ -616,7 +799,9 @@ is exposed.
 | Time / init | `get time`, `set time 14:30`, `system init` |
 
 Example replies include `wm 1 manual on`, `ain 1 raw=2032 mv=5000`,
-`vai 1 ON pulse_ms=2000`, and later `vai 1 OFF pulse complete`.
+`vai 1 ON pulse_ms=2000`, and later `vai 1 OFF pulse complete`. A timed WM start
+replies `wm 1 started duration_ms=30000`, and when the firmware timer expires it
+sends the unsolicited `wm 1 stopped working at 12:00:30 | wm1=30 wm2=0 wm3=0 wm4=0`.
 Timed ACKs/completions also include a separate vsen status line. Firmware errors
 are propagated rather than treating a write or an echo as success.
 
@@ -632,11 +817,21 @@ they do not energize hardware. Coverage includes scaling, echoes and fragmented
 lines, safe lifecycle, idempotent/concurrent WM ON, sensor ownership and cleanup,
 zero-voltage/cancelled/completed pulses, serial loss/timeouts, FIFO AUTO,
 threshold/freshness/saturation, reset disarming, CLI subprocesses, HTTP duplicate
-IDs/validation, local access restrictions and event cursor gaps.
+IDs/validation, local access restrictions and event cursor gaps. WM Duration_ms
+is covered by range-boundary and cross-action validation tests, the timed and
+continuous example files, the GUI field/label/tooltip/validation, and the real
+`WaterMeterSimulator.cpp` pulse timer built on the host with a fake clock and
+GPIO (timeout while HIGH, Stop before timeout, pulse count over a run, restart
+and clock wrap-around). The GUI tests need Tk and the firmware test needs `g++`
+on PATH; the latter is skipped when it is missing.
 
 Physical COM operation, output voltage accuracy, pulse timing and wiring still
 require explicit hardware acceptance testing with safe loads and appropriate
-measurement equipment. No firmware was changed or flashed. Excluded features:
+measurement equipment. The firmware source was changed for WM Duration_ms
+(`start wm_timed`, `WaterMeterSimulator::Start` and its timeout in `Task`); the
+edited files were compile-checked with the ARM toolchain but the board was not
+reflashed or measured. Flash the updated firmware before using a nonzero
+Duration_ms. Excluded features:
 FLEX second-port CLI, Log Analyzer, GUI migration, WM5, legacy DAC controls,
 and valve-trigger operation. No plotting, persistent configuration or automatic
 file export is provided in this version.
@@ -725,10 +920,18 @@ tester> ON WM1
 tester> OFF WM1
 {"channel":1,"state":"stopped","cycle_ms":1000}
 tester> START WM1 CYCLE_MS 1000
-{"channel":1,"state":"started","cycle_ms":1000}
+{"channel":1,"state":"started","cycle_ms":1000,"duration_ms":0}
 tester> STOP WM1
 {"channel":1,"state":"stopped","cycle_ms":1000}
+tester> START WM1 CYCLE_MS 1000 DURATION_MS 30000
+{"channel":1,"state":"started","cycle_ms":1000,"duration_ms":30000}
+tester> START WM1 CYCLE_MS 1000 DURATION_MS 19
+ERROR validation: duration_ms must be an integer: 0 (continuous) or 20..3600000 ms.
 ```
+
+After 30 seconds the board stops WM1 by itself; STATUS then shows
+`{"state":"stopped","cycle_ms":1000}` for WM1. `STOP WM1` sent earlier would have
+stopped it immediately and cancelled the timer.
 
 ### Sensor Configuration And Output
 
@@ -811,6 +1014,9 @@ Connection/read/write ambiguity normally has outcome=unknown, not failed.
 | Invalid CLI channel, e.g. ON WM5 | `ERROR validation: Unrecognized command. Type HELP.` | CLI validation |
 | Invalid numeric API channel 5 | `ERROR validation: channel must be 1..4.` | 400 / failed |
 | WM running while steady HIGH requested | `ERROR conflict: Stop WM pulses before selecting steady HIGH.` | 409 / failed |
+| WM Start Duration_ms not 0 or 20..3600000 | `ERROR validation: duration_ms must be an integer: 0 (continuous) or 20..3600000 ms.` (batch: `Commands[0]: Duration_ms must be ...`) | 400 / failed |
+| Duration_ms on a WM action other than Start | `ERROR validation: Commands[0]: Duration_ms is not valid for WM Stop; it is only valid for WM Start.` | 400 / failed |
+| Timed WM start on firmware without `start wm_timed` | `ERROR unsupported: ERROR start wm_timed 1 1000 30000` (no continuous fallback is sent) | 422 / failed |
 | Different sensor owns supply | `ERROR conflict: A different sensor owns the shared supply.` | 409 / failed |
 | Manual supply command while AUTO armed | `ERROR conflict: Sensor supply is owned by AUTO or an active pulse.` | 409 / failed |
 | Serial read connection loss | `ERROR connection: Cable removed` in the fake-serial test; actual driver text varies | 503 / unknown |
@@ -858,6 +1064,9 @@ the caller's ID. Envelopes do not establish physical electrical safety.
     "pulse_duration_ms": [10,3600000],
     "wm_cycle_ms_host_policy": [20,3600000],
     "vin_max_mv": 10076,
+    "wm_duration_ms": [20,3600000],
+    "wm_duration_continuous_value": 0,
+    "wm_timed_requires_updated_firmware": true,
     "calibrated_mv": [334,10120],
     "trigger_wm": false,
     "trigger_limitation": "Firmware calls wm.Task(false); valve triggering is unavailable.",
@@ -945,6 +1154,7 @@ integer channel keys; JSON object keys are strings.
 | result.wm | Channel map of cached WM logical status |
 | wm[n].state | stopped, manual on, started, triggered or running (triggered) |
 | wm[n].cycle_ms | Retained full period; not a counter or measured edge interval |
+| wm[n].state after a timed run | Becomes stopped when the firmware's Duration_ms timer expires; remaining time is not reported |
 | result.supply | Last parsed supply status, or null when absent/invalidated |
 | supply.enabled | Reported booster-enable state |
 | supply.mv | Requested board setpoint; not measured voltage |
@@ -1029,7 +1239,8 @@ Default after=0 and timeout_ms=0. Long polling allows 0..30000ms and returns
 an empty events array on an ordinary wait expiration, not an HTTP504. Cursor
 IDs are monotonically increasing within the client object. A gap indicates
 history was overwritten. Event-specific fields vary; serial.tx/rx carry line,
-vin carries sample, and faults carry error/outputs.
+vin carries sample, wm.stopped carries channel (a WM run ended by its
+Duration_ms timer), and faults carry error/outputs.
 
 ### POST Successful Command - HTTP 200
 
@@ -1140,7 +1351,9 @@ cache persistence nor durable exactly-once execution is guaranteed.
 
 ## Test Record
 
-The last recorded automated execution passed all 43 tests using Python 3.12.
+The last recorded automated execution passed all 55 tests using Python 3.12
+(`python -m unittest test_flex_tester_api` from this directory), after the WM
+Duration_ms change.
 The implementation environment also had pyserial 3.5 installed. Syntax
 compilation and editor diagnostics passed during the initial implementation.
 The batch update reran the full suite against fake serial and loopback HTTP;
@@ -1151,10 +1364,12 @@ The current test inventory is:
 | Test class | Passing test method names, with the common test_ prefix omitted |
 | --- | --- |
 | CoreTests (5) | scaling; bad_scaling; status; vin; import_has_no_gui_or_serial_side_effects |
-| ClientTests (12) | connect_and_disconnect_safe; wm_idempotent_and_conflicts; configuration_does_not_send_commands; failed_sensor_sequence_cleanup; pulse_completion_and_cancel; timeout_echo_not_ack_and_no_retry; concurrent_wm_on; time_help; serial_loss_marks_outputs_unknown; status_snapshots_are_independent; failed_handshake_closes_without_claiming_safe; event_history_is_bounded_and_reports_gap |
+| ClientTests (13) | connect_and_disconnect_safe; wm_idempotent_and_conflicts; configuration_does_not_send_commands; failed_sensor_sequence_cleanup; pulse_completion_and_cancel; timeout_echo_not_ack_and_no_retry; concurrent_wm_on; time_help; timed_wm_command_completion_and_legacy_fallback_safety; serial_loss_marks_outputs_unknown; status_snapshots_are_independent; failed_handshake_closes_without_claiming_safe; event_history_is_bounded_and_reports_gap |
 | AutoTests (6) | vin_read_and_poll_selection; threshold_saturation_and_fifo; stale_and_fresh_retrigger; auto_forces_sampling_and_error_disarms; reset_invalidates_and_never_rearms; missing_completion_forces_sensor_off |
 | CliTests (2) | grammar; shell_subprocess_no_hardware |
-| HttpTests (18) | commands_duplicate_id_and_conflict; pulse_accepted_and_completed; validation_and_loopback; remote_cli_and_events; channel_batch_combines_vai_and_wm; channel_batch_prevalidates_every_command; channel_batch_conflict_stops_remaining_and_cleans_up; channel_batch_example_file; channel_batch_atomic_config_and_null_preservation; channel_batch_pulse_is_accepted_without_blocking; channel_batch_normalizes_integer_valued_floats; channel_batch_invalid_shapes_and_fields_have_no_side_effects; channel_batch_timeout_reports_unsafe_cleanup; channel_batch_duplicate_id_conflict; channel_batch_auto_enable_disable_and_null; channel_batch_auto_input_validation; channel_batch_auto_threshold_cancel_and_manual_transition; channel_batch_auto_duration_change_requires_disarm |
+| HttpTests (25) | commands_duplicate_id_and_conflict; pulse_accepted_and_completed; validation_and_loopback; remote_cli_and_events; channel_batch_combines_vai_and_wm; channel_batch_prevalidates_every_command; channel_batch_conflict_stops_remaining_and_cleans_up; channel_batch_example_file; channel_batch_atomic_config_and_null_preservation; channel_batch_pulse_is_accepted_without_blocking; channel_batch_normalizes_integer_valued_floats; channel_batch_invalid_shapes_and_fields_have_no_side_effects; channel_batch_timeout_reports_unsafe_cleanup; channel_batch_duplicate_id_conflict; channel_batch_auto_enable_disable_and_null; channel_batch_auto_input_validation; channel_batch_auto_threshold_cancel_and_manual_transition; channel_batch_auto_duration_change_requires_disarm; channel_batch_wm_duration_and_validation; channel_batch_wm_duration_boundaries; wm_stop_before_timeout_cancels_the_timer; duration_ms_is_rejected_for_other_wm_actions_without_side_effects; legacy_wm_start_action_accepts_duration; wm_example_files; capabilities_describe_wm_duration |
+| GuiWmDurationTests (3) | duration_handlers_and_validation; help_text_and_tooltip_class; duration_widgets_exist_without_serial_connection |
+| FirmwareWmDurationTests (1) | actual_cpp_timer_with_fake_clock_and_gpio (skipped when g++ is unavailable) |
 
 Serial traffic is generated by FakeSerial. HTTP tests use real ephemeral
 loopback sockets, not physical serial. AUTO tests use a controllable host clock.
@@ -1205,6 +1420,11 @@ failsafe based on these tests.
 - Pulse timing is polled by firmware and affected by command traffic. The host
   cycle limit is policy, not a measurement or timing guarantee. Stop/start can
   retain phase/history; system init is not a cold power-up reset.
+- WM Duration_ms is a firmware timer with the same polled accuracy; it is not a
+  pulse count. The firmware cannot report the remaining time, and the API learns
+  of the automatic stop from the unsolicited `wm <n> stopped working` line. If
+  that line is lost, the cached status keeps saying started until the next
+  refreshing `status` call. A nonzero Duration_ms needs the updated firmware.
 - Supply voltage is open-loop calibrated. Requested mv, timer duty and an ACK
   are not measured output voltage. Physical OFF voltage/decay is unverified.
 - The service is local IPv4 only: no remote bind, authentication, TLS or browser

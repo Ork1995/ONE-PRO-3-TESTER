@@ -12,7 +12,7 @@
 ../Application/App.cpp:221:6:void App::ToggleWaterMeter(int, TextPrinter&)	3
 ../Application/App.cpp:244:6:void App::HandleSetSensorSupply(BufferView<char>&, TextScanner&, TextPrinter&)	28
 ../Application/App.cpp:300:6:void App::AppendSensorSupplyStatus(TextPrinter&)	9
-../Application/App.cpp:321:6:void App::HandleCommand(const BufferView<char>&)	82
+../Application/App.cpp:321:6:void App::HandleCommand(const BufferView<char>&)	91
 C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/array:132:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::begin() [with _Tp = DigitalOutput; unsigned int _Nm = 0]	1
 C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/array:142:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::end() [with _Tp = DigitalOutput; unsigned int _Nm = 0]	1
 ../Application/Buffer.hpp:20:2:Buffer<Capacity, TItem>::Buffer() [with int Capacity = 100; TItem = char]	1

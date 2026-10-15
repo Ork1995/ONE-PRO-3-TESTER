@@ -1,5 +1,5 @@
 {
-  "RequestId": "batch-auto-vai1-wm1-001",
+  "RequestId": "batch-auto-vai1-timed-wm1-001",
   "Commands": [
     {
       "Port": "VAI",
@@ -29,7 +29,7 @@
       "Manual_voltage": null,
       "Auto_Enabled": null,
       "Cycle_ms": 1000,
-      "Duration_ms": null
+      "Duration_ms": 5000
     }
   ]
 }

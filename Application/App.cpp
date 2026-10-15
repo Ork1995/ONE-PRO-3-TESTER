@@ -436,8 +436,18 @@ void App::HandleCommand(const BufferView<> &cmd)
 				long id, cycleTimeMs;
 				scanner >> id >> cycleTimeMs;
 				if (!scanner.IsError() && id >= 1 && id <= WM_SIM_COUNT) {
-					_wmSim[id - 1].SetStatus(WaterMeterSimulator::Status::Started, (uint32_t)cycleTimeMs);
+					_wmSim[id - 1].Start((uint32_t)cycleTimeMs);
 					response << "wm " << id << " started";
+				}
+			}
+			else if (token2 == "wm_timed") {
+				long id, cycleTimeMs, durationMs;
+				scanner >> id >> cycleTimeMs >> durationMs;
+				if (!scanner.IsError() && id >= 1 && id <= WM_SIM_COUNT &&
+				    cycleTimeMs >= 20 && cycleTimeMs <= 3600000 &&
+				    durationMs >= 20 && durationMs <= 3600000) {
+					_wmSim[id - 1].Start((uint32_t)cycleTimeMs, (uint32_t)durationMs);
+					response << "wm " << id << " started duration_ms=" << durationMs;
 				}
 			}
 		}
@@ -524,6 +534,9 @@ void App::HandleCommand(const BufferView<> &cmd)
 			_comm.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " start wm <id> <cycle_ms>\r\n";
+			_comm.SendResponse(helpBuf); helpBuf.Reset();
+
+			helpPrinter << " start wm_timed <id> <cycle_ms> <20-3600000 ms>\r\n";
 			_comm.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " stop wm <id>\r\n";
