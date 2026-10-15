@@ -1,0 +1,38 @@
+--- Log Started: Thu Oct 15 14:32:40 2026 ---
+[14:35:15] Connected to COM16
+[14:35:18] > start wm 1 1000
+
+[14:35:18] start wm 1 1000
+[14:35:18] wm 1 started
+[14:35:42] > stop wm 1
+
+[14:35:42] stop wm 1
+[14:35:42] wm 1 stopped
+[14:35:47] > toggle wm 1
+
+[14:35:47] toggle wm 1
+[14:35:47] wm 1 manual on
+[14:36:03] > toggle wm 1
+
+[14:36:03] toggle wm 1
+[14:36:03] wm 1 manual off
+[14:39:26] > set vsen 6000
+
+[14:39:26] set vsen 6000
+[14:39:26] vsen set to 6000 mV (booster off)
+[14:39:26] > set vsen_en on
+
+[14:39:26] set vsen_en on
+[14:39:26] vsen_en ON, 6000 mV
+[14:39:26] > set vai 1 on
+
+[14:39:26] set vai 1 on
+[14:39:26] vai 1 ON
+[14:40:42] > set vai 1 off
+
+[14:40:42] set vai 1 off
+[14:40:42] vai 1 OFF
+[14:40:42] > set vsen_en off
+
+[14:40:42] set vsen_en off
+[14:40:42] vsen_en OFF

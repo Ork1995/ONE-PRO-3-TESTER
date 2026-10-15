@@ -1,0 +1,35 @@
+{
+  "RequestId": "batch-auto-vai1-wm1-001",
+  "Commands": [
+    {
+      "Port": "VAI",
+      "PortNum": 1,
+      "Action": "Configure",
+      "X1": 0,
+      "Y1": 0,
+      "X2": 10000,
+      "Y2": 100,
+      "Output_Value": 50,
+      "Operation_Mode": "Automatic",
+      "Manual_voltage": null,
+      "Auto_Enabled": true,
+      "Cycle_ms": null,
+      "Duration_ms": 5000
+    },
+    {
+      "Port": "WM",
+      "PortNum": 1,
+      "Action": "Start",
+      "X1": null,
+      "Y1": null,
+      "X2": null,
+      "Y2": null,
+      "Output_Value": null,
+      "Operation_Mode": null,
+      "Manual_voltage": null,
+      "Auto_Enabled": null,
+      "Cycle_ms": 1000,
+      "Duration_ms": null
+    }
+  ]
+}
