@@ -140,6 +140,9 @@ unsupported feature (7), and unsafe shutdown (8).
 | `--line-ending <LF\|CRLF\|CR>` | No | `LF` | Startup command terminator |
 | `shell --json` | No | Disabled | Newline-delimited result envelopes on stdout |
 | `shell --server <url>` | No | Direct mode | Use an existing loopback HTTP service |
+| `send <file\|->` | Yes | None | POST one JSON request (batch or `id`/`action`/`args`) from a file, or stdin with `-`, to a running service; prints `HTTP <status>` to stderr and the pretty-printed reply to stdout. Exit code 0 on `ok`, 1 if the service rejected it, 2 for an unreadable file/invalid JSON (nothing sent), 3 if the service is unreachable |
+| `send --server <url>` | No | `http://127.0.0.1:8765` | Loopback address of the service |
+| `send --new-id` | No | Disabled | Replace `RequestId` (or `id`) with a fresh one so a repeat is executed instead of deduplicated |
 | `serve --http-port <port>` | No | `8765` | Local TCP port; zero requests an ephemeral port |
 | `-h` / `--help` | No | Disabled | Display startup or subcommand usage |
 

@@ -39,3 +39,6 @@
 [16:36:14] ADC init=ready configured_vref=2500mV
 [16:36:20] App Started
 [16:36:20] ADC init=ready configured_vref=2500mV
+[16:38:16] 
+Error reading: ClearCommError failed (PermissionError(13, 'Access is denied.', None, 5))
+

@@ -1,5 +1,6 @@
 """Isolated tests. No physical serial ports are opened."""
 
+import io
 import subprocess
 import sys
 import queue
@@ -9,6 +10,7 @@ import importlib.util
 import shutil
 import tempfile
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -16,7 +18,7 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 from FlexTesterApi import (CommandDispatcher, RemoteClient, ScalingConfig, TesterClient,
-                          TesterError, TesterHttpServer, parse_cli, parse_supply_status,
+                          TesterError, TesterHttpServer, main, parse_cli, parse_supply_status,
                           parse_vin, parse_wm_status)
 
 
@@ -517,6 +519,48 @@ class HttpTests(unittest.TestCase):
         code, body = self.request("/api/v1/operations/" + operation_id)
         self.assertEqual(code, 200)
         self.assertEqual(body["result"]["status"], "completed")
+
+    def run_send(self, *arguments, stdin=None):
+        out, err = io.StringIO(), io.StringIO()
+        with redirect_stdout(out), redirect_stderr(err), patch.object(sys, "stdin", stdin or sys.stdin):
+            code = main(["send", *arguments, "--server", self.address])
+        return code, out.getvalue(), err.getvalue()
+
+    def test_send_json_file(self):
+        batch = {"RequestId": "send-1", "Commands": [
+            {"Port": "WM", "PortNum": 1, "Action": "Start", "Cycle_ms": 1000, "Duration_ms": 0}]}
+        folder = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, folder, True)
+        path = Path(folder) / "request.json"
+        path.write_text(json.dumps(batch), encoding="utf-8-sig")  # tolerates a BOM from editors
+        code, out, err = self.run_send(str(path))
+        self.assertEqual(code, 0, err)
+        self.assertIn("HTTP 200", err)
+        reply = json.loads(out)
+        self.assertTrue(reply["ok"])
+        self.assertEqual(reply["result"]["commands"][0]["result"]["state"], "started")
+        # same RequestId and body is deduplicated; --new-id executes it again
+        self.assertEqual(self.run_send(str(path))[0], 0)
+        self.assertEqual(self.serial.commands.count("start wm 1 1000"), 1)
+        self.assertEqual(self.run_send(str(path), "--new-id")[0], 0)
+        self.assertEqual(self.serial.commands.count("start wm 1 1000"), 2)
+
+    def test_send_stdin_and_errors(self):
+        legacy = io.StringIO(json.dumps({"id": "send-2", "action": "wm.stop", "args": {"channel": 1}}))
+        self.assertEqual(self.run_send("-", stdin=legacy)[0], 0)
+        piped = io.StringIO("\ufeff" + json.dumps({"id": "send-2b", "action": "status", "args": {}}))
+        self.assertEqual(self.run_send("-", stdin=piped)[0], 0)  # BOM added by a PowerShell pipe
+        # a server-side rejection keeps the reply on stdout and returns 1
+        bad = io.StringIO(json.dumps({"RequestId": "send-3", "Commands": [
+            {"Port": "WM", "PortNum": 1, "Action": "Start", "Cycle_ms": 1000, "Duration_ms": 19}]}))
+        code, out, err = self.run_send("-", stdin=bad)
+        self.assertEqual(code, 1)
+        self.assertIn("HTTP 400", err)
+        self.assertEqual(json.loads(out)["error"]["code"], "validation")
+        # local problems never reach the server
+        self.assertEqual(self.run_send("-", stdin=io.StringIO("{"))[0], 2)
+        self.assertEqual(self.run_send("-", stdin=io.StringIO("[1]"))[0], 2)
+        self.assertEqual(self.run_send(str(Path(tempfile.gettempdir()) / "no-such-request.json"))[0], 2)
 
     def test_validation_and_loopback(self):
         self.assertEqual(self.request(payload={"id": "x", "action": "wm.on", "args": {"channel": 1, "oops": 1}})[0], 400)

@@ -1493,8 +1493,7 @@ class RemoteClient:
             raise TesterError("validation", "Server must be http://127.0.0.1:<port>.")
         self.address = address.rstrip("/")
 
-    def execute(self, action, args=None):
-        payload = {"id": uuid.uuid4().hex, "action": action, "args": args or {}}
+    def post(self, payload):
         request = Request(self.address + "/api/v1/commands", json.dumps(payload).encode(),
                           headers={"Content-Type": "application/json"}, method="POST")
         try:
@@ -1503,9 +1502,12 @@ class RemoteClient:
             except HTTPError as error:
                 response = error
             with response:
-                data = json.load(response)
+                return response.status, json.load(response)
         except (URLError, OSError, ValueError) as error:
             raise TesterError("connection", f"Local API unavailable: {error}", "unknown") from None
+
+    def execute(self, action, args=None):
+        _, data = self.post({"id": uuid.uuid4().hex, "action": action, "args": args or {}})
         if not data["ok"]:
             error = data["error"]
             raise TesterError(error["code"], error["message"], error["outcome"])
@@ -1552,11 +1554,40 @@ def run_shell(dispatcher, json_output=False):
     return 1 if failed else 0
 
 
+def run_send(remote, source, new_id=False):
+    """POST one JSON request (batch or id/action/args) read from a file or stdin ("-")."""
+    try:
+        if source == "-":
+            text = sys.stdin.read().lstrip("\ufeff")  # Windows PowerShell 5.1 prefixes piped text with a BOM
+        else:
+            with open(source, encoding="utf-8-sig") as handle:
+                text = handle.read()
+    except OSError as error:
+        raise TesterError("validation", f"Cannot read {source}: {error}") from None
+    try:
+        payload = json.loads(text)
+    except ValueError as error:
+        raise TesterError("validation", f"{source} is not valid JSON: {error}") from None
+    if not isinstance(payload, dict):
+        raise TesterError("validation", "The JSON root must be an object.")
+    if new_id:
+        payload["RequestId" if "Commands" in payload else "id"] = uuid.uuid4().hex
+    status, data = remote.post(payload)
+    print(f"HTTP {status}", file=sys.stderr)
+    print(json.dumps(data, indent=2))
+    return 0 if isinstance(data, dict) and data.get("ok") else 1
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="mode", required=True)
     shell = subparsers.add_parser("shell", help="Persistent CLI, direct serial or remote local API")
     server = subparsers.add_parser("serve", help="Loopback HTTP server, one serial owner")
+    send = subparsers.add_parser("send", help="Send a JSON request file to a running local API")
+    send.add_argument("file", help='JSON file to send, or "-" to read stdin')
+    send.add_argument("--server", default="http://127.0.0.1:8765", help="Local API address")
+    send.add_argument("--new-id", action="store_true",
+                      help="Replace RequestId/id with a fresh one so a repeat is executed, not deduplicated")
     for subparser in (shell, server):
         subparser.add_argument("--port", help="Tester COM port; connection resets outputs OFF")
         subparser.add_argument("--baudrate", type=int, default=115200)
@@ -1571,6 +1602,8 @@ def main(argv=None):
     http_server = None
     code = 0
     try:
+        if args.mode == "send":
+            return run_send(RemoteClient(args.server), args.file, args.new_id)
         if args.mode == "shell" and args.server:
             return run_shell(RemoteClient(args.server), args.json)
         if args.port:

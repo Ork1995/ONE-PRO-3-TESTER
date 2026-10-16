@@ -1,0 +1,5 @@
+{
+  "id": "safe-off-001",
+  "action": "safety.off",
+  "args": {}
+}
