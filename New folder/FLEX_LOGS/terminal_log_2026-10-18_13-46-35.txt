@@ -1,0 +1,137 @@
+--- Log Started: Sun Oct 18 13:46:35 2026 ---
+[13:46:40] Connected to COM16
+[13:47:10] > set vsen 9000
+
+[13:47:10] set vsen 9000
+[13:47:10] vsen set to 9000 mV (booster off)
+[13:47:10] > set vsen_en on
+
+[13:47:10] set vsen_en on
+[13:47:10] vsen_en ON, 9000 mV
+[13:47:10] > set vai 1 on
+
+[13:47:11] set vai 1 on
+[13:47:11] vai 1 ON
+[13:48:20] > set vai 1 off
+
+[13:48:20] set vai 1 off
+[13:48:20] vai 1 OFF
+[13:48:20] > set vsen_en off
+
+[13:48:20] set vsen_en off
+[13:48:20] vsen_en OFF
+[13:48:22] > set vsen 9000
+
+[13:48:22] set vsen 9000
+[13:48:22] vsen set to 9000 mV (booster off)
+[13:48:22] > set vsen_en on
+
+[13:48:22] set vsen_en on
+[13:48:22] vsen_en ON, 9000 mV
+[13:48:22] > set vai 1 on
+
+[13:48:22] set vai 1 on
+[13:48:22] vai 1 ON
+[13:48:28] > set vai 1 off
+
+[13:48:29] set vai 1 off
+[13:48:29] vai 1 OFF
+[13:48:29] > set vsen_en off
+
+[13:48:29] set vsen_en off
+[13:48:29] vsen_en OFF
+[13:48:36] > set vsen 9000
+
+[13:48:36] set vsen 9000
+[13:48:36] vsen set to 9000 mV (booster off)
+[13:48:36] > set vsen_en on
+
+[13:48:36] set vsen_en on
+[13:48:36] vsen_en ON, 9000 mV
+[13:48:36] > set vai 1 on
+
+[13:48:36] set vai 1 on
+[13:48:36] vai 1 ON
+[13:48:38] > set vai 1 off
+
+[13:48:38] set vai 1 off
+[13:48:38] vai 1 OFF
+[13:48:38] > set vsen_en off
+
+[13:48:38] set vsen_en off
+[13:48:38] vsen_en OFF
+[13:48:54] > set vsen 9000
+
+[13:48:55] set vsen 9000
+[13:48:55] vsen set to 9000 mV (booster off)
+[13:48:55] > set vsen_en on
+
+[13:48:55] set vsen_en on
+[13:48:55] vsen_en ON, 9000 mV
+[13:48:55] > set vai 1 on
+
+[13:48:55] set vai 1 on
+[13:48:55] vai 1 ON
+[13:49:16] > set vai 1 off
+
+[13:49:16] set vai 1 off
+[13:49:16] vai 1 OFF
+[13:49:16] > set vsen_en off
+
+[13:49:17] set vsen_en off
+[13:49:17] vsen_en OFF
+[13:49:23] > set vsen 9000
+
+[13:49:23] set vsen 9000
+[13:49:23] vsen set to 9000 mV (booster off)
+[13:49:23] > set vsen_en on
+
+[13:49:23] set vsen_en on
+[13:49:23] vsen_en ON, 9000 mV
+[13:49:23] > set vai 1 on
+
+[13:49:23] set vai 1 on
+[13:49:23] vai 1 ON
+[13:50:06] > set vai 1 off
+
+[13:50:06] set vai 1 off
+[13:50:06] vai 1 OFF
+[13:50:06] > set vsen_en off
+
+[13:50:06] set vsen_en off
+[13:50:06] vsen_en OFF
+[13:50:39] > toggle wm 1
+
+[13:50:39] toggle wm 1
+[13:50:39] wm 1 manual on
+[13:50:43] > pulse vai 1 9000 5000
+
+[13:50:43] pulse vai 1 9000 5000
+[13:50:43] vai 1 ON pulse_ms=5000
+[13:50:43] vsen en=1 mv=9000 ccr4=38594 duty=58.89% pwm=run vai1=on vai2=off vai3=off vai4=off cal=interpolated
+[13:50:48] vai 1 OFF pulse complete
+[13:50:48] vsen en=0 mv=9000 ccr4=0 duty=0.00% pwm=run vai1=off vai2=off vai3=off vai4=off cal=interpolated
+[13:50:52] > toggle wm 1
+
+[13:50:52] toggle wm 1
+[13:50:52] wm 1 manual off
+[13:51:36] > start wm 1 1000
+
+[13:51:36] start wm 1 1000
+[13:51:36] wm 1 started
+[13:52:08] > toggle wm 1
+
+[13:52:08] toggle wm 1
+[13:52:08] ERROR wm 1 busy
+[13:52:10] > stop wm 1
+
+[13:52:10] stop wm 1
+[13:52:10] wm 1 stopped
+[13:52:12] > toggle wm 1
+
+[13:52:12] toggle wm 1
+[13:52:12] wm 1 manual on
+[13:52:14] > toggle wm 1
+
+[13:52:14] toggle wm 1
+[13:52:14] wm 1 manual off

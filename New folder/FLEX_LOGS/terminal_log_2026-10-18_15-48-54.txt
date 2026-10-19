@@ -1,0 +1,67 @@
+--- Log Started: Sun Oct 18 15:48:54 2026 ---
+[15:52:02] Connected to COM17
+[15:52:57] > start wm 1 1000
+
+[15:52:57] start wm 1 1000
+[15:52:57] wm 1 started
+[15:53:26] > toggle wm 1
+
+[15:53:26] toggle wm 1
+[15:53:26] ERROR wm 1 busy
+[15:53:39] 
+Error reading: ClearCommError failed (PermissionError(13, 'The device does not recognize the command.', None, 22))
+
+[15:54:31] Disconnected
+[15:54:32] Connected to COM17
+[15:55:02] > stop wm 1
+
+[15:55:02] stop wm 1
+[15:55:02] wm 1 stopped
+[15:55:45] > set vsen 5000
+
+[15:55:45] set vsen 5000
+[15:55:45] vsen set to 5000 mV (booster off)
+[15:55:46] > set vsen_en on
+
+[15:55:46] set vsen_en on
+[15:55:46] vsen_en ON, 5000 mV
+[15:55:46] > set vai 1 on
+
+[15:55:46] set vai 1 on
+[15:55:46] vai 1 ON
+[15:55:48] > set vai 1 off
+
+[15:55:48] set vai 1 off
+[15:55:48] vai 1 OFF
+[15:55:48] > set vsen_en off
+
+[15:55:48] set vsen_en off
+[15:55:48] vsen_en OFF
+[15:55:50] > set vsen 5000
+
+[15:55:50] set vsen 5000
+[15:55:50] vsen set to 5000 mV (booster off)
+[15:55:50] > set vsen_en on
+
+[15:55:50] set vsen_en on
+[15:55:50] vsen_en ON, 5000 mV
+[15:55:50] > set vai 1 on
+
+[15:55:50] set vai 1 on
+[15:55:50] vai 1 ON
+[15:55:53] > set vai 1 off
+
+[15:55:53] set vai 1 off
+[15:55:53] vai 1 OFF
+[15:55:53] > set vsen_en off
+
+[15:55:53] set vsen_en off
+[15:55:53] vsen_en OFF
+[15:56:16] > toggle wm 1
+
+[15:56:16] toggle wm 1
+[15:56:16] wm 1 manual on
+[15:56:18] > toggle wm 1
+
+[15:56:18] toggle wm 1
+[15:56:18] wm 1 manual off

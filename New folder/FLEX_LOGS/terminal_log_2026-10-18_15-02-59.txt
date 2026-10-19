@@ -1,0 +1,45 @@
+--- Log Started: Sun Oct 18 15:02:59 2026 ---
+[15:03:06] Connected to COM16
+[15:06:28] > start wm 1 1000
+
+[15:06:29] start wm 1 1000
+[15:06:29] wm 1 started
+[15:07:24] > stop wm 1
+
+[15:07:24] stop wm 1
+[15:07:24] wm 1 stopped
+[15:07:35] > toggle wm 1
+
+[15:07:35] toggle wm 1
+[15:07:35] wm 1 manual on
+[15:07:41] > toggle wm 1
+
+[15:07:41] toggle wm 1
+[15:07:41] wm 1 manual off
+[15:11:11] > set vsen 9000
+
+[15:11:11] set vsen 9000
+[15:11:11] vsen set to 9000 mV (booster off)
+[15:11:11] > set vsen_en on
+
+[15:11:11] set vsen_en on
+[15:11:11] vsen_en ON, 9000 mV
+[15:11:11] > set vai 1 on
+
+[15:11:11] set vai 1 on
+[15:11:11] vai 1 ON
+[15:11:34] > set vai 1 off
+
+[15:11:34] set vai 1 off
+[15:11:34] vai 1 OFF
+[15:11:34] > set vsen_en off
+
+[15:11:34] set vsen_en off
+[15:11:34] vsen_en OFF
+[15:15:48] > pulse vai 1 9000 5000
+
+[15:15:48] pulse vai 1 9000 5000
+[15:15:48] vai 1 ON pulse_ms=5000
+[15:15:48] vsen en=1 mv=9000 ccr4=38594 duty=58.89% pwm=run vai1=on vai2=off vai3=off vai4=off cal=interpolated
+[15:15:53] vai 1 OFF pulse complete
+[15:15:53] vsen en=0 mv=9000 ccr4=0 duty=0.00% pwm=run vai1=off vai2=off vai3=off vai4=off cal=interpolated
