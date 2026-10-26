@@ -13,6 +13,8 @@
 #include "WaterMeterSimulator.hpp"
 #include "DigitalOutput.hpp"
 #include "Comm.hpp"
+#include "UartTransport.hpp"
+#include "UsbCdcTransport.hpp"
 #include "CLIManager.h"
 #include "RealTimer.hpp"
 #include "DacControl.hpp"
@@ -45,7 +47,11 @@ private:
 	Board _board;
 	// TODO: UART to be defined
 	//CLIManager _cli;
+	UartTransport _uartTransport;
 	Comm _comm;
+	UsbCdcTransport _usbTransport;
+	Comm::Resources _usbResources;
+	Comm _usbComm;
 	WaterMeterSimulator _wmSim[WM_SIM_COUNT];
 	SensorSupply _sensorSupply;
 	std::array<DigitalOutput, PS_COUNT> _psOut;
@@ -58,7 +64,8 @@ private:
 	void ReadAnalogInput(uint8_t channel, TextPrinter &response);
 	void ControlWaterMeters();
 	void ToggleWaterMeter(int wmIdx, TextPrinter &response);
-	void HandleCommand(const BufferView<> &cmd);
+	void HandleCommand(const BufferView<> &cmd, Comm &sourceSession);
+	void SendEvent(const BufferView<> &message);
 	void HandleSetSensorSupply(BufferView<> &token2, TextScanner &scanner, TextPrinter &response);
 	void AppendStatus(TextPrinter &p);
 	void AppendSensorSupplyStatus(TextPrinter &p);

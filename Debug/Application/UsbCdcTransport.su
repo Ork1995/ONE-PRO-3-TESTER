@@ -1,0 +1,45 @@
+../Application/IByteTransport.hpp:13:19:virtual uint32_t IByteTransport::SessionId() const	16	static
+../Application/IByteTransport.hpp:14:14:virtual int IByteTransport::ReceiveForSession(uint8_t*, int, uint32_t&)	24	static
+../Application/IByteTransport.hpp:19:15:virtual bool IByteTransport::SendForSession(const BufferView<unsigned char>&, uint32_t)	24	static
+../Application/IByteTransport.hpp:23:15:virtual bool IByteTransport::SendEcho(const BufferView<unsigned char>&, uint32_t)	24	static
+../Application/UsbCdcTransport.cpp:18:2:{anonymous}::UsbCriticalSection::UsbCriticalSection()	24	static,ignoring_inline_asm
+../Application/UsbCdcTransport.cpp:19:2:{anonymous}::UsbCriticalSection::~UsbCriticalSection()	24	static,ignoring_inline_asm
+../Application/UsbCdcTransport.cpp:42:50:UsbCdcTransport::Start()::<lambda(void*)>	16	static
+../Application/UsbCdcTransport.cpp:42:50:static void UsbCdcTransport::Start()::<lambda(void*)>::_FUN(void*)	16	static
+../Application/UsbCdcTransport.cpp:42:50:UsbCdcTransport::Start()::<lambda(void*)>::operator void (*)(void*)() const	16	static
+../Application/UsbCdcTransport.cpp:25:6:bool UsbCdcTransport::Start()	56	static
+../Application/UsbCdcTransport.cpp:51:6:void UsbCdcTransport::Notify()	24	static,ignoring_inline_asm
+../Application/UsbCdcTransport.cpp:66:6:void UsbCdcTransport::Task()	16	static
+../Application/UsbCdcTransport.cpp:75:6:void UsbCdcTransport::Service()	48	static
+../Application/UsbCdcTransport.cpp:100:5:virtual int UsbCdcTransport::Receive(uint8_t*, int)	40	static
+../Application/UsbCdcTransport.cpp:106:5:virtual int UsbCdcTransport::ReceiveForSession(uint8_t*, int, uint32_t&)	40	static
+../Application/UsbCdcTransport.cpp:125:6:bool UsbCdcTransport::Queue(const BufferView<unsigned char>&, uint32_t, bool)	48	static
+../Application/UsbCdcTransport.cpp:147:6:virtual bool UsbCdcTransport::Send(const BufferView<unsigned char>&)	16	static
+../Application/UsbCdcTransport.cpp:152:6:virtual bool UsbCdcTransport::SendForSession(const BufferView<unsigned char>&, uint32_t)	24	static
+../Application/UsbCdcTransport.cpp:157:6:virtual bool UsbCdcTransport::SendEcho(const BufferView<unsigned char>&, uint32_t)	24	static
+../Application/UsbCdcTransport.cpp:162:6:virtual bool UsbCdcTransport::IsConnected() const	32	static
+../Application/UsbCdcTransport.cpp:168:10:virtual uint32_t UsbCdcTransport::SessionId() const	32	static
+../Application/UsbCdcTransport.cpp:174:6:bool UsbCdcTransport::BeginResponse(uint32_t*)	32	static
+../Application/UsbCdcTransport.cpp:188:6:void UsbCdcTransport::EndResponse()	24	static
+../Application/UsbCdcTransport.cpp:194:30:UsbCdcTransport::Diagnostics UsbCdcTransport::GetDiagnostics() const	32	static
+../Application/UsbCdcTransport.cpp:200:6:void UsbCdcTransport::Reset(bool)	24	static
+../Application/UsbCdcTransport.cpp:212:6:void UsbCdcTransport::OnConfigured()	16	static
+../Application/UsbCdcTransport.cpp:218:6:void UsbCdcTransport::OnReset()	16	static
+../Application/UsbCdcTransport.cpp:224:6:void UsbCdcTransport::OnSuspend(bool)	24	static
+../Application/UsbCdcTransport.cpp:233:6:void UsbCdcTransport::OnReceive(const uint8_t*, uint32_t)	40	static
+../Application/UsbCdcTransport.cpp:253:6:void UsbCdcTransport::OnTransmitComplete()	24	static
+../Application/UsbCdcTransport.cpp:263:6:void UsbCdcTransport::OnStartupFailed()	24	static
+../Application/UsbCdcTransport.cpp:273:6:void UsbCdc_Configured()	8	static
+../Application/UsbCdcTransport.cpp:274:6:void UsbCdc_Reset()	8	static
+../Application/UsbCdcTransport.cpp:275:6:void UsbCdc_Suspend()	8	static
+../Application/UsbCdcTransport.cpp:276:6:void UsbCdc_Resume()	8	static
+../Application/UsbCdcTransport.cpp:277:6:void UsbCdc_Receive(const uint8_t*, uint32_t)	16	static
+../Application/UsbCdcTransport.cpp:278:6:void UsbCdc_TransmitComplete()	8	static
+../Application/UsbCdcTransport.cpp:279:6:void UsbCdc_StartupFailed()	8	static
+C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\arm-none-eabi\include\c++\14.3.1\bits\stl_algobase.h:233:5:constexpr const _Tp& std::min(const _Tp&, const _Tp&) [with _Tp = long unsigned int]	16	static
+../Application/BufferView.hpp:18:6:int BufferView<TItem>::Len() const [with TItem = unsigned char]	16	static
+../Application/BufferView.hpp:48:15:const TItem& BufferView<TItem>::operator[](int) const [with TItem = unsigned char]	16	static
+../Application/IByteTransport.hpp:9:10:IByteTransport::~IByteTransport()	16	static
+../Application/IByteTransport.hpp:9:10:virtual IByteTransport::~IByteTransport()	16	static
+../Application/UsbCdcTransport.hpp:7:7:UsbCdcTransport::~UsbCdcTransport()	16	static
+../Application/UsbCdcTransport.hpp:7:7:virtual UsbCdcTransport::~UsbCdcTransport()	16	static

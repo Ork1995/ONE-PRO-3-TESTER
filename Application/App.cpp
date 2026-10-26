@@ -13,7 +13,9 @@
 #include "adc.h"
 
 App::App():
-	_comm { _board._commUart },
+	_uartTransport { _board._commUart },
+	_comm { _uartTransport },
+	_usbComm { _usbTransport, &_usbResources },
 	_wmSim {
 		{ ._port = WM_SIM_1_GPIO_Port, ._pin = WM_SIM_1_Pin, ._id = 1 },
 		{ ._port = WM_SIM_2_GPIO_Port, ._pin = WM_SIM_2_Pin, ._id = 2 },
@@ -155,12 +157,22 @@ void App::Task()
 	p << "ADC init=" << (_analogReady ? "ready" : "failed")
 	  << " configured_vref=" << (long)ANALOG_VREF_MV << "mV\r\n";
 	_comm.SendResponse(startupMsg);
+	if (_usbComm.IsReady()) {
+		_usbTransport.Start();
+	}
 
 	for(;;)
 	{
 		Buffer<Comm::MAX_CMD_LEN> cmdBuf;
 		if (_comm.ReceiveCommand(cmdBuf, 10)) {
-			HandleCommand(cmdBuf);
+			HandleCommand(cmdBuf, _comm);
+		}
+		uint32_t responseSession;
+		if (_usbTransport.BeginResponse(&responseSession)) {
+			if (_usbComm.ReceiveCommand(cmdBuf, 0, responseSession)) {
+				HandleCommand(cmdBuf, _usbComm);
+			}
+			_usbTransport.EndResponse();
 		}
 
 		ControlWaterMeters();
@@ -171,8 +183,16 @@ void App::Task()
 			output << "vai " << (long)completed << " OFF pulse complete\r\n";
 			AppendSensorSupplyStatus(output);
 			output << "\r\n";
-			_comm.SendResponse(message);
+			SendEvent(message);
 		}
+	}
+}
+
+void App::SendEvent(const BufferView<> &message)
+{
+	_comm.SendResponse(message);
+	if (_usbComm.IsReady()) {
+		_usbComm.SendEvent(message);
 	}
 }
 
@@ -210,7 +230,7 @@ void App::ControlWaterMeters()
 			}
 			AppendStatus(p);
 			p << "\r\n";
-			_comm.SendResponse(msg);
+			SendEvent(msg);
 			if (change == WaterMeterSimulator::StateChange::Stopped) {
 				wm._pulseCount = 0;
 			}
@@ -318,7 +338,7 @@ void App::AppendSensorSupplyStatus(TextPrinter &p)
 		? "interpolated" : "extrapolated"));
 }
 
-void App::HandleCommand(const BufferView<> &cmd)
+void App::HandleCommand(const BufferView<> &cmd, Comm &sourceSession)
 {
 	TextScanner scanner(cmd);
 
@@ -494,59 +514,59 @@ void App::HandleCommand(const BufferView<> &cmd)
 			TextPrinter helpPrinter(helpBuf);
 			
 			helpPrinter << "Available Commands:\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 			
 			helpPrinter << " system init\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " set time HH:MM\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " get time\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " get status\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " set dac1 <mV>\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " get ain <1-4> (0-10V; PA5 reserved for AI1, DAC2 disabled)\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " set ps <id> on|off\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " set vsen <mV>\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " set vsen_en on|off\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " set vai <1-4> on|off\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 			helpPrinter << " pulse vai <1-4> <mV> <10-3600000 ms>\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 			helpPrinter << " stop vai <1-4>\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " get vsen\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " start wm <id> <cycle_ms>\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " start wm_timed <id> <cycle_ms> <20-3600000 ms>\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " stop wm <id>\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " trigger wm <id> <cycle_ms>\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			helpPrinter << " toggle wm <id>\r\n";
-			_comm.SendResponse(helpBuf); helpBuf.Reset();
+			sourceSession.SendResponse(helpBuf); helpBuf.Reset();
 
 			response << "OK";
 		}
@@ -561,5 +581,5 @@ void App::HandleCommand(const BufferView<> &cmd)
 
 	response << "\r\n";
 
-	_comm.SendResponse(respBuf);
+	sourceSession.SendResponse(respBuf);
 }

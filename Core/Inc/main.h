@@ -92,6 +92,10 @@ void Error_Handler(void);
 #define VAI1_VEN_GPIO_Port GPIOC
 #define VSEN_PWM_Pin GPIO_PIN_9
 #define VSEN_PWM_GPIO_Port GPIOC
+#define USB_DM_Pin GPIO_PIN_11
+#define USB_DM_GPIO_Port GPIOA
+#define USB_DP_Pin GPIO_PIN_12
+#define USB_DP_GPIO_Port GPIOA
 #define JTMS_SWDIO_Pin GPIO_PIN_13
 #define JTMS_SWDIO_GPIO_Port GPIOA
 #define V_SNS1_3K3_Pin GPIO_PIN_0

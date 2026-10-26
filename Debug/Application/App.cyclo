@@ -1,18 +1,34 @@
+../Application/IByteTransport.hpp:13:19:virtual uint32_t IByteTransport::SessionId() const	1
+../Application/IByteTransport.hpp:14:14:virtual int IByteTransport::ReceiveForSession(uint8_t*, int, uint32_t&)	1
+../Application/IByteTransport.hpp:19:15:virtual bool IByteTransport::SendForSession(const BufferView<unsigned char>&, uint32_t)	3
+../Application/IByteTransport.hpp:23:15:virtual bool IByteTransport::SendEcho(const BufferView<unsigned char>&, uint32_t)	1
+../Application/Comm.hpp:36:7:bool Comm::IsReady() const	4
+../Application/IByteTransport.hpp:6:7:constexpr IByteTransport::IByteTransport()	1
+../Application/IByteTransport.hpp:9:10:IByteTransport::~IByteTransport()	1
+../Application/IByteTransport.hpp:9:10:virtual IByteTransport::~IByteTransport()	1
+../Application/UartTransport.hpp:9:11:UartTransport::UartTransport(Uart&)	1
+../Application/UartTransport.hpp:10:6:virtual int UartTransport::Receive(uint8_t*, int)	1
+../Application/UartTransport.hpp:11:7:virtual bool UartTransport::Send(const BufferView<unsigned char>&)	1
+../Application/UartTransport.hpp:12:7:virtual bool UartTransport::IsConnected() const	1
 ../Application/SensorSupply.hpp:93:11:uint32_t SensorSupply::GetRequestedVoltage_mV() const	1
 ../Application/SensorSupply.hpp:94:7:bool SensorSupply::IsPwmRunning() const	1
 ../Application/SensorSupply.hpp:95:7:bool SensorSupply::IsVsenEnabled() const	1
 ../Application/TextScanner.hpp:42:7:bool TextScanner::IsError() const	1
+../Application/UartTransport.hpp:6:7:UartTransport::~UartTransport()	1
+../Application/UartTransport.hpp:6:7:virtual UartTransport::~UartTransport()	1
+../Application/UsbCdcTransport.hpp:7:7:UsbCdcTransport::UsbCdcTransport()	1
 ../Application/App.cpp:15:1:App::App()	1
-../Application/App.cpp:49:6:void App::Init()	3
-../Application/App.cpp:68:6:void App::InitAnalogInputs()	5
-../Application/App.cpp:112:6:void App::ReadAnalogInput(uint8_t, TextPrinter&)	9
-../Application/App.cpp:148:6:void App::Task()	4
-../Application/App.cpp:179:6:void App::AppendStatus(TextPrinter&)	4
-../Application/App.cpp:195:6:void App::ControlWaterMeters()	5
-../Application/App.cpp:221:6:void App::ToggleWaterMeter(int, TextPrinter&)	3
-../Application/App.cpp:244:6:void App::HandleSetSensorSupply(BufferView<char>&, TextScanner&, TextPrinter&)	28
-../Application/App.cpp:300:6:void App::AppendSensorSupplyStatus(TextPrinter&)	9
-../Application/App.cpp:321:6:void App::HandleCommand(const BufferView<char>&)	91
+../Application/App.cpp:51:6:void App::Init()	3
+../Application/App.cpp:70:6:void App::InitAnalogInputs()	5
+../Application/App.cpp:114:6:void App::ReadAnalogInput(uint8_t, TextPrinter&)	9
+../Application/App.cpp:150:6:void App::Task()	7
+../Application/App.cpp:191:6:void App::SendEvent(const BufferView<char>&)	2
+../Application/App.cpp:199:6:void App::AppendStatus(TextPrinter&)	4
+../Application/App.cpp:215:6:void App::ControlWaterMeters()	5
+../Application/App.cpp:241:6:void App::ToggleWaterMeter(int, TextPrinter&)	3
+../Application/App.cpp:264:6:void App::HandleSetSensorSupply(BufferView<char>&, TextScanner&, TextPrinter&)	28
+../Application/App.cpp:320:6:void App::AppendSensorSupplyStatus(TextPrinter&)	9
+../Application/App.cpp:341:6:void App::HandleCommand(const BufferView<char>&, Comm&)	91
 C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/array:132:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::begin() [with _Tp = DigitalOutput; unsigned int _Nm = 0]	1
 C:\ST\STM32CubeIDE_2.1.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740\tools\bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/include/c++/14.3.1/array:142:7:std::array<_Tp, _Nm>::value_type* std::array<_Tp, _Nm>::end() [with _Tp = DigitalOutput; unsigned int _Nm = 0]	1
 ../Application/Buffer.hpp:20:2:Buffer<Capacity, TItem>::Buffer() [with int Capacity = 100; TItem = char]	1
